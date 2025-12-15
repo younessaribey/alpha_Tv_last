@@ -47,9 +47,14 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         const priceConfig = getPriceConfig(productId);
-        const baseUrl = import.meta.env.PUBLIC_BASE_URL || 'http://localhost:4321';
+        let baseUrl = import.meta.env.PUBLIC_BASE_URL || 'http://localhost:4321';
 
-        console.log('Checkout request:', { productId, useSubscription, priceId: priceConfig.priceId });
+        // Ensure baseUrl has protocol
+        if (!baseUrl.startsWith('http')) {
+            baseUrl = `https://${baseUrl}`;
+        }
+
+        console.log('Checkout request:', { productId, useSubscription, priceId: priceConfig.priceId, baseUrl });
 
         // If we have a Stripe Price ID AND subscription is requested, use subscription mode with trial
         if (priceConfig.priceId && useSubscription) {
@@ -132,9 +137,20 @@ export const POST: APIRoute = async ({ request }) => {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Stripe checkout error:', error);
-        return new Response(JSON.stringify({ error: 'Failed to create checkout session' }), {
+        console.error('Error details:', {
+            message: error.message,
+            type: error.type,
+            code: error.code,
+            stack: error.stack,
+        });
+
+        return new Response(JSON.stringify({
+            error: 'Failed to create checkout session',
+            details: error.message,
+            type: error.type || 'unknown',
+        }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
