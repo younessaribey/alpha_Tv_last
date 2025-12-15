@@ -356,14 +356,37 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                         </button>
                     </form>
 
-                    {/* Help Note */}
-                    <div className="help-note">
-                        <p>
-                            {lang === 'fr'
-                                ? '💡 Besoin d\'aide pour trouver votre MAC/PIN? Contactez-nous sur WhatsApp.'
-                                : '💡 Need help finding your MAC/PIN? Contact us on WhatsApp.'}
-                        </p>
-                    </div>
+                    {/* Expandable Help Guide */}
+                    <details className="help-guide">
+                        <summary className="help-guide-toggle">
+                            <span>❓ {lang === 'fr' ? 'Comment trouver mon MAC / PIN ?' : 'How to find my MAC / PIN?'}</span>
+                            <svg className="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </summary>
+                        <div className="help-guide-content">
+                            <div className="guide-step">
+                                <div className="guide-step-number">1</div>
+                                <div className="guide-step-text">
+                                    <strong>{lang === 'fr' ? 'Ouvrez Cap Player' : 'Open Cap Player'}</strong>
+                                    <p>{lang === 'fr' ? 'Lancez l\'application sur votre appareil' : 'Launch the app on your device'}</p>
+                                </div>
+                            </div>
+                            <div className="guide-step">
+                                <div className="guide-step-number">2</div>
+                                <div className="guide-step-text">
+                                    <strong>{lang === 'fr' ? 'Écran de connexion' : 'Login Screen'}</strong>
+                                    <p>{lang === 'fr' ? 'Votre MAC et PIN sont affichés' : 'Your MAC and PIN are displayed'}</p>
+                                </div>
+                            </div>
+                            <div className="guide-screenshot">
+                                <img src="/images/PHOTO-2025-12-14-13-47-55.jpg" alt="Cap Player MAC Address" />
+                            </div>
+                            <a href="/how-it-works" target="_blank" className="guide-link">
+                                📖 {lang === 'fr' ? 'Voir le guide complet' : 'View full guide'}
+                            </a>
+                        </div>
+                    </details>
                 </div>
             </div>
 
@@ -708,5 +731,108 @@ const successStyles = `
     .home-btn:hover {
         background: rgba(139, 92, 246, 0.1);
         border-color: var(--color-primary);
+    }
+
+    /* Expandable Help Guide */
+    .help-guide {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .help-guide-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.875rem 1rem;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        list-style: none;
+    }
+
+    .help-guide-toggle::-webkit-details-marker {
+        display: none;
+    }
+
+    .help-guide[open] .help-guide-toggle {
+        border-radius: 12px 12px 0 0;
+    }
+
+    .help-guide .chevron {
+        transition: transform 0.2s ease;
+    }
+
+    .help-guide[open] .chevron {
+        transform: rotate(180deg);
+    }
+
+    .help-guide-content {
+        padding: 1rem;
+        background: var(--color-surface-elevated);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .guide-step {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .guide-step-number {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .guide-step-text strong {
+        display: block;
+        font-size: 0.8125rem;
+        margin-bottom: 0.125rem;
+    }
+
+    .guide-step-text p {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        margin: 0;
+    }
+
+    .guide-screenshot {
+        margin: 1rem 0;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid var(--color-primary);
+    }
+
+    .guide-screenshot img {
+        width: 100%;
+        display: block;
+    }
+
+    .guide-link {
+        display: block;
+        text-align: center;
+        padding: 0.625rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .guide-link:hover {
+        text-decoration: underline;
     }
 `;
