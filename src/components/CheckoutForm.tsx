@@ -422,9 +422,9 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
             value: price
         });
 
-        // Create payment intent
+        // Create checkout session (supports subscription with trial)
         try {
-            const response = await fetch('/api/create-payment-intent', {
+            const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -434,6 +434,7 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     customerName: formData.name,
                     customerEmail: formData.email,
                     customerPhone: formData.phone,
+                    useSubscription: productId === '12months-1device', // Enable trial for 12 month plan
                 }),
             });
             const data = await response.json();
@@ -443,7 +444,7 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                 setStep('checkout');
             }
         } catch (err) {
-            console.error('Error creating payment intent:', err);
+            console.error('Error creating checkout session:', err);
         }
 
         setIsLoading(false);
