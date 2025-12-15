@@ -3,33 +3,41 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
-// Map product IDs to generic Stripe-safe names (no IPTV references)
-const getGenericProductName = (productId: string): { name: string; description: string } => {
-    const productMap: Record<string, { name: string; description: string }> = {
+// Map product IDs to Stripe Price IDs (create these in Stripe Dashboard)
+// These should be RECURRING prices with the subscription amount
+const getPriceConfig = (productId: string): { priceId?: string; name: string; description: string; amount: number } => {
+    const productMap: Record<string, { priceId?: string; name: string; description: string; amount: number }> = {
         '6months-1device': {
+            priceId: import.meta.env.STRIPE_PRICE_6M_1D, // Set in .env
             name: '6 Month Subscription',
-            description: 'Premium streaming subscription - 6 months, 1 device'
+            description: 'Premium streaming - 6 months, 1 device',
+            amount: 3900, // €39
         },
         '12months-1device': {
+            priceId: import.meta.env.STRIPE_PRICE_12M_1D, // Set in .env
             name: '12 Month Subscription',
-            description: 'Premium streaming subscription - 12 months, 1 device'
+            description: 'Premium streaming - 12 months, 1 device',
+            amount: 5900, // €59
         },
         '12months-2devices': {
+            priceId: import.meta.env.STRIPE_PRICE_12M_2D, // Set in .env
             name: '12 Month Subscription Duo',
-            description: 'Premium streaming subscription - 12 months, 2 devices'
+            description: 'Premium streaming - 12 months, 2 devices',
+            amount: 7900, // €79
         }
     };
 
     return productMap[productId] || {
         name: 'Premium Subscription',
-        description: 'Digital streaming subscription'
+        description: 'Digital streaming subscription',
+        amount: 5900,
     };
 };
 
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
-        const { productId, productName, price, customerName, customerEmail, customerPhone } = body;
+        const { productId, productName, price, customerName, customerEmail, customerPhone, useSubscription } = body;
 
         if (!productId || !productName || !price || !customerName || !customerEmail) {
             return new Response(JSON.stringify({ error: 'Missing required fields' }), {
@@ -38,13 +46,55 @@ export const POST: APIRoute = async ({ request }) => {
             });
         }
 
-        // Get generic product info for Stripe (no IPTV references)
-        const genericProduct = getGenericProductName(productId);
+        const priceConfig = getPriceConfig(productId);
+        const baseUrl = import.meta.env.PUBLIC_BASE_URL || 'http://localhost:4321';
 
+        // If we have a Stripe Price ID, use subscription mode with trial
+        if (priceConfig.priceId && useSubscription) {
+            const session = await stripe.checkout.sessions.create({
+                mode: 'subscription',
+                customer_email: customerEmail,
+                line_items: [
+                    {
+                        price: priceConfig.priceId,
+                        quantity: 1,
+                    },
+                ],
+                subscription_data: {
+                    trial_period_days: 1, // 24h free trial
+                    metadata: {
+                        productId,
+                        productName: priceConfig.name,
+                        customerName,
+                        customerEmail,
+                        customerPhone: customerPhone || '',
+                    },
+                },
+                metadata: {
+                    productId,
+                    productName: priceConfig.name,
+                    customerName,
+                    customerEmail,
+                    customerPhone: customerPhone || '',
+                    price: price.toString(),
+                },
+                return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+                ui_mode: 'embedded',
+            });
+
+            return new Response(JSON.stringify({
+                clientSecret: session.client_secret,
+                sessionId: session.id,
+                mode: 'subscription',
+            }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // Fallback to one-time payment (current behavior)
         const session = await stripe.checkout.sessions.create({
             ui_mode: 'embedded',
-            // Let Stripe automatically show all available payment methods (Apple Pay, Google Pay, etc.)
-            // payment_method_types: ['card'], // Removed to enable automatic payment method detection
             mode: 'payment',
             customer_email: customerEmail,
             line_items: [
@@ -52,8 +102,8 @@ export const POST: APIRoute = async ({ request }) => {
                     price_data: {
                         currency: 'eur',
                         product_data: {
-                            name: genericProduct.name,
-                            description: genericProduct.description,
+                            name: priceConfig.name,
+                            description: priceConfig.description,
                         },
                         unit_amount: Math.round(price * 100),
                     },
@@ -62,18 +112,19 @@ export const POST: APIRoute = async ({ request }) => {
             ],
             metadata: {
                 productId,
-                productName: genericProduct.name, // Use generic name in metadata too
+                productName: priceConfig.name,
                 customerName,
                 customerEmail,
                 customerPhone: customerPhone || '',
                 price: price.toString(),
             },
-            return_url: `${import.meta.env.PUBLIC_BASE_URL || 'http://localhost:4321'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+            return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         });
 
         return new Response(JSON.stringify({
             clientSecret: session.client_secret,
             sessionId: session.id,
+            mode: 'payment',
         }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
