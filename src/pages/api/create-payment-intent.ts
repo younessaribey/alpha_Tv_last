@@ -49,6 +49,7 @@ export const POST: APIRoute = async ({ request }) => {
                 enabled: true,
             },
             description: genericProduct.description,
+            statement_descriptor_suffix: genericProduct.name.slice(0, 22), // Max 22 chars for suffix
             metadata: {
                 productId,
                 productName: genericProduct.name,
