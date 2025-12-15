@@ -58,6 +58,19 @@ const stripeAppearance = {
             backgroundColor: '#8b5cf6',
             border: '1px solid #8b5cf6',
         },
+        '.AccordionItem': {
+            backgroundColor: '#1a1a24',
+            border: '1px solid #2a2a3e',
+            borderRadius: '12px',
+            marginBottom: '8px',
+        },
+        '.AccordionItemHeader': {
+            color: '#ffffff',
+            padding: '16px',
+        },
+        '.AccordionItemBody': {
+            padding: '0 16px 16px',
+        },
     },
 };
 
@@ -130,7 +143,17 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
             <form onSubmit={handleSubmit} className="stripe-form">
                 <PaymentElement
                     options={{
-                        layout: 'tabs',
+                        layout: {
+                            type: 'accordion',
+                            defaultCollapsed: false,
+                            radios: true,
+                            spacedAccordionItems: true,
+                        },
+                        wallets: {
+                            applePay: 'auto',
+                            googlePay: 'auto',
+                        },
+                        paymentMethodOrder: ['apple_pay', 'google_pay', 'card'],
                     }}
                 />
 
