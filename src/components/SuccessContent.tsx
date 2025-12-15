@@ -65,7 +65,7 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                     setCustomerEmail(data.customer_email || '');
                     setMetadata(data.metadata);
 
-                    // Track TikTok Pixel Purchase event
+                    // Track TikTok Pixel Purchase event (client-side)
                     trackTikTokEvent('CompletePayment', {
                         content_id: data.metadata?.productId,
                         content_name: data.metadata?.productName,
@@ -73,13 +73,29 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                         value: parseFloat(data.metadata?.price || '0')
                     });
 
-                    // Track Meta Pixel Purchase event
+                    // Track Meta Pixel Purchase event (client-side)
                     trackMetaEvent('Purchase', {
                         content_ids: [data.metadata?.productId],
                         content_name: data.metadata?.productName,
                         currency: 'EUR',
                         value: parseFloat(data.metadata?.price || '0')
                     });
+
+                    // SERVER-SIDE Conversions API (more reliable)
+                    fetch('/api/track-conversion', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            eventName: 'Purchase',
+                            email: data.customer_email,
+                            phone: data.metadata?.customerPhone,
+                            value: parseFloat(data.metadata?.price || '0'),
+                            currency: 'EUR',
+                            contentId: data.metadata?.productId,
+                            contentName: data.metadata?.productName,
+                            eventSourceUrl: window.location.href,
+                        })
+                    }).catch(err => console.error('Conversion tracking error:', err));
                 } else {
                     setStatus('error');
                 }
