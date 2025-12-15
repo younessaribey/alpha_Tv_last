@@ -86,12 +86,13 @@ export const POST: APIRoute = async ({ request }) => {
                     customerPhone: customerPhone || '',
                     price: price.toString(),
                 },
-                return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-                ui_mode: 'embedded',
+                success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${baseUrl}/pricing`,
+                // No ui_mode - use hosted checkout for subscriptions
             });
 
             return new Response(JSON.stringify({
-                clientSecret: session.client_secret,
+                url: session.url, // Redirect URL for hosted checkout
                 sessionId: session.id,
                 mode: 'subscription',
             }), {

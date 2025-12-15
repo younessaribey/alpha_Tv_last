@@ -439,6 +439,13 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
             });
             const data = await response.json();
 
+            // If subscription mode, redirect to hosted checkout
+            if (data.url) {
+                window.location.href = data.url;
+                return;
+            }
+
+            // Otherwise use embedded checkout (payment mode)
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
                 setStep('checkout');
