@@ -27,13 +27,20 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get('session_id');
+        const paymentIntentId = params.get('payment_intent');
 
-        if (!sessionId) {
+        // Need either session_id or payment_intent
+        if (!sessionId && !paymentIntentId) {
             setStatus('error');
             return;
         }
 
-        fetch(`/api/checkout-session-status?session_id=${sessionId}`)
+        // Build the API URL with whichever param we have
+        const apiUrl = paymentIntentId
+            ? `/api/checkout-session-status?payment_intent=${paymentIntentId}`
+            : `/api/checkout-session-status?session_id=${sessionId}`;
+
+        fetch(apiUrl)
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'complete' && data.payment_status === 'paid') {
