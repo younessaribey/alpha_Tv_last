@@ -1,106 +1,160 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import type { Lang } from '../lib/data';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import type { Lang } from "../lib/data";
 
-const lang: Lang = 'fr';
+const lang: Lang = "fr";
 
 // Device platforms with direct links
 const devices = [
-    { 
-        id: 'ios',
-        name: 'iPhone/iPad', 
-        icon: '📱',
-        link: 'https://apps.apple.com/app/cap-player/id1234567890',
-        instructions: lang === 'fr' 
-            ? 'Ouvrez l\'App Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
-            : 'Open the App Store and search for "Cap Player" or click the button below.'
+    {
+        id: "ios",
+        name: "iPhone/iPad",
+        icon: "📱",
+        link: "https://apps.apple.com/app/cap-player/id1234567890",
+        instructions:
+            lang === "fr"
+                ? 'Ouvrez l\'App Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
+                : 'Open the App Store and search for "Cap Player" or click the button below.',
     },
-    { 
-        id: 'android',
-        name: 'Android', 
-        icon: '🤖',
-        link: 'https://play.google.com/store/apps/details?id=com.capplayer',
-        instructions: lang === 'fr' 
-            ? 'Ouvrez le Google Play Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
-            : 'Open Google Play Store and search for "Cap Player" or click the button below.'
+    {
+        id: "android",
+        name: "Android",
+        icon: "🤖",
+        link: "https://play.google.com/store/apps/details?id=com.capplayer",
+        instructions:
+            lang === "fr"
+                ? 'Ouvrez le Google Play Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
+                : 'Open Google Play Store and search for "Cap Player" or click the button below.',
     },
-    { 
-        id: 'firetv',
-        name: 'Fire TV/Stick', 
-        icon: '🔥',
-        link: 'https://www.amazon.com/dp/B0CAPPLAYER',
-        code: '557851',
-        instructions: lang === 'fr' 
-            ? 'Sur votre Fire TV, allez dans Recherche > tapez le code 557851 ou "Cap Player".'
-            : 'On your Fire TV, go to Search > type code 557851 or "Cap Player".'
+    {
+        id: "firetv",
+        name: "Fire TV/Stick",
+        icon: "🔥",
+        link: "https://www.amazon.com/dp/B0CAPPLAYER",
+        code: "557851",
+        instructions:
+            lang === "fr"
+                ? 'Sur votre Fire TV, allez dans Recherche > tapez le code 557851 ou "Cap Player".'
+                : 'On your Fire TV, go to Search > type code 557851 or "Cap Player".',
     },
-    { 
-        id: 'samsung',
-        name: 'Samsung TV', 
-        icon: '📺',
-        instructions: lang === 'fr' 
-            ? 'Ouvrez le Samsung App Store sur votre TV et recherchez "Cap Player".'
-            : 'Open Samsung App Store on your TV and search for "Cap Player".'
+    {
+        id: "samsung",
+        name: "Samsung TV",
+        icon: "📺",
+        instructions:
+            lang === "fr"
+                ? 'Ouvrez le Samsung App Store sur votre TV et recherchez "Cap Player".'
+                : 'Open Samsung App Store on your TV and search for "Cap Player".',
     },
-    { 
-        id: 'lg',
-        name: 'LG TV', 
-        icon: '📺',
-        instructions: lang === 'fr' 
-            ? 'Ouvrez le LG Content Store sur votre TV et recherchez "Cap Player".'
-            : 'Open LG Content Store on your TV and search for "Cap Player".'
+    {
+        id: "lg",
+        name: "LG TV",
+        icon: "📺",
+        instructions:
+            lang === "fr"
+                ? 'Ouvrez le LG Content Store sur votre TV et recherchez "Cap Player".'
+                : 'Open LG Content Store on your TV and search for "Cap Player".',
     },
-    { 
-        id: 'windows',
-        name: 'Windows PC', 
-        icon: '💻',
-        link: 'https://capplayer.com/download/windows',
-        instructions: lang === 'fr' 
-            ? 'Téléchargez Cap Player directement depuis le site officiel.'
-            : 'Download Cap Player directly from the official website.'
+    {
+        id: "windows",
+        name: "Windows PC",
+        icon: "💻",
+        link: "https://capplayer.com/download/windows",
+        instructions:
+            lang === "fr"
+                ? "Téléchargez Cap Player directement depuis le site officiel."
+                : "Download Cap Player directly from the official website.",
     },
-    { 
-        id: 'mac',
-        name: 'Mac', 
-        icon: '🍎',
-        link: 'https://apps.apple.com/app/cap-player-mac/id1234567890',
-        instructions: lang === 'fr' 
-            ? 'Ouvrez l\'App Store sur votre Mac et recherchez "Cap Player".'
-            : 'Open the App Store on your Mac and search for "Cap Player".'
+    {
+        id: "mac",
+        name: "Mac",
+        icon: "🍎",
+        link: "https://apps.apple.com/app/cap-player-mac/id1234567890",
+        instructions:
+            lang === "fr"
+                ? 'Ouvrez l\'App Store sur votre Mac et recherchez "Cap Player".'
+                : 'Open the App Store on your Mac and search for "Cap Player".',
     },
 ];
 ---
 
-<Layout title={lang === 'fr' ? 'Comment ça marche' : 'How It Works'} lang={lang}>
+<Layout
+    title={lang === "fr" ? "Comment ça marche" : "How It Works"}
+    lang={lang}
+>
     <Header lang={lang} />
-    
+
     <main class="main-content">
         <!-- Hero -->
         <section class="section">
             <div class="container">
                 <div class="page-header" data-animate>
-                    <h1>{lang === 'fr' ? 'Comment ça marche' : 'How It Works'}</h1>
-                    <p class="page-subtitle">{lang === 'fr' ? 'Commencez en 3 étapes simples' : 'Get started in 3 simple steps'}</p>
+                    <h1>
+                        {lang === "fr" ? "Comment ça marche" : "How It Works"}
+                    </h1>
+                    <p class="page-subtitle">
+                        {
+                            lang === "fr"
+                                ? "Commencez en 3 étapes simples"
+                                : "Get started in 3 simple steps"
+                        }
+                    </p>
                 </div>
 
                 <!-- Steps Overview -->
                 <div class="steps-grid">
                     <div class="step-card" data-animate>
                         <div class="step-number">1</div>
-                        <h3>{lang === 'fr' ? 'Téléchargez Cap Player' : 'Download Cap Player'}</h3>
-                        <p>{lang === 'fr' ? 'Installez l\'application sur votre appareil' : 'Install the app on your device'}</p>
+                        <h3>
+                            {
+                                lang === "fr"
+                                    ? "Téléchargez Cap Player"
+                                    : "Download Cap Player"
+                            }
+                        </h3>
+                        <p>
+                            {
+                                lang === "fr"
+                                    ? "Installez l'application sur votre appareil"
+                                    : "Install the app on your device"
+                            }
+                        </p>
                     </div>
                     <div class="step-card" data-animate>
                         <div class="step-number">2</div>
-                        <h3>{lang === 'fr' ? 'Notez votre MAC & Clé' : 'Note your MAC & Key'}</h3>
-                        <p>{lang === 'fr' ? 'Copiez les informations affichées' : 'Copy the displayed information'}</p>
+                        <h3>
+                            {
+                                lang === "fr"
+                                    ? "Notez votre MAC & Clé"
+                                    : "Note your MAC & Key"
+                            }
+                        </h3>
+                        <p>
+                            {
+                                lang === "fr"
+                                    ? "Copiez les informations affichées"
+                                    : "Copy the displayed information"
+                            }
+                        </p>
                     </div>
                     <div class="step-card" data-animate>
                         <div class="step-number">3</div>
-                        <h3>{lang === 'fr' ? 'Commandez & Profitez' : 'Order & Enjoy'}</h3>
-                        <p>{lang === 'fr' ? 'Remplissez le formulaire et regardez !' : 'Fill the form and start watching!'}</p>
+                        <h3>
+                            {
+                                lang === "fr"
+                                    ? "Commandez & Profitez"
+                                    : "Order & Enjoy"
+                            }
+                        </h3>
+                        <p>
+                            {
+                                lang === "fr"
+                                    ? "Remplissez le formulaire et regardez !"
+                                    : "Fill the form and start watching!"
+                            }
+                        </p>
                     </div>
                 </div>
             </div>
@@ -111,54 +165,108 @@ const devices = [
             <div class="container">
                 <div class="step-detail">
                     <div class="step-badge">Étape 1</div>
-                    <h2>📲 {lang === 'fr' ? 'Téléchargez Cap Player' : 'Download Cap Player'}</h2>
-                    <p class="step-description">{lang === 'fr' ? 'Choisissez votre appareil et suivez les instructions' : 'Choose your device and follow the instructions'}</p>
+                    <h2>
+                        📲 {
+                            lang === "fr"
+                                ? "Téléchargez Cap Player"
+                                : "Download Cap Player"
+                        }
+                    </h2>
+                    <p class="step-description">
+                        {
+                            lang === "fr"
+                                ? "Choisissez votre appareil et suivez les instructions"
+                                : "Choose your device and follow the instructions"
+                        }
+                    </p>
 
                     <!-- Device Selector -->
                     <div class="device-grid">
-                        {devices.map((device) => (
-                            <button class="device-btn" data-device={device.id}>
-                                <span class="device-icon">{device.icon}</span>
-                                <span class="device-name">{device.name}</span>
-                            </button>
-                        ))}
+                        {
+                            devices.map((device) => (
+                                <button
+                                    class="device-btn"
+                                    data-device={device.id}
+                                >
+                                    <span class="device-icon">
+                                        {device.icon}
+                                    </span>
+                                    <span class="device-name">
+                                        {device.name}
+                                    </span>
+                                </button>
+                            ))
+                        }
                     </div>
 
                     <!-- Device Instructions (Hidden by default, shown when device is selected) -->
                     <div class="device-instructions-container">
-                        {devices.map((device) => (
-                            <div class="device-instructions" id={`instructions-${device.id}`}>
-                                <div class="instruction-card">
-                                    <div class="instruction-header">
-                                        <span class="instruction-icon">{device.icon}</span>
-                                        <h3>{device.name}</h3>
-                                    </div>
-                                    <p class="instruction-text">{device.instructions}</p>
-                                    
-                                    {device.code && (
-                                        <div class="download-code">
-                                            <span>{lang === 'fr' ? 'Code de téléchargement :' : 'Download code:'}</span>
-                                            <code>{device.code}</code>
+                        {
+                            devices.map((device) => (
+                                <div
+                                    class="device-instructions"
+                                    id={`instructions-${device.id}`}
+                                >
+                                    <div class="instruction-card">
+                                        <div class="instruction-header">
+                                            <span class="instruction-icon">
+                                                {device.icon}
+                                            </span>
+                                            <h3>{device.name}</h3>
                                         </div>
-                                    )}
-                                    
-                                    {device.link && (
-                                        <a href={device.link} target="_blank" rel="noopener noreferrer" class="btn btn-primary download-btn">
-                                            {lang === 'fr' ? '📥 Télécharger Cap Player' : '📥 Download Cap Player'}
-                                        </a>
-                                    )}
-                                    
-                                    {!device.link && !device.code && (
-                                        <p class="instruction-note">{lang === 'fr' ? 'Recherchez "Cap Player" dans le store de votre appareil.' : 'Search for "Cap Player" in your device\'s store.'}</p>
-                                    )}
+                                        <p class="instruction-text">
+                                            {device.instructions}
+                                        </p>
+
+                                        {device.code && (
+                                            <div class="download-code">
+                                                <span>
+                                                    {lang === "fr"
+                                                        ? "Code de téléchargement :"
+                                                        : "Download code:"}
+                                                </span>
+                                                <code>{device.code}</code>
+                                            </div>
+                                        )}
+
+                                        {device.link && (
+                                            <a
+                                                href={device.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="btn btn-primary download-btn"
+                                            >
+                                                {lang === "fr"
+                                                    ? "📥 Télécharger Cap Player"
+                                                    : "📥 Download Cap Player"}
+                                            </a>
+                                        )}
+
+                                        {!device.link && !device.code && (
+                                            <p class="instruction-note">
+                                                {lang === "fr"
+                                                    ? 'Recherchez "Cap Player" dans le store de votre appareil.'
+                                                    : 'Search for "Cap Player" in your device\'s store.'}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        }
                     </div>
 
                     <div class="official-site">
-                        <a href="https://capplayer.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                            🌐 {lang === 'fr' ? 'Visiter le site officiel Cap Player' : 'Visit official Cap Player website'}
+                        <a
+                            href="https://capplayer.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-secondary"
+                        >
+                            🌐 {
+                                lang === "fr"
+                                    ? "Visiter le site officiel Cap Player"
+                                    : "Visit official Cap Player website"
+                            }
                         </a>
                     </div>
                 </div>
@@ -170,12 +278,27 @@ const devices = [
             <div class="container">
                 <div class="step-detail">
                     <div class="step-badge">Étape 2</div>
-                    <h2>🔑 {lang === 'fr' ? 'Trouvez votre MAC Address & Device Key' : 'Find your MAC Address & Device Key'}</h2>
-                    <p class="step-description">{lang === 'fr' ? 'Ces informations sont affichées à l\'ouverture de Cap Player' : 'This information is displayed when you open Cap Player'}</p>
+                    <h2>
+                        🔑 {
+                            lang === "fr"
+                                ? "Trouvez votre MAC Address & Device Key"
+                                : "Find your MAC Address & Device Key"
+                        }
+                    </h2>
+                    <p class="step-description">
+                        {
+                            lang === "fr"
+                                ? "Ces informations sont affichées à l'ouverture de Cap Player"
+                                : "This information is displayed when you open Cap Player"
+                        }
+                    </p>
 
                     <div class="mac-guide">
                         <div class="mac-screenshot">
-                            <img src="/images/PHOTO-2025-12-14-13-47-55.jpg" alt="Cap Player MAC Address & Device Key" />
+                            <img
+                                src="/images/PHOTO-2025-12-14-13-47-55.jpg"
+                                alt="Cap Player MAC Address & Device Key"
+                            />
                             <div class="screenshot-labels">
                                 <div class="label mac-label">
                                     <span class="label-arrow">←</span>
@@ -187,25 +310,49 @@ const devices = [
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mac-info">
                             <div class="info-card">
-                                <h3>📋 {lang === 'fr' ? 'Ce qu\'il faut noter' : 'What to note'}</h3>
+                                <h3>
+                                    📋 {
+                                        lang === "fr"
+                                            ? "Ce qu'il faut noter"
+                                            : "What to note"
+                                    }
+                                </h3>
                                 <ul>
                                     <li>
                                         <strong>MAC Address</strong>
-                                        <p>{lang === 'fr' ? 'Une adresse unique à votre appareil (format: XX:XX:XX:XX:XX:XX)' : 'A unique address for your device (format: XX:XX:XX:XX:XX:XX)'}</p>
+                                        <p>
+                                            {
+                                                lang === "fr"
+                                                    ? "Une adresse unique à votre appareil (format: XX:XX:XX:XX:XX:XX)"
+                                                    : "A unique address for your device (format: XX:XX:XX:XX:XX:XX)"
+                                            }
+                                        </p>
                                     </li>
                                     <li>
                                         <strong>Device Key</strong>
-                                        <p>{lang === 'fr' ? 'Un code de sécurité pour activer votre abonnement' : 'A security code to activate your subscription'}</p>
+                                        <p>
+                                            {
+                                                lang === "fr"
+                                                    ? "Un code de sécurité pour activer votre abonnement"
+                                                    : "A security code to activate your subscription"
+                                            }
+                                        </p>
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <div class="important-note">
                                 <span class="note-icon">⚠️</span>
-                                <p>{lang === 'fr' ? 'Gardez ces informations ! Vous en aurez besoin pour activer votre abonnement.' : 'Keep this information! You will need it to activate your subscription.'}</p>
+                                <p>
+                                    {
+                                        lang === "fr"
+                                            ? "Gardez ces informations ! Vous en aurez besoin pour activer votre abonnement."
+                                            : "Keep this information! You will need it to activate your subscription."
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -218,32 +365,87 @@ const devices = [
             <div class="container">
                 <div class="step-detail">
                     <div class="step-badge">Étape 3</div>
-                    <h2>🎉 {lang === 'fr' ? 'Commandez votre abonnement' : 'Order your subscription'}</h2>
-                    <p class="step-description">{lang === 'fr' ? 'Choisissez votre forfait et remplissez vos informations' : 'Choose your plan and fill in your information'}</p>
+                    <h2>
+                        🎉 {
+                            lang === "fr"
+                                ? "Commandez votre abonnement"
+                                : "Order your subscription"
+                        }
+                    </h2>
+                    <p class="step-description">
+                        {
+                            lang === "fr"
+                                ? "Choisissez votre forfait et remplissez vos informations"
+                                : "Choose your plan and fill in your information"
+                        }
+                    </p>
 
                     <div class="order-options">
                         <div class="order-card" data-animate>
                             <div class="order-icon">💳</div>
-                            <h3>{lang === 'fr' ? 'Paiement en ligne' : 'Online Payment'}</h3>
-                            <p>{lang === 'fr' ? 'Payez par carte bancaire via Stripe. Remplissez votre MAC Address et Device Key dans le formulaire de commande.' : 'Pay by credit card via Stripe. Fill in your MAC Address and Device Key in the order form.'}</p>
+                            <h3>
+                                {
+                                    lang === "fr"
+                                        ? "Paiement en ligne"
+                                        : "Online Payment"
+                                }
+                            </h3>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Payez par carte bancaire via Stripe. Remplissez votre MAC Address et Device Key dans le formulaire de commande."
+                                        : "Pay by credit card via Stripe. Fill in your MAC Address and Device Key in the order form."
+                                }
+                            </p>
                             <a href="/pricing" class="btn btn-primary">
-                                {lang === 'fr' ? 'Voir les forfaits' : 'View Plans'} →
+                                {
+                                    lang === "fr"
+                                        ? "Voir les forfaits"
+                                        : "View Plans"
+                                } →
                             </a>
                         </div>
 
                         <div class="order-card" data-animate>
                             <div class="order-icon">💬</div>
                             <h3>WhatsApp</h3>
-                            <p>{lang === 'fr' ? 'Envoyez-nous votre MAC Address et Device Key par WhatsApp pour une activation rapide.' : 'Send us your MAC Address and Device Key via WhatsApp for quick activation.'}</p>
-                            <a href="https://wa.me/33612345678?text=Bonjour, je souhaite un abonnement. Voici mes infos:%0A- MAC Address: %0A- Device Key:" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-                                💬 {lang === 'fr' ? 'Contacter sur WhatsApp' : 'Contact on WhatsApp'}
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Envoyez-nous votre MAC Address et Device Key par WhatsApp pour une activation rapide."
+                                        : "Send us your MAC Address and Device Key via WhatsApp for quick activation."
+                                }
+                            </p>
+                            <a
+                                href="https://wa.me/33612345678?text=Bonjour, je souhaite un abonnement. Voici mes infos:%0A- MAC Address: %0A- Device Key:"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-whatsapp"
+                            >
+                                💬 {
+                                    lang === "fr"
+                                        ? "Contacter sur WhatsApp"
+                                        : "Contact on WhatsApp"
+                                }
                             </a>
                         </div>
                     </div>
 
                     <div class="activation-info">
-                        <h3>⏱️ {lang === 'fr' ? 'Délai d\'activation' : 'Activation time'}</h3>
-                        <p>{lang === 'fr' ? 'Votre abonnement sera activé dans les 1-2 heures suivant la réception de vos informations. Contactez-nous sur WhatsApp pour un service encore plus rapide !' : 'Your subscription will be activated within 1-2 hours after receiving your information. Contact us on WhatsApp for even faster service!'}</p>
+                        <h3>
+                            ⏱️ {
+                                lang === "fr"
+                                    ? "Délai d'activation"
+                                    : "Activation time"
+                            }
+                        </h3>
+                        <p>
+                            {
+                                lang === "fr"
+                                    ? "Votre abonnement sera activé dans les 1-2 heures suivant la réception de vos informations. Contactez-nous sur WhatsApp pour un service encore plus rapide !"
+                                    : "Your subscription will be activated within 1-2 hours after receiving your information. Contact us on WhatsApp for even faster service!"
+                            }
+                        </p>
                     </div>
                 </div>
             </div>
@@ -253,14 +455,27 @@ const devices = [
         <section class="section">
             <div class="container">
                 <div class="cta-card" data-animate>
-                    <h2>{lang === 'fr' ? '🚀 Prêt à commencer ?' : '🚀 Ready to get started?'}</h2>
-                    <p>{lang === 'fr' ? 'Profitez de plus de 10 000 chaînes, 22 000 films et séries en qualité 4K' : 'Enjoy 10,000+ channels, 22,000 movies and series in 4K quality'}</p>
+                    <h2>
+                        {
+                            lang === "fr"
+                                ? "🚀 Prêt à commencer ?"
+                                : "🚀 Ready to get started?"
+                        }
+                    </h2>
+                    <p>
+                        {
+                            lang === "fr"
+                                ? "Profitez de plus de 10 000 chaînes, 22 000 films et séries en qualité 4K"
+                                : "Enjoy 10,000+ channels, 22,000 movies and series in 4K quality"
+                        }
+                    </p>
                     <div class="cta-buttons">
                         <a href="/pricing" class="btn btn-primary btn-large">
-                            {lang === 'fr' ? '🎁 Essai Gratuit 24h' : '🎁 Free 24h Trial'}
-                        </a>
-                        <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-                            💬 WhatsApp
+                            {
+                                lang === "fr"
+                                    ? "🎁 Commencer Gratuitement"
+                                    : "🎁 Start Free"
+                            }
                         </a>
                     </div>
                 </div>
@@ -315,7 +530,11 @@ const devices = [
         width: 3.5rem;
         height: 3.5rem;
         border-radius: 1rem;
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary) 0%,
+            var(--color-secondary) 100%
+        );
         display: flex;
         align-items: center;
         justify-content: center;
@@ -351,7 +570,11 @@ const devices = [
     .step-badge {
         display: inline-block;
         padding: 0.375rem 1rem;
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary) 0%,
+            var(--color-secondary) 100%
+        );
         border-radius: 100px;
         font-size: 0.75rem;
         font-weight: 700;
@@ -653,7 +876,7 @@ const devices = [
         justify-content: center;
         gap: 0.5rem;
         padding: 0.75rem 1.5rem;
-        background: #25D366;
+        background: #25d366;
         color: white;
         font-weight: 600;
         border-radius: 8px;
@@ -684,7 +907,11 @@ const devices = [
 
     /* CTA Card */
     .cta-card {
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.15) 0%,
+            rgba(236, 72, 153, 0.1) 100%
+        );
         border: 1px solid rgba(139, 92, 246, 0.3);
         border-radius: 20px;
         padding: 3rem 2rem;
@@ -726,26 +953,30 @@ const devices = [
 
 <script>
     // Device selector functionality
-    const deviceButtons = document.querySelectorAll('.device-btn');
-    const instructionPanels = document.querySelectorAll('.device-instructions');
+    const deviceButtons = document.querySelectorAll(".device-btn");
+    const instructionPanels = document.querySelectorAll(".device-instructions");
 
-    deviceButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const deviceId = button.getAttribute('data-device');
-            
+    deviceButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const deviceId = button.getAttribute("data-device");
+
             // Remove active from all buttons
-            deviceButtons.forEach(btn => btn.classList.remove('active'));
-            
+            deviceButtons.forEach((btn) => btn.classList.remove("active"));
+
             // Add active to clicked button
-            button.classList.add('active');
-            
+            button.classList.add("active");
+
             // Hide all instruction panels
-            instructionPanels.forEach(panel => panel.classList.remove('active'));
-            
+            instructionPanels.forEach((panel) =>
+                panel.classList.remove("active"),
+            );
+
             // Show selected instruction panel
-            const targetPanel = document.getElementById(`instructions-${deviceId}`);
+            const targetPanel = document.getElementById(
+                `instructions-${deviceId}`,
+            );
             if (targetPanel) {
-                targetPanel.classList.add('active');
+                targetPanel.classList.add("active");
             }
         });
     });
