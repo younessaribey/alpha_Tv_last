@@ -73,6 +73,11 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Track when payment step is loaded
+    useEffect(() => {
+        trackTikTokEvent('AddPaymentInfo');
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -96,6 +101,19 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
 
     return (
         <div className="payment-form-container">
+            {/* Progress Indicator */}
+            <div className="checkout-progress">
+                <div className="progress-step completed">
+                    <div className="step-dot">✓</div>
+                    <span>{lang === 'fr' ? 'Infos' : 'Info'}</span>
+                </div>
+                <div className="progress-line"></div>
+                <div className="progress-step active">
+                    <div className="step-dot">2</div>
+                    <span>{lang === 'fr' ? 'Paiement' : 'Payment'}</span>
+                </div>
+            </div>
+
             {/* Back button */}
             <button onClick={onBack} className="back-btn" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
@@ -139,6 +157,22 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
                         <span>{lang === 'fr' ? '💳 Payer maintenant' : '💳 Pay Now'}</span>
                     )}
                 </button>
+
+                {/* Reassurance Micro-copy */}
+                <div className="reassurance">
+                    <div className="reassurance-item">
+                        <span>🔒</span>
+                        <span>{lang === 'fr' ? 'Paiement 100% sécurisé' : '100% secure payment'}</span>
+                    </div>
+                    <div className="reassurance-item">
+                        <span>✅</span>
+                        <span>{lang === 'fr' ? 'Aucun frais caché' : 'No hidden fees'}</span>
+                    </div>
+                    <div className="reassurance-item">
+                        <span>📧</span>
+                        <span>{lang === 'fr' ? 'Confirmation par email' : 'Email confirmation'}</span>
+                    </div>
+                </div>
             </form>
 
             <style>{`
@@ -261,6 +295,81 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
                 }
+
+                /* Progress Indicator */
+                .checkout-progress {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    padding: 0.75rem;
+                    background: var(--color-surface);
+                    border: 1px solid var(--color-border);
+                    border-radius: 12px;
+                }
+
+                .progress-step {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .step-dot {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    background: var(--color-border);
+                    color: var(--color-text-muted);
+                }
+
+                .progress-step.completed .step-dot {
+                    background: var(--color-success);
+                    color: white;
+                }
+
+                .progress-step.active .step-dot {
+                    background: var(--color-primary);
+                    color: white;
+                }
+
+                .progress-step span {
+                    font-size: 0.8125rem;
+                    font-weight: 500;
+                    color: var(--color-text-muted);
+                }
+
+                .progress-step.active span {
+                    color: var(--color-primary);
+                    font-weight: 600;
+                }
+
+                .progress-line {
+                    width: 40px;
+                    height: 2px;
+                    background: var(--color-border);
+                }
+
+                /* Reassurance */
+                .reassurance {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 0.75rem;
+                    padding-top: 0.5rem;
+                }
+
+                .reassurance-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.375rem;
+                    font-size: 0.75rem;
+                    color: var(--color-text-muted);
+                }
             `}</style>
         </div>
     );
@@ -354,9 +463,10 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
             </div>
 
             <div className="checkout-form-inner">
-                <h2 className="form-title">
-                    {lang === 'fr' ? 'Vos informations' : 'Your Information'}
-                </h2>
+                {/* Progress Indicator Step 1 */}
+                <div className="checkout-progress-simple">
+                    <span className="step-label active">{lang === 'fr' ? 'Étape 1/2 : Vos informations' : 'Step 1/2: Your Information'}</span>
+                </div>
 
                 <form onSubmit={handleSubmit} className="checkout-form">
                     <div className="form-group">
@@ -610,6 +720,21 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     gap: 1rem;
                     font-size: 0.8125rem;
                     color: var(--color-text-muted);
+                }
+
+                .checkout-progress-simple {
+                    text-align: center;
+                    margin-bottom: 1rem;
+                }
+
+                .step-label {
+                    font-size: 0.8125rem;
+                    font-weight: 600;
+                    color: var(--color-text-muted);
+                }
+
+                .step-label.active {
+                    color: var(--color-primary);
                 }
             `}</style>
         </div>
