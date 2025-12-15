@@ -1,0 +1,757 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../lib/data';
+
+const lang: Lang = 'fr';
+
+// Device platforms with direct links
+const devices = [
+    { 
+        id: 'ios',
+        name: 'iPhone/iPad', 
+        icon: '📱',
+        link: 'https://apps.apple.com/app/cap-player/id1234567890',
+        instructions: lang === 'fr' 
+            ? 'Ouvrez l\'App Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
+            : 'Open the App Store and search for "Cap Player" or click the button below.'
+    },
+    { 
+        id: 'android',
+        name: 'Android', 
+        icon: '🤖',
+        link: 'https://play.google.com/store/apps/details?id=com.capplayer',
+        instructions: lang === 'fr' 
+            ? 'Ouvrez le Google Play Store et recherchez "Cap Player" ou cliquez sur le bouton ci-dessous.'
+            : 'Open Google Play Store and search for "Cap Player" or click the button below.'
+    },
+    { 
+        id: 'firetv',
+        name: 'Fire TV/Stick', 
+        icon: '🔥',
+        link: 'https://www.amazon.com/dp/B0CAPPLAYER',
+        code: '557851',
+        instructions: lang === 'fr' 
+            ? 'Sur votre Fire TV, allez dans Recherche > tapez le code 557851 ou "Cap Player".'
+            : 'On your Fire TV, go to Search > type code 557851 or "Cap Player".'
+    },
+    { 
+        id: 'samsung',
+        name: 'Samsung TV', 
+        icon: '📺',
+        instructions: lang === 'fr' 
+            ? 'Ouvrez le Samsung App Store sur votre TV et recherchez "Cap Player".'
+            : 'Open Samsung App Store on your TV and search for "Cap Player".'
+    },
+    { 
+        id: 'lg',
+        name: 'LG TV', 
+        icon: '📺',
+        instructions: lang === 'fr' 
+            ? 'Ouvrez le LG Content Store sur votre TV et recherchez "Cap Player".'
+            : 'Open LG Content Store on your TV and search for "Cap Player".'
+    },
+    { 
+        id: 'windows',
+        name: 'Windows PC', 
+        icon: '💻',
+        link: 'https://capplayer.com/download/windows',
+        instructions: lang === 'fr' 
+            ? 'Téléchargez Cap Player directement depuis le site officiel.'
+            : 'Download Cap Player directly from the official website.'
+    },
+    { 
+        id: 'mac',
+        name: 'Mac', 
+        icon: '🍎',
+        link: 'https://apps.apple.com/app/cap-player-mac/id1234567890',
+        instructions: lang === 'fr' 
+            ? 'Ouvrez l\'App Store sur votre Mac et recherchez "Cap Player".'
+            : 'Open the App Store on your Mac and search for "Cap Player".'
+    },
+];
+---
+
+<Layout title={lang === 'fr' ? 'Comment ça marche' : 'How It Works'} lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="main-content">
+        <!-- Hero -->
+        <section class="section">
+            <div class="container">
+                <div class="page-header" data-animate>
+                    <h1>{lang === 'fr' ? 'Comment ça marche' : 'How It Works'}</h1>
+                    <p class="page-subtitle">{lang === 'fr' ? 'Commencez en 3 étapes simples' : 'Get started in 3 simple steps'}</p>
+                </div>
+
+                <!-- Steps Overview -->
+                <div class="steps-grid">
+                    <div class="step-card" data-animate>
+                        <div class="step-number">1</div>
+                        <h3>{lang === 'fr' ? 'Téléchargez Cap Player' : 'Download Cap Player'}</h3>
+                        <p>{lang === 'fr' ? 'Installez l\'application sur votre appareil' : 'Install the app on your device'}</p>
+                    </div>
+                    <div class="step-card" data-animate>
+                        <div class="step-number">2</div>
+                        <h3>{lang === 'fr' ? 'Notez votre MAC & Clé' : 'Note your MAC & Key'}</h3>
+                        <p>{lang === 'fr' ? 'Copiez les informations affichées' : 'Copy the displayed information'}</p>
+                    </div>
+                    <div class="step-card" data-animate>
+                        <div class="step-number">3</div>
+                        <h3>{lang === 'fr' ? 'Commandez & Profitez' : 'Order & Enjoy'}</h3>
+                        <p>{lang === 'fr' ? 'Remplissez le formulaire et regardez !' : 'Fill the form and start watching!'}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 1: Download Cap Player -->
+        <section class="section section-alt" id="step1">
+            <div class="container">
+                <div class="step-detail">
+                    <div class="step-badge">Étape 1</div>
+                    <h2>📲 {lang === 'fr' ? 'Téléchargez Cap Player' : 'Download Cap Player'}</h2>
+                    <p class="step-description">{lang === 'fr' ? 'Choisissez votre appareil et suivez les instructions' : 'Choose your device and follow the instructions'}</p>
+
+                    <!-- Device Selector -->
+                    <div class="device-grid">
+                        {devices.map((device) => (
+                            <button class="device-btn" data-device={device.id}>
+                                <span class="device-icon">{device.icon}</span>
+                                <span class="device-name">{device.name}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <!-- Device Instructions (Hidden by default, shown when device is selected) -->
+                    <div class="device-instructions-container">
+                        {devices.map((device) => (
+                            <div class="device-instructions" id={`instructions-${device.id}`}>
+                                <div class="instruction-card">
+                                    <div class="instruction-header">
+                                        <span class="instruction-icon">{device.icon}</span>
+                                        <h3>{device.name}</h3>
+                                    </div>
+                                    <p class="instruction-text">{device.instructions}</p>
+                                    
+                                    {device.code && (
+                                        <div class="download-code">
+                                            <span>{lang === 'fr' ? 'Code de téléchargement :' : 'Download code:'}</span>
+                                            <code>{device.code}</code>
+                                        </div>
+                                    )}
+                                    
+                                    {device.link && (
+                                        <a href={device.link} target="_blank" rel="noopener noreferrer" class="btn btn-primary download-btn">
+                                            {lang === 'fr' ? '📥 Télécharger Cap Player' : '📥 Download Cap Player'}
+                                        </a>
+                                    )}
+                                    
+                                    {!device.link && !device.code && (
+                                        <p class="instruction-note">{lang === 'fr' ? 'Recherchez "Cap Player" dans le store de votre appareil.' : 'Search for "Cap Player" in your device\'s store.'}</p>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="official-site">
+                        <a href="https://capplayer.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                            🌐 {lang === 'fr' ? 'Visiter le site officiel Cap Player' : 'Visit official Cap Player website'}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Find MAC Address -->
+        <section class="section" id="step2">
+            <div class="container">
+                <div class="step-detail">
+                    <div class="step-badge">Étape 2</div>
+                    <h2>🔑 {lang === 'fr' ? 'Trouvez votre MAC Address & Device Key' : 'Find your MAC Address & Device Key'}</h2>
+                    <p class="step-description">{lang === 'fr' ? 'Ces informations sont affichées à l\'ouverture de Cap Player' : 'This information is displayed when you open Cap Player'}</p>
+
+                    <div class="mac-guide">
+                        <div class="mac-screenshot">
+                            <img src="/images/PHOTO-2025-12-14-13-47-55.jpg" alt="Cap Player MAC Address & Device Key" />
+                            <div class="screenshot-labels">
+                                <div class="label mac-label">
+                                    <span class="label-arrow">←</span>
+                                    <span class="label-text">MAC Address</span>
+                                </div>
+                                <div class="label key-label">
+                                    <span class="label-arrow">←</span>
+                                    <span class="label-text">Device Key</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mac-info">
+                            <div class="info-card">
+                                <h3>📋 {lang === 'fr' ? 'Ce qu\'il faut noter' : 'What to note'}</h3>
+                                <ul>
+                                    <li>
+                                        <strong>MAC Address</strong>
+                                        <p>{lang === 'fr' ? 'Une adresse unique à votre appareil (format: XX:XX:XX:XX:XX:XX)' : 'A unique address for your device (format: XX:XX:XX:XX:XX:XX)'}</p>
+                                    </li>
+                                    <li>
+                                        <strong>Device Key</strong>
+                                        <p>{lang === 'fr' ? 'Un code de sécurité pour activer votre abonnement' : 'A security code to activate your subscription'}</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="important-note">
+                                <span class="note-icon">⚠️</span>
+                                <p>{lang === 'fr' ? 'Gardez ces informations ! Vous en aurez besoin pour activer votre abonnement.' : 'Keep this information! You will need it to activate your subscription.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Order -->
+        <section class="section section-alt" id="step3">
+            <div class="container">
+                <div class="step-detail">
+                    <div class="step-badge">Étape 3</div>
+                    <h2>🎉 {lang === 'fr' ? 'Commandez votre abonnement' : 'Order your subscription'}</h2>
+                    <p class="step-description">{lang === 'fr' ? 'Choisissez votre forfait et remplissez vos informations' : 'Choose your plan and fill in your information'}</p>
+
+                    <div class="order-options">
+                        <div class="order-card" data-animate>
+                            <div class="order-icon">💳</div>
+                            <h3>{lang === 'fr' ? 'Paiement en ligne' : 'Online Payment'}</h3>
+                            <p>{lang === 'fr' ? 'Payez par carte bancaire via Stripe. Remplissez votre MAC Address et Device Key dans le formulaire de commande.' : 'Pay by credit card via Stripe. Fill in your MAC Address and Device Key in the order form.'}</p>
+                            <a href="/pricing" class="btn btn-primary">
+                                {lang === 'fr' ? 'Voir les forfaits' : 'View Plans'} →
+                            </a>
+                        </div>
+
+                        <div class="order-card" data-animate>
+                            <div class="order-icon">💬</div>
+                            <h3>WhatsApp</h3>
+                            <p>{lang === 'fr' ? 'Envoyez-nous votre MAC Address et Device Key par WhatsApp pour une activation rapide.' : 'Send us your MAC Address and Device Key via WhatsApp for quick activation.'}</p>
+                            <a href="https://wa.me/33612345678?text=Bonjour, je souhaite un abonnement. Voici mes infos:%0A- MAC Address: %0A- Device Key:" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                                💬 {lang === 'fr' ? 'Contacter sur WhatsApp' : 'Contact on WhatsApp'}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="activation-info">
+                        <h3>⏱️ {lang === 'fr' ? 'Délai d\'activation' : 'Activation time'}</h3>
+                        <p>{lang === 'fr' ? 'Votre abonnement sera activé dans les 1-2 heures suivant la réception de vos informations. Contactez-nous sur WhatsApp pour un service encore plus rapide !' : 'Your subscription will be activated within 1-2 hours after receiving your information. Contact us on WhatsApp for even faster service!'}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="container">
+                <div class="cta-card" data-animate>
+                    <h2>{lang === 'fr' ? '🚀 Prêt à commencer ?' : '🚀 Ready to get started?'}</h2>
+                    <p>{lang === 'fr' ? 'Profitez de plus de 10 000 chaînes, 22 000 films et séries en qualité 4K' : 'Enjoy 10,000+ channels, 22,000 movies and series in 4K quality'}</p>
+                    <div class="cta-buttons">
+                        <a href="/pricing" class="btn btn-primary btn-large">
+                            {lang === 'fr' ? '🎁 Essai Gratuit 24h' : '🎁 Free 24h Trial'}
+                        </a>
+                        <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .page-subtitle {
+        color: var(--color-text-muted);
+        font-size: 1.125rem;
+    }
+
+    /* Steps Overview */
+    .steps-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 56rem;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .steps-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .step-card {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+    }
+
+    .step-number {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    .step-card h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+        color: var(--color-text-muted);
+        font-size: 0.9375rem;
+    }
+
+    /* Section Alt */
+    .section-alt {
+        background: rgba(139, 92, 246, 0.03);
+    }
+
+    /* Step Detail */
+    .step-detail {
+        max-width: 56rem;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .step-badge {
+        display: inline-block;
+        padding: 0.375rem 1rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    .step-detail h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .step-description {
+        color: var(--color-text-muted);
+        margin-bottom: 2rem;
+    }
+
+    /* Device Grid */
+    .device-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+        .device-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .device-grid {
+            grid-template-columns: repeat(7, 1fr);
+        }
+    }
+
+    .device-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: var(--color-surface);
+        border: 2px solid var(--color-border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .device-btn:hover {
+        border-color: var(--color-primary);
+        background: rgba(139, 92, 246, 0.05);
+    }
+
+    .device-btn.active {
+        border-color: var(--color-primary);
+        background: rgba(139, 92, 246, 0.1);
+    }
+
+    .device-icon {
+        font-size: 1.5rem;
+    }
+
+    .device-name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    /* Device Instructions */
+    .device-instructions-container {
+        margin-bottom: 1.5rem;
+    }
+
+    .device-instructions {
+        display: none;
+    }
+
+    .device-instructions.active {
+        display: block;
+    }
+
+    .instruction-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .instruction-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .instruction-icon {
+        font-size: 2rem;
+    }
+
+    .instruction-header h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .instruction-text {
+        color: var(--color-text-muted);
+        margin-bottom: 1rem;
+    }
+
+    .download-code {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .download-code code {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--color-primary);
+    }
+
+    .download-btn {
+        display: inline-flex;
+    }
+
+    .instruction-note {
+        color: var(--color-text-subtle);
+        font-size: 0.875rem;
+    }
+
+    .official-site {
+        margin-top: 1rem;
+    }
+
+    /* MAC Guide */
+    .mac-guide {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: left;
+    }
+
+    @media (min-width: 768px) {
+        .mac-guide {
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+        }
+    }
+
+    .mac-screenshot {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid var(--color-primary);
+    }
+
+    .mac-screenshot img {
+        width: 100%;
+        display: block;
+    }
+
+    .screenshot-labels {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(139, 92, 246, 0.9);
+        border-radius: 8px;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .mac-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .info-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .info-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-card li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .info-card li:last-child {
+        border-bottom: none;
+    }
+
+    .info-card li strong {
+        display: block;
+        color: var(--color-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .info-card li p {
+        color: var(--color-text-muted);
+        font-size: 0.875rem;
+    }
+
+    .important-note {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 12px;
+    }
+
+    .note-icon {
+        font-size: 1.25rem;
+    }
+
+    .important-note p {
+        color: var(--color-text);
+        font-size: 0.875rem;
+    }
+
+    /* Order Options */
+    .order-options {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .order-options {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .order-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .order-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .order-card h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .order-card p {
+        color: var(--color-text-muted);
+        font-size: 0.9375rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-whatsapp {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #25D366;
+        color: white;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .btn-whatsapp:hover {
+        background: #20b85a;
+    }
+
+    .activation-info {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .activation-info h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 0.5rem;
+    }
+
+    .activation-info p {
+        color: var(--color-text-muted);
+    }
+
+    /* CTA Card */
+    .cta-card {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+
+    .cta-card h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .cta-card p {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+        max-width: 32rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+        .cta-buttons {
+            flex-direction: row;
+        }
+    }
+
+    .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+</style>
+
+<script>
+    // Device selector functionality
+    const deviceButtons = document.querySelectorAll('.device-btn');
+    const instructionPanels = document.querySelectorAll('.device-instructions');
+
+    deviceButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const deviceId = button.getAttribute('data-device');
+            
+            // Remove active from all buttons
+            deviceButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active to clicked button
+            button.classList.add('active');
+            
+            // Hide all instruction panels
+            instructionPanels.forEach(panel => panel.classList.remove('active'));
+            
+            // Show selected instruction panel
+            const targetPanel = document.getElementById(`instructions-${deviceId}`);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+
+    // Auto-select first device on load
+    if (deviceButtons.length > 0) {
+        deviceButtons[0].click();
+    }
+</script>

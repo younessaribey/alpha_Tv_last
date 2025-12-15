@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CancelForm from '../components/CancelForm';
+import type { Lang } from '../lib/data';
+
+const lang: Lang = 'fr';
+---
+
+<Layout title={lang === 'fr' ? 'Annuler mon abonnement' : 'Cancel Subscription'} lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="pt-[var(--header-height)]">
+        <section class="section">
+            <div class="container">
+                <div class="max-w-md mx-auto">
+                    <CancelForm client:load lang={lang} />
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</Layout>

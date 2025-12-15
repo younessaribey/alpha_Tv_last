@@ -1,0 +1,269 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../lib/data';
+
+const lang: Lang = 'fr';
+
+const faqs = [
+    {
+        question: { en: 'How do I install Cap Player?', fr: 'Comment installer Cap Player ?' },
+        answer: { 
+            en: 'Cap Player is available on iOS, Android, Smart TVs, Roku, Fire TV, and Windows. Visit our How It Works page for step-by-step installation guides for each platform.',
+            fr: 'Cap Player est disponible sur iOS, Android, Smart TV, Roku, Fire TV et Windows. Visitez notre page "Comment ça marche" pour des guides d\'installation étape par étape.' 
+        },
+    },
+    {
+        question: { en: 'How do I find my MAC address and PIN?', fr: 'Comment trouver mon adresse MAC et mon code PIN ?' },
+        answer: { 
+            en: 'After installing Cap Player, open the app. Your MAC address and PIN/Device Key will be displayed on the login screen.',
+            fr: 'Après avoir installé Cap Player, ouvrez l\'application. Votre adresse MAC et votre code PIN seront affichés sur l\'écran de connexion.' 
+        },
+    },
+    {
+        question: { en: 'How many devices can I use?', fr: 'Combien d\'appareils puis-je utiliser ?' },
+        answer: { 
+            en: 'It depends on your plan. Single device plans support 1 device. Duo plans support 2 simultaneous streams.',
+            fr: 'Cela dépend de votre forfait. Les forfaits 1 appareil supportent 1 appareil. Les forfaits Duo supportent 2 flux simultanés.' 
+        },
+    },
+    {
+        question: { en: 'What channels are included?', fr: 'Quelles chaînes sont incluses ?' },
+        answer: { 
+            en: 'We offer over 10,000 channels including sports, movies, news, entertainment, and international channels in HD/4K quality.',
+            fr: 'Nous proposons plus de 10 000 chaînes incluant sports, films, actualités, divertissement et chaînes internationales en qualité HD/4K.' 
+        },
+    },
+    {
+        question: { en: 'Is there a free trial?', fr: 'Y a-t-il un essai gratuit ?' },
+        answer: { 
+            en: 'Yes! All plans include a 24-hour free trial. Test all channels before committing.',
+            fr: 'Oui ! Tous les forfaits incluent un essai gratuit de 24 heures. Testez toutes les chaînes avant de vous engager.' 
+        },
+    },
+    {
+        question: { en: 'How do I renew my subscription?', fr: 'Comment renouveler mon abonnement ?' },
+        answer: { 
+            en: 'Simply purchase a new plan from our shop. Use the same MAC address and PIN for seamless continuity.',
+            fr: 'Achetez simplement un nouveau forfait dans notre boutique. Utilisez la même adresse MAC et le même code PIN pour une continuité sans interruption.' 
+        },
+    },
+    {
+        question: { en: 'What payment methods do you accept?', fr: 'Quels moyens de paiement acceptez-vous ?' },
+        answer: { 
+            en: 'We accept all major credit/debit cards, Apple Pay, and Google Pay through Stripe.',
+            fr: 'Nous acceptons toutes les cartes de crédit/débit majeures, Apple Pay et Google Pay via Stripe.' 
+        },
+    },
+    {
+        question: { en: 'How long does activation take?', fr: 'Combien de temps prend l\'activation ?' },
+        answer: { 
+            en: 'Activation is typically completed within 1-2 hours. Contact us via WhatsApp for faster service.',
+            fr: 'L\'activation est généralement effectuée dans les 1-2 heures. Contactez-nous via WhatsApp pour un service plus rapide.' 
+        },
+    },
+];
+---
+
+<Layout title="FAQ" lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="main-content">
+        <section class="section">
+            <div class="container">
+                <!-- Header -->
+                <div class="page-header" data-animate>
+                    <span class="badge">❓ {lang === 'fr' ? 'Centre d\'Aide' : 'Help Center'}</span>
+                    <h1>{lang === 'fr' ? 'Questions Fréquentes' : 'Frequently Asked Questions'}</h1>
+                    <p class="page-subtitle">{lang === 'fr' ? 'Trouvez des réponses aux questions les plus courantes' : 'Find answers to the most common questions'}</p>
+                </div>
+
+                <!-- FAQ Accordion -->
+                <div class="faq-container">
+                    {faqs.map((faq, index) => (
+                        <div class="faq-item" data-animate>
+                            <button class="faq-question" onclick={`this.parentElement.classList.toggle('open')`}>
+                                <span>{faq.question[lang]}</span>
+                                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>{faq.answer[lang]}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <!-- Still Need Help -->
+                <div class="help-card" data-animate>
+                    <h2>{lang === 'fr' ? 'Vous n\'avez pas trouvé votre réponse ?' : 'Didn\'t find your answer?'}</h2>
+                    <p>{lang === 'fr' ? 'Notre équipe est disponible 24/7' : 'Our team is available 24/7'}</p>
+                    <div class="help-buttons">
+                        <a href="/contact" class="btn btn-secondary">
+                            {lang === 'fr' ? 'Nous Contacter' : 'Contact Us'}
+                        </a>
+                        <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        margin-bottom: 1rem;
+    }
+
+    .page-header h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .page-subtitle {
+        color: var(--color-text-muted);
+        font-size: 1.125rem;
+    }
+
+    /* FAQ Container */
+    .faq-container {
+        max-width: 42rem;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+
+    .faq-question {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .faq-question:hover {
+        background: rgba(139, 92, 246, 0.05);
+    }
+
+    .faq-icon {
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+        color: var(--color-text-muted);
+    }
+
+    .faq-item.open .faq-icon {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 500px;
+    }
+
+    .faq-answer p {
+        padding: 0 1.25rem 1.25rem;
+        color: var(--color-text-muted);
+        line-height: 1.6;
+    }
+
+    /* Help Card */
+    .help-card {
+        max-width: 42rem;
+        margin: 3rem auto 0;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .help-card h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .help-card p {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .help-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .help-buttons {
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+
+    .btn-whatsapp {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #25D366;
+        color: white;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .btn-whatsapp:hover {
+        background: #20b85a;
+    }
+</style>
+
+<script>
+    // Initialize FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const item = button.parentElement;
+            item?.classList.toggle('open');
+        });
+    });
+</script>

@@ -1,0 +1,39 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SuccessContent from '../../components/SuccessContent';
+import type { Lang } from '../../lib/data';
+
+const lang: Lang = 'fr';
+---
+
+<Layout title="Paiement réussi" lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="main-content">
+        <section class="success-section">
+            <div class="container">
+                <SuccessContent client:load lang={lang} />
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .main-content {
+        padding-top: var(--header-height);
+    }
+
+    .success-section {
+        padding: 2rem 0 4rem;
+    }
+
+    @media (min-width: 768px) {
+        .success-section {
+            padding: 3rem 0 5rem;
+        }
+    }
+</style>

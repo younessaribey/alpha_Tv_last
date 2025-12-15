@@ -1,0 +1,575 @@
+---
+// Scrolling Channel Logos Component - Using CDN sources
+interface Props {
+    lang: 'en' | 'fr';
+}
+
+const { lang } = Astro.props;
+
+// Streaming platforms - popular in France
+const platforms = [
+    { name: 'Netflix', logo: '/logos/netflix_logo_1765793447774.png' },
+    { name: 'Disney+', logo: '/logos/disney_plus_logo_1765793514911.png' },
+    { name: 'Canal+', logo: '/logos/canal_plus_logo_1765793476078.png' },
+    { name: 'beIN Sports', logo: '/logos/bein_sports_purple_1765793640937.png' },
+    { name: 'Amazon Prime', logo: '/logos/amazon-prime.png' },
+    { name: 'Apple TV+', logo: '/logos/apple-tv.png' },
+    { name: 'HBO Max', logo: '/logos/hbo-max.png' },
+    { name: 'TF1', logo: '/logos/tf1.png' },
+];
+
+// Football leagues - separate scroll
+const leagues = [
+    { name: 'Champions League', logo: '/logos/champions_league_logo_1765793396216.png' },
+    { name: 'Premier League', logo: '/logos/premier_league_logo_1765793432569.png' },
+    { name: 'La Liga', logo: '/logos/laliga_logo_1765793567812.png' },
+    { name: 'Bundesliga', logo: '/logos/bundesliga_logo_1765793583493.png' },
+    { name: 'Serie A', logo: '/logos/serie_a_logo_1765793601121.png' },
+    { name: 'Ligue 1', logo: '/logos/ligue1_logo_1765793615718.png' },
+];
+
+// Duplicate for seamless scroll
+const duplicatedPlatforms = [...platforms, ...platforms, ...platforms];
+const duplicatedLeagues = [...leagues, ...leagues, ...leagues];
+
+// Country flags using FlagCDN
+const countries = [
+    { code: 'fr', name: 'France' },
+    { code: 'dz', name: 'Algeria' },
+    { code: 'gb', name: 'UK' },
+    { code: 'es', name: 'Spain' },
+    { code: 'us', name: 'USA' },
+    { code: 'it', name: 'Italy' },
+    { code: 'de', name: 'Germany' },
+    { code: 'ma', name: 'Morocco' },
+    { code: 'tn', name: 'Tunisia' },
+    { code: 'ae', name: 'UAE' },
+    { code: 'tr', name: 'Turkey' },
+    { code: 'pt', name: 'Portugal' },
+];
+---
+
+<section class="channels-section">
+    <!-- Background Effects -->
+    <div class="channels-bg">
+        <div class="channel-blob blob-1"></div>
+        <div class="channel-blob blob-2"></div>
+    </div>
+
+    <div class="container channels-content">
+        <!-- Section Title -->
+        <div class="channels-header" data-animate>
+            <h2 class="gradient-text">
+                {lang === 'fr' ? 'Tous Vos Contenus Préférés' : 'All Your Favorite Content'}
+            </h2>
+            <p>
+                {lang === 'fr'
+                    ? 'Netflix, beIN Sports, Canal+, Disney+, HBO et bien plus. Accédez à des milliers de films et séries en streaming illimité.'
+                    : 'Netflix, beIN Sports, Canal+, Disney+, HBO and many more. Access thousands of movies and series with unlimited streaming.'
+                }
+            </p>
+            
+            <!-- Category Tags -->
+            <div class="category-tags">
+                <span class="category-tag">⚽ {lang === 'fr' ? 'Sports' : 'Sports'}</span>
+                <span class="category-tag">🎬 {lang === 'fr' ? 'Films' : 'Movies'}</span>
+                <span class="category-tag">📺 {lang === 'fr' ? 'Séries' : 'Series'}</span>
+                <span class="category-tag">👶 Kids</span>
+                <span class="category-tag">🎵 {lang === 'fr' ? 'Musique' : 'Music'}</span>
+            </div>
+        </div>
+
+        <!-- Scrolling Streaming Platforms -->
+        <div class="scroll-section" data-animate>
+            <p class="scroll-title">📺 {lang === 'fr' ? 'Plateformes de streaming' : 'Streaming Platforms'}</p>
+            <div class="channel-logos-container">
+                <div class="channel-logos-track">
+                    {duplicatedPlatforms.map((platform) => (
+                        <div class="channel-logo-wrapper">
+                            <div class="channel-logo-item">
+                                <img
+                                    src={platform.logo}
+                                    alt={platform.name}
+                                    class="channel-logo-image"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <span class="channel-name">{platform.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrolling Football Leagues -->
+        <div class="scroll-section" data-animate>
+            <p class="scroll-title">⚽ {lang === 'fr' ? 'Ligues de Football' : 'Football Leagues'}</p>
+            <div class="channel-logos-container leagues-scroll">
+                <div class="channel-logos-track leagues-track">
+                    {duplicatedLeagues.map((league) => (
+                        <div class="channel-logo-wrapper">
+                            <div class="channel-logo-item league-scroll-item">
+                                <img
+                                    src={league.logo}
+                                    alt={league.name}
+                                    class="channel-logo-image"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <span class="channel-name">{league.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sports Leagues Section -->
+        <div class="leagues-section" data-animate>
+            <p class="leagues-title">
+                {lang === 'fr' ? '⚽ Toutes les Grandes Ligues' : '⚽ All Major Leagues'}
+            </p>
+            <div class="leagues-grid">
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/champions_league_logo_1765793396216.png" alt="Champions League" loading="lazy" />
+                    </div>
+                    <span class="league-name">Champions League</span>
+                </div>
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/premier_league_logo_1765793432569.png" alt="Premier League" loading="lazy" />
+                    </div>
+                    <span class="league-name">Premier League</span>
+                </div>
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/laliga_logo_1765793567812.png" alt="La Liga" loading="lazy" />
+                    </div>
+                    <span class="league-name">La Liga</span>
+                </div>
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/bundesliga_logo_1765793583493.png" alt="Bundesliga" loading="lazy" />
+                    </div>
+                    <span class="league-name">Bundesliga</span>
+                </div>
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/serie_a_logo_1765793601121.png" alt="Serie A" loading="lazy" />
+                    </div>
+                    <span class="league-name">Serie A</span>
+                </div>
+                <div class="league-wrapper">
+                    <div class="league-badge-icon">
+                        <img src="/logos/ligue1_logo_1765793615718.png" alt="Ligue 1" loading="lazy" />
+                    </div>
+                    <span class="league-name">Ligue 1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Country Flags Section -->
+        <div class="flags-section" data-animate>
+            <p class="flags-title">
+                {lang === 'fr' ? '🌍 Chaînes de +50 pays' : '🌍 Channels from 50+ countries'}
+            </p>
+            <div class="country-flags">
+                {countries.map((country) => (
+                    <img 
+                        src={`https://flagcdn.com/w80/${country.code}.png`}
+                        srcset={`https://flagcdn.com/w160/${country.code}.png 2x`}
+                        alt={country.name}
+                        class="flag-img"
+                        title={country.name}
+                        loading="lazy"
+                    />
+                ))}
+                <span class="plus-more">+38</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .channels-section {
+        position: relative;
+        padding: 3rem 0;
+        overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+        .channels-section {
+            padding: 4rem 0;
+        }
+    }
+
+    .channels-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .channel-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.25;
+    }
+
+    .blob-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--color-primary);
+        top: 20%;
+        left: 10%;
+        animation: pulse 6s ease-in-out infinite;
+    }
+
+    .blob-2 {
+        width: 250px;
+        height: 250px;
+        background: var(--color-secondary);
+        bottom: 10%;
+        right: 10%;
+        animation: pulse 6s ease-in-out infinite 3s;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.25; transform: scale(1); }
+        50% { opacity: 0.35; transform: scale(1.05); }
+    }
+
+    .channels-content {
+        position: relative;
+        z-index: 10;
+    }
+
+    .channels-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .channels-header h2 {
+        font-size: clamp(1.5rem, 5vw, 2.25rem);
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+    }
+
+    .channels-header p {
+        color: var(--color-text-muted);
+        font-size: 0.9375rem;
+        max-width: 550px;
+        margin: 0 auto 1.25rem;
+        line-height: 1.6;
+    }
+
+    .category-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .category-tag {
+        padding: 0.5rem 0.875rem;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 100px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-primary-light);
+        white-space: nowrap;
+    }
+
+    /* Scrolling Logos */
+    .channel-logos-container {
+        width: 100%;
+        overflow: hidden;
+        padding: 1.5rem 0;
+        position: relative;
+    }
+
+    .channel-logos-container::before,
+    .channel-logos-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 60px;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .channel-logos-container::before {
+        left: 0;
+        background: linear-gradient(to right, var(--color-bg), transparent);
+    }
+
+    .channel-logos-container::after {
+        right: 0;
+        background: linear-gradient(to left, var(--color-bg), transparent);
+    }
+
+    @media (min-width: 768px) {
+        .channel-logos-container::before,
+        .channel-logos-container::after {
+            width: 100px;
+        }
+    }
+
+    /* Scroll section title */
+    .scroll-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .scroll-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--color-text);
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .channel-logos-track {
+        display: flex;
+        gap: 1.5rem;
+        animation: scroll 35s linear infinite;
+        width: fit-content;
+        will-change: transform;
+    }
+
+    .channel-logos-track:hover {
+        animation-play-state: paused;
+    }
+
+    /* Reverse scroll for leagues */
+    .leagues-track {
+        animation: scroll-reverse 30s linear infinite;
+    }
+
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-100% / 3)); }
+    }
+
+    @keyframes scroll-reverse {
+        0% { transform: translateX(calc(-100% / 3)); }
+        100% { transform: translateX(0); }
+    }
+
+    .channel-logo-item {
+        flex-shrink: 0;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+        .channel-logo-item {
+            width: 120px;
+            height: 120px;
+            padding: 14px;
+            border-radius: 18px;
+        }
+        
+        .channel-logos-track {
+            gap: 2rem;
+        }
+    }
+
+    .channel-logo-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .channel-logo-item:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(139, 92, 246, 0.4);
+        transform: scale(1.05);
+    }
+
+    .channel-logo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: brightness(1) saturate(1.1);
+        transition: filter 0.3s ease;
+    }
+
+    .channel-logo-item:hover .channel-logo-image {
+        filter: brightness(1.15) saturate(1.25);
+    }
+
+    .channel-name {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        color: var(--color-text-muted);
+        text-align: center;
+        white-space: nowrap;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (min-width: 768px) {
+        .channel-name {
+            font-size: 0.75rem;
+        }
+    }
+
+    /* Country Flags */
+    .flags-section {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .flags-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .country-flags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.625rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flag-img {
+        width: 32px;
+        height: 24px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    @media (min-width: 768px) {
+        .flag-img {
+            width: 40px;
+            height: 30px;
+        }
+        
+        .country-flags {
+            gap: 0.75rem;
+        }
+    }
+
+    .flag-img:hover {
+        transform: scale(1.15);
+    }
+
+    .plus-more {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 28px;
+        padding: 0 0.5rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    /* Sports Leagues */
+    .leagues-section {
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .leagues-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .leagues-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 640px) {
+        .leagues-grid {
+            grid-template-columns: repeat(6, 1fr);
+            max-width: 900px;
+        }
+    }
+
+    /* League wrapper - contains badge + text */
+    .league-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Badge icon - contains just the image */
+    .league-badge-icon {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .league-wrapper:hover .league-badge-icon {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .league-badge-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    @media (min-width: 768px) {
+        .league-badge-icon {
+            width: 90px;
+            height: 90px;
+            padding: 10px;
+        }
+    }
+
+    /* League name - outside the badge */
+    .league-name {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        color: var(--color-text-muted);
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    @media (min-width: 768px) {
+        .league-name {
+            font-size: 0.75rem;
+        }
+    }
+</style>

@@ -1,0 +1,367 @@
+---
+import { t, type Lang } from '../lib/data';
+
+interface Props {
+    lang?: Lang;
+}
+
+const { lang = 'fr' } = Astro.props;
+
+const navItems = [
+    { href: '/', label: t(lang, 'nav.home') },
+    { href: '/pricing', label: t(lang, 'nav.pricing') },
+    { href: '/how-it-works', label: t(lang, 'nav.howItWorks') },
+    { href: '/faq', label: t(lang, 'nav.faq') },
+    { href: '/contact', label: t(lang, 'nav.contact') },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50" id="main-header">
+    <div class="glass">
+        <div class="container">
+            <nav class="nav-container">
+                <!-- Logo -->
+                <a href="/" class="logo-link">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <span class="logo-text">AlphaTv</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="desktop-nav">
+                    {navItems.map(item => (
+                        <a 
+                            href={item.href} 
+                            class={`nav-link ${currentPath === item.href ? 'active' : ''}`}
+                        >
+                            {item.label}
+                        </a>
+                    ))}
+                </div>
+
+                <!-- Right Side -->
+                <div class="nav-right">
+                    <!-- Language Toggle -->
+                    <button 
+                        id="lang-toggle"
+                        class="lang-toggle"
+                        data-lang={lang}
+                        aria-label="Toggle language"
+                    >
+                        {lang === 'fr' ? 'EN' : 'FR'}
+                    </button>
+                    
+                    <!-- CTA Button (Desktop) -->
+                    <a href="/pricing" class="btn btn-primary cta-desktop">
+                        {t(lang, 'hero.cta')}
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="container">
+            <div class="mobile-menu-content">
+                {navItems.map(item => (
+                    <a 
+                        href={item.href} 
+                        class={`mobile-nav-link ${currentPath === item.href ? 'active' : ''}`}
+                    >
+                        {item.label}
+                    </a>
+                ))}
+                <a href="/pricing" class="btn btn-primary btn-cta mt-4">
+                    {t(lang, 'hero.cta')}
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: var(--header-height);
+    }
+
+    /* Logo */
+    .logo-link {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        text-decoration: none;
+    }
+
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    @media (min-width: 768px) {
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+        }
+    }
+
+    .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Desktop Nav */
+    .desktop-nav {
+        display: none;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+        .desktop-nav {
+            display: flex;
+        }
+    }
+
+    .nav-link {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--color-text);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.active {
+        color: var(--color-text);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Nav Right */
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .lang-toggle {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid transparent;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .lang-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--color-text);
+    }
+
+    .cta-desktop {
+        display: none;
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+
+    @media (min-width: 640px) {
+        .cta-desktop {
+            display: flex;
+        }
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+    }
+
+    .mobile-menu-btn:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    @media (min-width: 768px) {
+        .mobile-menu-btn {
+            display: none;
+        }
+    }
+
+    .hamburger-line {
+        width: 22px;
+        height: 2px;
+        background: var(--color-text);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+
+    .mobile-menu-btn.open .hamburger-line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .mobile-menu-btn.open .hamburger-line:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+
+    .mobile-menu-btn.open .hamburger-line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        display: none;
+        background: rgba(3, 0, 20, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid var(--color-border);
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        z-index: 40;
+    }
+
+    .mobile-menu.open {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @media (min-width: 768px) {
+        .mobile-menu {
+            display: none !important;
+        }
+    }
+
+    .mobile-menu-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 1.5rem 0;
+    }
+
+    .mobile-nav-link {
+        padding: 1rem;
+        border-radius: 12px;
+        font-size: 1.0625rem;
+        font-weight: 500;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+        color: var(--color-text);
+        background: rgba(139, 92, 246, 0.1);
+    }
+
+    .mt-4 {
+        margin-top: 1rem;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
+<script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const body = document.body;
+    
+    menuBtn?.addEventListener('click', () => {
+        const isOpen = mobileMenu?.classList.toggle('open');
+        menuBtn.classList.toggle('open');
+        menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        
+        // Prevent body scroll when menu is open
+        if (isOpen) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu?.classList.remove('open');
+            menuBtn?.classList.remove('open');
+            body.style.overflow = '';
+        });
+    });
+
+    // Language toggle
+    const langToggle = document.getElementById('lang-toggle');
+    langToggle?.addEventListener('click', () => {
+        const currentLang = langToggle.dataset.lang;
+        const newLang = currentLang === 'fr' ? 'en' : 'fr';
+        localStorage.setItem('lang', newLang);
+        window.location.reload();
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('main-header');
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        
+        if (currentScroll > 50) {
+            header?.classList.add('scrolled');
+        } else {
+            header?.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+    });
+</script>

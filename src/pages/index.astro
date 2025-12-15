@@ -1,0 +1,1357 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ChannelLogos from '../components/ChannelLogos.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { products, platforms, t, type Lang } from '../lib/data';
+
+const lang: Lang = 'fr';
+
+// WhatsApp config - UPDATE THIS WITH YOUR REAL NUMBER
+const whatsappNumber = '33612345678'; // Replace with real number
+const whatsappMessage = lang === 'fr' 
+    ? 'Bonjour ! Je souhaite obtenir mon essai gratuit 24h.' 
+    : 'Hello! I would like to get my free 24h trial.';
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+// Scarcity - dynamic feel
+const trialsLeft = 23;
+---
+
+<Layout title="Premium IPTV Streaming - Essai Gratuit 24h" lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="main-content">
+        <!-- Hero Section - ABOVE FOLD = Instant CTA -->
+        <section class="hero">
+            <!-- Background Effects -->
+            <div class="hero-bg">
+                <div class="hero-gradient-orb orb-1"></div>
+                <div class="hero-gradient-orb orb-2"></div>
+                <div class="hero-gradient-orb orb-3"></div>
+                <div class="hero-grid"></div>
+            </div>
+
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <!-- Scarcity Badge -->
+                    <div class="scarcity-badge animate-fade-in-up">
+                        <span class="scarcity-dot"></span>
+                        <span>🔥 {lang === 'fr' ? `${trialsLeft} essais gratuits restants aujourd'hui` : `${trialsLeft} free trials left today`}</span>
+                    </div>
+
+                    <!-- Main Title - Sports + Stability focus -->
+                    <h1 class="hero-title animate-fade-in-up stagger-1">
+                        {lang === 'fr' ? 'Sports en Direct' : 'Live Sports'}<br />
+                        <span class="gradient-text">{lang === 'fr' ? 'Sans Coupure' : 'Without Buffering'}</span>
+                    </h1>
+
+                    <!-- Description - Short & Punchy -->
+                    <p class="hero-description animate-fade-in-up stagger-2">
+                        {lang === 'fr' 
+                            ? 'beIN Sports, Canal+, Netflix, Disney+ et 10 000+ chaînes. Qualité 4K, zapping ultra-rapide.' 
+                            : 'beIN Sports, Canal+, Netflix, Disney+ and 10,000+ channels. 4K quality, ultra-fast zapping.'
+                        }
+                    </p>
+
+                    <!-- Key Stats - Visual -->
+                    <div class="hero-stats animate-fade-in-up stagger-3">
+                        <div class="stat-item">
+                            <span class="stat-icon">⚽</span>
+                            <span class="stat-text">{lang === 'fr' ? 'Sports' : 'Sports'}</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🎬</span>
+                            <span class="stat-text">8000+ {lang === 'fr' ? 'Films' : 'Movies'}</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-icon">📺</span>
+                            <span class="stat-text">10K+ {lang === 'fr' ? 'Chaînes' : 'Channels'}</span>
+                        </div>
+                    </div>
+
+                    <!-- CTAs - Both Stripe & WhatsApp options -->
+                    <div class="hero-ctas animate-fade-in-up stagger-4">
+                        <a href="#pricing" class="btn btn-primary btn-cta">
+                            {lang === 'fr' ? '💳 Voir les Offres' : '💳 View Plans'}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                        <a href={whatsappUrl} target="_blank" rel="noopener" class="btn btn-whatsapp">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                            {lang === 'fr' ? '🎁 Essai Gratuit' : '🎁 Free Trial'}
+                        </a>
+                    </div>
+
+                    <!-- Trust Signals -->
+                    <div class="hero-trust animate-fade-in-up stagger-5">
+                        <span class="trust-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            {lang === 'fr' ? 'Activation en 5 min' : 'Activation in 5 min'}
+                        </span>
+                        <span class="trust-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                            {lang === 'fr' ? 'Paiement sécurisé' : 'Secure payment'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Channel Logos - Scrolling Netflix-style -->
+        <ChannelLogos lang={lang} />
+
+        <!-- PRICING SECTION - RIGHT AFTER CHANNEL LOGOS FOR ADS TRAFFIC -->
+        <section class="section pricing-section" id="pricing">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="pricing-badge">
+                        <span>🎁 {lang === 'fr' ? 'Essai gratuit 24h inclus' : 'Free 24h trial included'}</span>
+                    </div>
+                    <h2>{t(lang, 'products.title')}</h2>
+                    <p class="section-subtitle">{t(lang, 'products.subtitle')}</p>
+                </div>
+
+                <div class="pricing-grid">
+                    {products.map((product, index) => (
+                        <div 
+                            class={`pricing-card ${product.popular ? 'card-featured' : 'card'}`} 
+                            data-animate
+                            style={`animation-delay: ${index * 0.1}s`}
+                        >
+                            {/* Popular Badge */}
+                            {product.popular && (
+                                <div class="popular-tag">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                                    {t(lang, 'products.popular')}
+                                </div>
+                            )}
+
+                            {/* Discount Badge */}
+                            {product.badge && (
+                                <div class="discount-badge">
+                                    {product.badge[lang]}
+                                </div>
+                            )}
+
+                            <div class="pricing-content">
+                                <div class="pricing-header">
+                                    <h3 class="pricing-name">{product.name[lang]}</h3>
+                                    <p class="pricing-devices">
+                                        {product.devices} {product.devices > 1 ? t(lang, 'products.devices') : t(lang, 'products.device')}
+                                    </p>
+                                </div>
+
+                                <div class="pricing-price">
+                                    {product.originalPrice && (
+                                        <span class="price-original">€{product.originalPrice}</span>
+                                    )}
+                                    <span class="price-amount gradient-text">€{product.price}</span>
+                                    <span class="price-note">{lang === 'fr' ? 'paiement unique' : 'one-time payment'}</span>
+                                </div>
+
+                                <ul class="pricing-features">
+                                    <li><span class="check">✓</span> 10 000+ {lang === 'fr' ? 'chaînes' : 'channels'}</li>
+                                    <li><span class="check">✓</span> 8 000+ {lang === 'fr' ? 'films/séries' : 'movies/series'}</li>
+                                    <li><span class="check">✓</span> 4K Ultra HD</li>
+                                    <li><span class="check">✓</span> {lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</li>
+                                </ul>
+
+                                <!-- Primary CTA - Stripe Checkout -->
+                                <a href={`/checkout/${product.id}`} class={`btn ${product.popular ? 'btn-primary' : 'btn-secondary'} pricing-cta`}>
+                                    {lang === 'fr' ? '💳 Acheter Maintenant' : '💳 Buy Now'}
+                                </a>
+
+                                <!-- Secondary CTA - WhatsApp Trial -->
+                                <a href={whatsappUrl} target="_blank" rel="noopener" class="trial-link">
+                                    {lang === 'fr' ? '🎁 ou essai gratuit WhatsApp' : '🎁 or free WhatsApp trial'}
+                                </a>
+
+                                <p class="pricing-trial">{lang === 'fr' ? '✓ Essai 24h inclus' : '✓ 24h trial included'}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <!-- INCLUDED CONTENT SHOWCASE - Right under pricing -->
+                <div class="included-content" data-animate>
+                    <!-- Streaming Platforms -->
+                    <div class="platforms-showcase">
+                        <p class="showcase-label">{lang === 'fr' ? '📺 Plateformes incluses' : '📺 Included platforms'}</p>
+                        <div class="platform-logos">
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/netflix_logo_1765793447774.png" alt="Netflix" />
+                                <span>Netflix</span>
+                            </div>
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/disney_plus_logo_1765793514911.png" alt="Disney+" />
+                                <span>Disney+</span>
+                            </div>
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/canal_plus_logo_1765793476078.png" alt="Canal+" />
+                                <span>Canal+</span>
+                            </div>
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/bein_sports_purple_1765793640937.png" alt="beIN Sports" />
+                                <span>beIN</span>
+                            </div>
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/amazon-prime.png" alt="Amazon Prime" />
+                                <span>Prime</span>
+                            </div>
+                            <div class="platform-item-wrapper">
+                                <img src="/logos/tf1.png" alt="TF1" />
+                                <span>TF1</span>
+                            </div>
+                            <span class="more-badge">+200</span>
+                        </div>
+                    </div>
+
+                    <!-- Football Leagues -->
+                    <div class="leagues-showcase">
+                        <p class="showcase-label">{lang === 'fr' ? '⚽ Tous les matchs en direct' : '⚽ All matches live'}</p>
+                        <div class="league-logos">
+                            <div class="league-item">
+                                <img src="/logos/champions_league_logo_1765793396216.png" alt="Champions League" />
+                            </div>
+                            <div class="league-item">
+                                <img src="/logos/premier_league_logo_1765793432569.png" alt="Premier League" />
+                            </div>
+                            <div class="league-item">
+                                <img src="/logos/laliga_logo_1765793567812.png" alt="La Liga" />
+                            </div>
+                            <div class="league-item">
+                                <img src="/logos/bundesliga_logo_1765793583493.png" alt="Bundesliga" />
+                            </div>
+                            <div class="league-item">
+                                <img src="/logos/serie_a_logo_1765793601121.png" alt="Serie A" />
+                            </div>
+                            <div class="league-item">
+                                <img src="/logos/ligue1_logo_1765793615718.png" alt="Ligue 1" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRUST SIGNALS - Why Choose Us -->
+                <div class="trust-strip" data-animate>
+                    <div class="trust-item-compact">
+                        <span class="trust-emoji">⚡</span>
+                        <span>{lang === 'fr' ? 'Anti-Freeze' : 'Anti-Freeze'}</span>
+                    </div>
+                    <div class="trust-item-compact">
+                        <span class="trust-emoji">🛰️</span>
+                        <span>{lang === 'fr' ? 'Multi-Serveurs' : 'Multi-Servers'}</span>
+                    </div>
+                    <div class="trust-item-compact">
+                        <span class="trust-emoji">💬</span>
+                        <span>{lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</span>
+                    </div>
+                    <div class="trust-item-compact">
+                        <span class="trust-emoji">🔄</span>
+                        <span>{lang === 'fr' ? 'Garantie' : 'Guarantee'}</span>
+                    </div>
+                </div>
+
+                <!-- DEVICE COMPATIBILITY -->
+                <div class="compat-strip" data-animate>
+                    <p class="compat-label">{lang === 'fr' ? '✓ Compatible avec' : '✓ Works with'}</p>
+                    <div class="compat-devices">
+                        <div class="device-item" title="Smart TV">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                            <span>Smart TV</span>
+                        </div>
+                        <div class="device-item" title="Amazon Fire Stick">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#FF9900"><path d="M12.04 2C6.52 2 2 6.52 2 12.04c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.22.68-.49v-1.71c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.33.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.59.69.49C19.14 20.21 22 16.46 22 12.04 22 6.52 17.52 2 12.04 2z"/></svg>
+                            <span>Fire Stick</span>
+                        </div>
+                        <div class="device-item" title="Android">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.31-.16-.69-.04-.85.26l-1.87 3.24c-1.39-.59-2.94-.93-4.58-.93s-3.19.34-4.58.93l-1.87-3.24c-.16-.31-.53-.43-.85-.26-.31.16-.43.54-.26.85l1.84 3.18C3.02 11.34 1 14.72 1 18.5h22c0-3.78-2.02-7.16-5.4-9.02zM7 15.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm10 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                            <span>Android</span>
+                        </div>
+                        <div class="device-item" title="iPhone/iPad">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                            <span>iOS</span>
+                        </div>
+                        <div class="device-item" title="Windows PC">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                            <span>Windows</span>
+                        </div>
+                        <div class="device-item" title="Mac">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                            <span>Mac</span>
+                        </div>
+                    </div>
+                    <p class="compat-apps-small">XCIPTV • Smarters Pro • Tivimate • VLC • Kodi</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust / Kill Fear Section -->
+        <section class="section trust-section">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <h2>{lang === 'fr' ? 'Pourquoi Nous Choisir ?' : 'Why Choose Us?'}</h2>
+                    <p class="section-subtitle">
+                        {lang === 'fr' ? 'Qualité premium, stabilité garantie' : 'Premium quality, guaranteed stability'}
+                    </p>
+                </div>
+
+                <div class="trust-grid">
+                    <!-- Anti-freeze -->
+                    <div class="trust-card" data-animate>
+                        <div class="trust-icon" style="background: rgba(16, 185, 129, 0.15);">
+                            <span>⚡</span>
+                        </div>
+                        <h3>{lang === 'fr' ? 'Anti-Freeze' : 'Anti-Freeze'}</h3>
+                        <p>{lang === 'fr' ? 'Zapping ultra-rapide, aucun buffering même en 4K' : 'Ultra-fast zapping, no buffering even in 4K'}</p>
+                    </div>
+
+                    <!-- Multiple servers -->
+                    <div class="trust-card" data-animate>
+                        <div class="trust-icon" style="background: rgba(139, 92, 246, 0.15);">
+                            <span>🛰️</span>
+                        </div>
+                        <h3>{lang === 'fr' ? 'Multi-Serveurs' : 'Multi-Servers'}</h3>
+                        <p>{lang === 'fr' ? 'Backup automatique si un serveur est down' : 'Automatic backup if a server goes down'}</p>
+                    </div>
+
+                    <!-- 24/7 Support -->
+                    <div class="trust-card" data-animate>
+                        <div class="trust-icon" style="background: rgba(6, 182, 212, 0.15);">
+                            <span>💬</span>
+                        </div>
+                        <h3>{lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</h3>
+                        <p>{lang === 'fr' ? 'Réponse en moins de 10 minutes sur WhatsApp' : 'Response in less than 10 minutes on WhatsApp'}</p>
+                    </div>
+
+                    <!-- Replacement guarantee -->
+                    <div class="trust-card" data-animate>
+                        <div class="trust-icon" style="background: rgba(245, 158, 11, 0.15);">
+                            <span>🔄</span>
+                        </div>
+                        <h3>{lang === 'fr' ? 'Garantie' : 'Guarantee'}</h3>
+                        <p>{lang === 'fr' ? 'Ligne de remplacement si problème technique' : 'Replacement line if technical issue'}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compatibility Section -->
+        <section class="section compatibility-section">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <h2>{lang === 'fr' ? 'Compatible Partout' : 'Works Everywhere'}</h2>
+                    <p class="section-subtitle">
+                        {lang === 'fr' ? 'Fonctionne sur tous vos appareils' : 'Works on all your devices'}
+                    </p>
+                </div>
+
+                <div class="device-grid" data-animate>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                        </div>
+                        <span>Smart TV</span>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper fire">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#FF9900"><path d="M12 2C8.5 2 5.4 4.4 4 8c-.8 2.1-.9 4.3-.4 6.4.4 1.7 1.2 3.2 2.3 4.5.2.3.5.5.8.6.3.1.6.1.9 0 .3-.1.5-.3.7-.5.2-.2.3-.5.3-.8 0-.3-.1-.6-.2-.8-.8-1.1-1.3-2.3-1.5-3.6-.2-1.4 0-2.8.5-4.1.8-2.1 2.5-3.7 4.6-4.4 2.1-.7 4.4-.4 6.2.8 1.8 1.2 3 3.1 3.3 5.3.3 2.2-.3 4.4-1.7 6.2-.2.3-.3.6-.3.9 0 .3.1.6.3.8.2.2.4.4.7.5.3.1.6.1.9 0 .3-.1.6-.3.8-.6 1.8-2.3 2.7-5.2 2.4-8.1-.3-2.9-1.7-5.5-4-7.3C17.3 2.7 14.7 2 12 2z"/><path d="M12 8c-1.7 0-3.2.9-4 2.4-.8 1.5-.8 3.2 0 4.7.8 1.5 2.3 2.4 4 2.4s3.2-.9 4-2.4c.8-1.5.8-3.2 0-4.7-.8-1.5-2.3-2.4-4-2.4zm0 7c-.8 0-1.6-.4-2-1.1-.4-.8-.4-1.7 0-2.4.4-.7 1.2-1.1 2-1.1.8 0 1.6.4 2 1.1.4.8.4 1.7 0 2.4-.4.7-1.2 1.1-2 1.1z"/></svg>
+                        </div>
+                        <span>Fire Stick</span>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper android">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.31-.16-.69-.04-.85.26l-1.87 3.24c-1.39-.59-2.94-.93-4.58-.93s-3.19.34-4.58.93l-1.87-3.24c-.16-.31-.53-.43-.85-.26-.31.16-.43.54-.26.85l1.84 3.18C3.02 11.34 1 14.72 1 18.5h22c0-3.78-2.02-7.16-5.4-9.02zM7 15.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm10 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                        </div>
+                        <span>Android</span>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper apple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        </div>
+                        <span>iPhone/iPad</span>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper windows">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                        </div>
+                        <span>Windows</span>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon-wrapper mac">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        </div>
+                        <span>Mac</span>
+                    </div>
+                </div>
+
+                <p class="apps-note" data-animate>
+                    {lang === 'fr' 
+                        ? '✓ Compatible avec: XCIPTV, IPTV Smarters, Tivimate, VLC, Kodi' 
+                        : '✓ Compatible with: XCIPTV, IPTV Smarters, Tivimate, VLC, Kodi'
+                    }
+                </p>
+            </div>
+        </section>
+
+
+        <!-- FAQ Section -->
+        <section class="section faq-section">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <h2>{lang === 'fr' ? 'Questions Fréquentes' : 'FAQ'}</h2>
+                </div>
+
+                <div class="faq-grid" data-animate>
+                    <div class="faq-item">
+                        <h3>{lang === 'fr' ? 'Y a-t-il du buffering ?' : 'Is there buffering?'}</h3>
+                        <p>{lang === 'fr' 
+                            ? 'Non. Nos serveurs sont optimisés pour un streaming sans coupure, même en 4K.' 
+                            : 'No. Our servers are optimized for smooth streaming, even in 4K.'
+                        }</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>{lang === 'fr' ? 'Quels appareils sont compatibles ?' : 'What devices are compatible?'}</h3>
+                        <p>{lang === 'fr' 
+                            ? 'Tous : Smart TV, Android, iPhone, Fire Stick, PC, Mac. Utilisez XCIPTV, Smarters ou Tivimate.' 
+                            : 'All of them: Smart TV, Android, iPhone, Fire Stick, PC, Mac. Use XCIPTV, Smarters or Tivimate.'
+                        }</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>{lang === 'fr' ? 'Comment fonctionne l\'essai gratuit ?' : 'How does the free trial work?'}</h3>
+                        <p>{lang === 'fr' 
+                            ? 'Contactez-nous sur WhatsApp, nous vous envoyons un accès test 24h. Si satisfait, vous commandez.' 
+                            : 'Contact us on WhatsApp, we send you a 24h test access. If satisfied, you order.'
+                        }</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>{lang === 'fr' ? 'Et si ça ne marche pas ?' : 'What if it doesn\'t work?'}</h3>
+                        <p>{lang === 'fr' 
+                            ? 'Garantie 24h. Si problème non résolu, remboursement ou remplacement de ligne.' 
+                            : '24h guarantee. If issue not resolved, refund or line replacement.'
+                        }</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="section final-cta-section">
+            <div class="container">
+                <div class="cta-box" data-animate>
+                    <h2>{lang === 'fr' ? 'Prêt à Essayer ?' : 'Ready to Try?'}</h2>
+                    <p>{lang === 'fr' ? 'Obtenez votre essai gratuit 24h maintenant' : 'Get your free 24h trial now'}</p>
+                    <a href={whatsappUrl} target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        {lang === 'fr' ? 'Démarrer sur WhatsApp' : 'Start on WhatsApp'}
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+
+    <!-- Floating WhatsApp Button -->
+    <WhatsAppFloat lang={lang} phoneNumber={whatsappNumber} />
+</Layout>
+
+<style>
+    .main-content {
+        padding-top: var(--header-height);
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+        position: relative;
+        min-height: calc(100vh - var(--header-height));
+        min-height: calc(100dvh - var(--header-height));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0 3rem;
+        overflow: hidden;
+    }
+
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hero-gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .orb-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--color-primary);
+        top: 10%;
+        left: -10%;
+        filter: blur(80px);
+        opacity: 0.4;
+    }
+
+    .orb-2 {
+        width: 250px;
+        height: 250px;
+        background: var(--color-secondary);
+        bottom: 20%;
+        right: -5%;
+        filter: blur(80px);
+        opacity: 0.3;
+    }
+
+    .orb-3 {
+        width: 200px;
+        height: 200px;
+        background: #10b981;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        filter: blur(100px);
+        opacity: 0.15;
+    }
+
+    .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image: 
+            linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+    }
+
+    .hero-container {
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Scarcity Badge */
+    .scarcity-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 100px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #f87171;
+        margin-bottom: 1.5rem;
+    }
+
+    .scarcity-dot {
+        width: 8px;
+        height: 8px;
+        background: #ef4444;
+        border-radius: 50%;
+        animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        letter-spacing: -0.03em;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        color: var(--color-text-muted);
+        max-width: 500px;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .hero-description {
+            font-size: 1.125rem;
+        }
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .stat-icon {
+        font-size: 1.25rem;
+    }
+
+    .stat-text {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--color-border);
+    }
+
+    /* Hero CTAs */
+    .hero-ctas {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 340px;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+        .hero-ctas {
+            flex-direction: row;
+            max-width: none;
+            width: auto;
+        }
+    }
+
+    /* WhatsApp Button */
+    .btn-whatsapp {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: #25D366;
+        color: white;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 14px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        min-height: 56px;
+    }
+
+    .btn-whatsapp:hover {
+        background: #22c55e;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-lg {
+        padding: 1.125rem 2rem;
+        font-size: 1.0625rem;
+    }
+
+    /* Trust Items */
+    .hero-trust {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8125rem;
+        color: var(--color-text-muted);
+    }
+
+    .trust-item svg {
+        color: var(--color-success);
+    }
+
+    /* ===== Trust Section ===== */
+    .trust-section {
+        background: rgba(15, 10, 31, 0.5);
+    }
+
+    .trust-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 768px) {
+        .trust-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+    }
+
+    .trust-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.25rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .trust-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .trust-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.75rem;
+        font-size: 1.5rem;
+    }
+
+    .trust-card h3 {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        margin-bottom: 0.375rem;
+    }
+
+    .trust-card p {
+        font-size: 0.8125rem;
+        color: var(--color-text-muted);
+        line-height: 1.4;
+    }
+
+    /* ===== Compatibility Section ===== */
+    .device-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 640px) {
+        .device-grid {
+            grid-template-columns: repeat(6, 1fr);
+            max-width: 800px;
+        }
+    }
+
+    .device-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 1rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .device-card:hover {
+        border-color: rgba(139, 92, 246, 0.4);
+        background: rgba(139, 92, 246, 0.05);
+        transform: translateY(-3px);
+    }
+
+    .device-icon-wrapper {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        padding: 8px;
+    }
+
+    .device-icon-wrapper svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .device-card span {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-text);
+        text-align: center;
+    }
+
+    @media (min-width: 768px) {
+        .device-icon-wrapper {
+            width: 64px;
+            height: 64px;
+        }
+        .device-icon-wrapper svg {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .apps-note {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.875rem;
+        color: var(--color-success);
+        font-weight: 500;
+    }
+
+    /* ===== Pricing Section ===== */
+    .pricing-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 100px;
+        color: #10b981;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .pricing-grid {
+        display: grid;
+        gap: 1.25rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .pricing-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+    }
+
+    .pricing-card {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .popular-tag {
+        position: absolute;
+        top: -1px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 0 0 12px 12px;
+        z-index: 10;
+    }
+
+    .discount-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 0.375rem 0.75rem;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 8px;
+        z-index: 10;
+    }
+
+    .pricing-content {
+        padding: 1.5rem;
+    }
+
+    .popular-tag + .pricing-content {
+        padding-top: 2.5rem;
+    }
+
+    .pricing-header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .pricing-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .pricing-devices {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+    }
+
+    .pricing-price {
+        text-align: center;
+        margin-bottom: 1.25rem;
+    }
+
+    .price-original {
+        display: block;
+        font-size: 1rem;
+        color: var(--color-text-subtle);
+        text-decoration: line-through;
+    }
+
+    .price-amount {
+        font-size: 2.5rem;
+        font-weight: 800;
+    }
+
+    .price-note {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--color-text-subtle);
+        margin-top: 0.25rem;
+    }
+
+    .pricing-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .pricing-features li {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .check {
+        color: var(--color-success);
+        font-weight: 700;
+    }
+
+    .pricing-cta {
+        width: 100%;
+    }
+
+    .pricing-trial {
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--color-success);
+        font-weight: 500;
+        margin-top: 0.75rem;
+    }
+
+    /* ===== FAQ Section ===== */
+    .faq-grid {
+        display: grid;
+        gap: 1rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .faq-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+    }
+
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        padding: 1.25rem;
+    }
+
+    .faq-item h3 {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        line-height: 1.5;
+    }
+
+    /* ===== Final CTA ===== */
+    .final-cta-section {
+        padding-bottom: 4rem;
+    }
+
+    .cta-box {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 24px;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+    }
+
+    @media (min-width: 768px) {
+        .cta-box {
+            padding: 3.5rem 2rem;
+        }
+    }
+
+    .cta-box h2 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        margin-bottom: 0.5rem;
+    }
+
+    .cta-box p {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Section Header */
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+    }
+
+    .section-subtitle {
+        color: var(--color-text-muted);
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Trial Link */
+    .trial-link {
+        display: block;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--color-primary-light);
+        text-decoration: none;
+        margin-top: 0.625rem;
+        padding: 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .trial-link:hover {
+        color: var(--color-text);
+        text-decoration: underline;
+    }
+
+    /* Included Content Showcase */
+    .included-content {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .platforms-showcase,
+    .leagues-showcase {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .showcase-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .platform-logos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .platform-item-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .platform-item-wrapper img {
+        height: 32px;
+        width: 32px;
+        object-fit: contain;
+        filter: brightness(0.95);
+        transition: all 0.2s ease;
+    }
+
+    .platform-item-wrapper:hover img {
+        filter: brightness(1.1);
+        transform: scale(1.1);
+    }
+
+    .platform-item-wrapper span {
+        font-size: 0.625rem;
+        font-weight: 600;
+        color: var(--color-text-muted);
+    }
+
+    @media (min-width: 768px) {
+        .platform-item-wrapper img {
+            height: 40px;
+            width: 40px;
+        }
+        .platform-item-wrapper span {
+            font-size: 0.6875rem;
+        }
+    }
+
+    .platform-logos img {
+        height: 32px;
+        width: auto;
+        max-width: 80px;
+        object-fit: contain;
+        filter: brightness(0.9);
+        transition: filter 0.2s ease;
+    }
+
+    .platform-logos img:hover {
+        filter: brightness(1.1);
+    }
+
+    .more-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.625rem;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    /* Platform logos - image based */
+    .platform-logos img {
+        height: 36px;
+        max-width: 120px;
+        object-fit: contain;
+        transition: all 0.2s ease;
+    }
+
+    .platform-logos img:hover {
+        transform: scale(1.1);
+    }
+
+    @media (min-width: 768px) {
+        .platform-logos img {
+            height: 48px;
+            max-width: 160px;
+        }
+    }
+
+    /* League Logos */
+    .league-logos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .league-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .league-item:hover {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .league-item img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+    }
+
+    @media (min-width: 768px) {
+        .league-item {
+            width: 72px;
+            height: 72px;
+        }
+        .league-item img {
+            width: 56px;
+            height: 56px;
+        }
+    }
+
+    /* Trust Strip */
+    .trust-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: rgba(16, 185, 129, 0.05);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+        border-radius: 14px;
+    }
+
+    .trust-item-compact {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+    }
+
+    .trust-emoji {
+        font-size: 1rem;
+    }
+
+    .trust-item-compact span:last-child {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    @media (min-width: 768px) {
+        .trust-strip {
+            gap: 1rem;
+        }
+        .trust-item-compact {
+            padding: 0.5rem 1rem;
+        }
+        .trust-item-compact span:last-child {
+            font-size: 0.8125rem;
+        }
+    }
+
+    /* Compatibility Strip */
+    .compat-strip {
+        margin-top: 1.25rem;
+        text-align: center;
+    }
+
+    .compat-label {
+        font-size: 0.8125rem;
+        color: var(--color-success);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .compat-devices {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+    }
+
+    .device-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.75rem 0.5rem;
+        min-width: 60px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+    .device-item:hover {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .device-item svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .device-item span {
+        font-size: 0.625rem;
+        font-weight: 600;
+        color: var(--color-text-muted);
+    }
+
+    .compat-apps-small {
+        font-size: 0.6875rem;
+        color: var(--color-text-subtle);
+    }
+
+    @media (min-width: 768px) {
+        .device-item {
+            padding: 0.875rem 0.625rem;
+            min-width: 70px;
+        }
+        .device-item svg {
+            width: 32px;
+            height: 32px;
+        }
+        .device-item span {
+            font-size: 0.6875rem;
+        }
+        .compat-apps-small {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<!-- Auto-scroll to pricing for ads traffic -->
+<script>
+    // If URL has #pricing or comes from an ad (utm_source), scroll to pricing
+    document.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash;
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromAd = urlParams.get('utm_source') || urlParams.get('fbclid') || urlParams.get('ttclid');
+        
+        if (hash === '#pricing' || fromAd) {
+            setTimeout(() => {
+                const pricingSection = document.getElementById('pricing');
+                if (pricingSection) {
+                    pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 500);
+        }
+    });
+</script>

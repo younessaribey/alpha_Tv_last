@@ -1,0 +1,189 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CheckoutForm from '../../components/CheckoutForm';
+import { products, type Lang } from '../../lib/data';
+
+const { id } = Astro.params;
+const lang: Lang = 'fr';
+
+const product = products.find(p => p.id === id);
+
+if (!product) {
+    return Astro.redirect('/pricing');
+}
+---
+
+<Layout title={`Checkout - ${product.name[lang]}`} lang={lang}>
+    <Header lang={lang} />
+    
+    <main class="main-content">
+        <section class="checkout-section">
+            <div class="container">
+                <!-- Back Link -->
+                <a href="/pricing" class="back-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                    {lang === 'fr' ? 'Retour aux forfaits' : 'Back to plans'}
+                </a>
+
+                <div class="checkout-container">
+                    <!-- Order Summary -->
+                    <div class="order-summary card">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <h2 class="order-title">{product.name[lang]}</h2>
+                                <p class="order-devices">
+                                    {product.devices} {product.devices > 1 ? 'appareils' : 'appareil'}
+                                </p>
+                            </div>
+                            <div class="order-price">
+                                {product.originalPrice && (
+                                    <span class="price-original">€{product.originalPrice}</span>
+                                )}
+                                <span class="price-current gradient-text">€{product.price}</span>
+                            </div>
+                        </div>
+                        <div class="order-trial">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            {lang === 'fr' ? '24h d\'essai gratuit inclus' : '24h free trial included'}
+                        </div>
+                    </div>
+
+                    <!-- Checkout Form (React Island) -->
+                    <CheckoutForm 
+                        client:load
+                        productId={product.id}
+                        productName={product.name[lang]}
+                        price={product.price}
+                        lang={lang}
+                    />
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</Layout>
+
+<style>
+    .main-content {
+        padding-top: var(--header-height);
+    }
+
+    .checkout-section {
+        padding: 1.5rem 0 4rem;
+    }
+
+    @media (min-width: 768px) {
+        .checkout-section {
+            padding: 2rem 0 5rem;
+        }
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9375rem;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: var(--color-text);
+    }
+
+    .checkout-container {
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    /* Order Summary */
+    .order-summary {
+        margin-bottom: 1.25rem;
+    }
+
+    .order-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    @media (min-width: 640px) {
+        .order-header {
+            padding: 1.5rem;
+        }
+    }
+
+    .order-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 0.125rem;
+    }
+
+    @media (min-width: 640px) {
+        .order-title {
+            font-size: 1.25rem;
+        }
+    }
+
+    .order-devices {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+    }
+
+    .order-price {
+        text-align: right;
+    }
+
+    .price-original {
+        display: block;
+        font-size: 0.875rem;
+        color: var(--color-text-subtle);
+        text-decoration: line-through;
+        margin-bottom: 0.125rem;
+    }
+
+    .price-current {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    @media (min-width: 640px) {
+        .price-current {
+            font-size: 1.75rem;
+        }
+    }
+
+    .order-trial {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem;
+        font-size: 0.875rem;
+        color: var(--color-success);
+    }
+
+    @media (min-width: 640px) {
+        .order-trial {
+            padding: 1rem 1.5rem;
+        }
+    }
+</style>
+
+<script define:vars={{ productId: product.id, productName: product.name[lang], price: product.price }}>
+    // TikTok Pixel - Track InitiateCheckout
+    if (typeof ttq !== 'undefined') {
+        ttq.track('InitiateCheckout', {
+            content_id: productId,
+            content_name: productName,
+            currency: 'EUR',
+            value: price
+        });
+    }
+</script>
