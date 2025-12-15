@@ -4,7 +4,9 @@ import {
     Elements,
     PaymentElement,
     useStripe,
-    useElements
+    useElements,
+    EmbeddedCheckoutProvider,
+    EmbeddedCheckout
 } from '@stripe/react-stripe-js';
 
 // Load Stripe once outside component
@@ -401,6 +403,7 @@ function PaymentForm({ lang, onBack, customerName, customerEmail }: {
 export default function CheckoutForm({ productId, productName, price, lang }: CheckoutFormProps) {
     const [step, setStep] = useState<'form' | 'checkout'>('form');
     const [clientSecret, setClientSecret] = useState<string | null>(null);
+    const [checkoutMode, setCheckoutMode] = useState<'payment' | 'subscription'>('payment');
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -439,15 +442,9 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
             });
             const data = await response.json();
 
-            // If subscription mode, redirect to hosted checkout
-            if (data.url) {
-                window.location.href = data.url;
-                return;
-            }
-
-            // Otherwise use embedded checkout (payment mode)
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
+                setCheckoutMode(data.mode || 'payment');
                 setStep('checkout');
             }
         } catch (err) {
@@ -457,7 +454,35 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
         setIsLoading(false);
     };
 
-    if (step === 'checkout' && clientSecret) {
+    // Subscription mode - use EmbeddedCheckout (shows trial info nicely)
+    if (step === 'checkout' && clientSecret && checkoutMode === 'subscription') {
+        return (
+            <div className="checkout-form-card">
+                <div className="checkout-progress-simple">
+                    <span className="step-label active">{lang === 'fr' ? 'Étape 2/2 : Paiement' : 'Step 2/2: Payment'}</span>
+                </div>
+                <div className="embedded-checkout-container">
+                    <EmbeddedCheckoutProvider
+                        stripe={stripePromise}
+                        options={{ clientSecret }}
+                    >
+                        <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                </div>
+                <style>{`
+                    .embedded-checkout-container {
+                        min-height: 400px;
+                        background: var(--color-surface);
+                        border-radius: 16px;
+                        overflow: hidden;
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    // Payment mode - use Elements + PaymentForm
+    if (step === 'checkout' && clientSecret && checkoutMode === 'payment') {
         return (
             <Elements
                 stripe={stripePromise}
