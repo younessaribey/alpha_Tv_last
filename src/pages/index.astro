@@ -155,12 +155,34 @@ const trialsLeft = 23;
                                     <li><span class="check">✓</span> {lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</li>
                                 </ul>
 
-                                <!-- Primary CTA - Stripe Checkout -->
+                                <!-- Clear Billing Explanation (CRITICAL) -->
+                                <div class="billing-info">
+                                    <div class="billing-row">
+                                        <span class="billing-icon">🎁</span>
+                                        <span class="billing-text">{lang === 'fr' ? '0€ aujourd\'hui' : '€0 today'}</span>
+                                    </div>
+                                    <div class="billing-row">
+                                        <span class="billing-icon">💳</span>
+                                        <span class="billing-text">{lang === 'fr' ? `${product.price}€ après 24h (1 an complet)` : `€${product.price} after 24h (full year)`}</span>
+                                    </div>
+                                    <div class="billing-row">
+                                        <span class="billing-icon">✅</span>
+                                        <span class="billing-text">{lang === 'fr' ? 'Garantie satisfait ou remboursé' : 'Money-back guarantee'}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Primary CTA - Clear Free Trial Copy -->
                                 <a href={`/checkout/${product.id}`} class={`btn ${product.popular ? 'btn-primary' : 'btn-secondary'} pricing-cta`}>
-                                    {lang === 'fr' ? '💳 Acheter Maintenant' : '💳 Buy Now'}
+                                    {lang === 'fr' ? '🎁 Essai Gratuit 24h — 0€ Aujourd\'hui' : '🎁 Start 24h Free Trial — €0 Today'}
                                 </a>
 
-                                <p class="pricing-trial">{lang === 'fr' ? '✓ Essai 24h inclus' : '✓ 24h trial included'}</p>
+                                <!-- Micro-Trust Block -->
+                                <div class="trust-grid">
+                                    <span class="trust-item">✔ {lang === 'fr' ? 'Paiement sécurisé' : 'Secure payment'}</span>
+                                    <span class="trust-item">✔ {lang === 'fr' ? 'Accès immédiat' : 'Instant access'}</span>
+                                    <span class="trust-item">✔ {lang === 'fr' ? 'Clients satisfaits' : 'Happy customers'}</span>
+                                    <span class="trust-item">✔ {lang === 'fr' ? 'Support 24/7' : '24/7 support'}</span>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -946,8 +968,56 @@ const trialsLeft = 23;
         font-weight: 700;
     }
 
+    /* Billing Info Block */
+    .billing-info {
+        background: rgba(139, 92, 246, 0.05);
+        border: 1px solid rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        padding: 1rem;
+        margin: 1.25rem 0;
+    }
+
+    .billing-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0;
+    }
+
+    .billing-row:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .billing-icon {
+        font-size: 1.125rem;
+    }
+
+    .billing-text {
+        font-size: 0.8125rem;
+        color: var(--color-text);
+        font-weight: 500;
+    }
+
     .pricing-cta {
         width: 100%;
+        font-size: 0.875rem;
+    }
+
+    /* Trust Grid */
+    .trust-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .trust-item {
+        font-size: 0.6875rem;
+        color: var(--color-text-muted);
+        text-align: center;
+        padding: 0.375rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 6px;
     }
 
     .pricing-trial {
