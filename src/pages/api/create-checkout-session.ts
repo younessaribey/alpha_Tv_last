@@ -49,8 +49,11 @@ export const POST: APIRoute = async ({ request }) => {
         const priceConfig = getPriceConfig(productId);
         const baseUrl = import.meta.env.PUBLIC_BASE_URL || 'http://localhost:4321';
 
-        // If we have a Stripe Price ID, use subscription mode with trial
+        console.log('Checkout request:', { productId, useSubscription, priceId: priceConfig.priceId });
+
+        // If we have a Stripe Price ID AND subscription is requested, use subscription mode with trial
         if (priceConfig.priceId && useSubscription) {
+            console.log('Creating subscription with trial for price:', priceConfig.priceId);
             const session = await stripe.checkout.sessions.create({
                 mode: 'subscription',
                 customer_email: customerEmail,
