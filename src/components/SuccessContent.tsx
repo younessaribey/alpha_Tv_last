@@ -11,9 +11,26 @@ const trackTikTokEvent = (event: string, data?: Record<string, any>) => {
     }
 };
 
+// Meta Pixel tracking helper
+const trackMetaEvent = (event: string, data?: Record<string, any>) => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', event, data);
+    }
+};
+
+// Auto-format MAC address (adds colons and uppercase)
+const formatMacAddress = (value: string): string => {
+    // Remove all non-hex characters
+    const hex = value.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
+    // Add colons every 2 characters
+    const formatted = hex.match(/.{1,2}/g)?.join(':') || hex;
+    // Limit to 17 characters (XX:XX:XX:XX:XX:XX)
+    return formatted.slice(0, 17);
+};
+
 export default function SuccessContent({ lang }: SuccessContentProps) {
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-    const [step, setStep] = useState<'confirm' | 'device' | 'complete'>('confirm');
+    const [step, setStep] = useState<'thankyou' | 'device' | 'complete'>('thankyou');
     const [customerEmail, setCustomerEmail] = useState('');
     const [metadata, setMetadata] = useState<Record<string, string> | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +72,14 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                         currency: 'EUR',
                         value: parseFloat(data.metadata?.price || '0')
                     });
+
+                    // Track Meta Pixel Purchase event
+                    trackMetaEvent('Purchase', {
+                        content_ids: [data.metadata?.productId],
+                        content_name: data.metadata?.productName,
+                        currency: 'EUR',
+                        value: parseFloat(data.metadata?.price || '0')
+                    });
                 } else {
                     setStatus('error');
                 }
@@ -62,16 +87,53 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
             .catch(() => setStatus('error'));
     }, []);
 
+    // Handle MAC address input with auto-format
+    const handleMacChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formatted = formatMacAddress(e.target.value);
+        setDeviceInfo({ ...deviceInfo, macAddress: formatted });
+    };
+
+    // Handle PIN input (6 digits only)
+    const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const pin = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+        setDeviceInfo({ ...deviceInfo, pinKey: pin });
+    };
+
+    // Move to device step
+    const handleContinueToDevice = () => {
+        setStep('device');
+    };
+
     const handleDeviceSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!deviceInfo.macAddress || !deviceInfo.pinKey) return;
+        if (!deviceInfo.macAddress || deviceInfo.pinKey.length !== 6) return;
 
         setIsSubmitting(true);
 
         // Build WhatsApp message with all info
         const message = lang === 'fr'
-            ? `🎬 NOUVELLE ACTIVATION ALPHATV\n\n👤 Nom: ${metadata?.customerName}\n📧 Email: ${metadata?.customerEmail}\n📱 Tél: ${metadata?.customerPhone || 'N/A'}\n\n📺 MAC: ${deviceInfo.macAddress}\n🔑 PIN: ${deviceInfo.pinKey}\n\n🎁 Produit: ${metadata?.productName}\n💰 Prix: €${metadata?.price}`
-            : `🎬 NEW ALPHATV ACTIVATION\n\n👤 Name: ${metadata?.customerName}\n📧 Email: ${metadata?.customerEmail}\n📱 Phone: ${metadata?.customerPhone || 'N/A'}\n\n📺 MAC: ${deviceInfo.macAddress}\n🔑 PIN: ${deviceInfo.pinKey}\n\n🎁 Product: ${metadata?.productName}\n💰 Price: €${metadata?.price}`;
+            ? `🎬 NOUVELLE ACTIVATION ALPHATV
+
+👤 Nom: ${metadata?.customerName}
+📧 Email: ${metadata?.customerEmail}
+📱 Tél: ${metadata?.customerPhone || 'N/A'}
+
+📺 MAC: ${deviceInfo.macAddress}
+🔑 PIN: ${deviceInfo.pinKey}
+
+🎁 Produit: ${metadata?.productName}
+💰 Prix: €${metadata?.price}`
+            : `🎬 NEW ALPHATV ACTIVATION
+
+👤 Name: ${metadata?.customerName}
+📧 Email: ${metadata?.customerEmail}
+📱 Phone: ${metadata?.customerPhone || 'N/A'}
+
+📺 MAC: ${deviceInfo.macAddress}
+🔑 PIN: ${deviceInfo.pinKey}
+
+🎁 Product: ${metadata?.productName}
+💰 Price: €${metadata?.price}`;
 
         // Open WhatsApp with the message
         const whatsappUrl = `https://wa.me/33612345678?text=${encodeURIComponent(message)}`;
@@ -253,141 +315,187 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
             <div className="success-card">
                 {/* Progress Steps */}
                 <div className="progress-steps">
-                    <div className={`progress-step ${step === 'confirm' ? 'active' : ''} completed`}>
+                    <div className={`progress-step ${step === 'thankyou' ? 'active' : ''} completed`}>
                         <div className="step-number">✓</div>
                         <span>{lang === 'fr' ? 'Paiement' : 'Payment'}</span>
                     </div>
                     <div className="progress-line"></div>
-                    <div className={`progress-step ${step === 'device' ? 'active' : ''}`}>
-                        <div className="step-number">2</div>
+                    <div className={`progress-step ${step === 'device' ? 'active' : ''} ${step === 'complete' ? 'completed' : ''}`}>
+                        <div className="step-number">{step === 'complete' ? '✓' : '2'}</div>
                         <span>{lang === 'fr' ? 'Appareil' : 'Device'}</span>
                     </div>
                     <div className="progress-line"></div>
-                    <div className="progress-step">
+                    <div className={`progress-step ${step === 'complete' ? 'active' : ''}`}>
                         <div className="step-number">3</div>
                         <span>{lang === 'fr' ? 'Activation' : 'Activation'}</span>
                     </div>
                 </div>
 
-                {/* Success Header */}
-                <div className="success-header">
-                    <div className="success-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                    </div>
-                    <h1>{lang === 'fr' ? 'Paiement réussi!' : 'Payment Successful!'}</h1>
-                    <p>
-                        {lang === 'fr'
-                            ? 'Dernière étape: entrez les informations de votre appareil'
-                            : 'Last step: enter your device information'}
-                    </p>
-                </div>
-
-                <div className="success-body">
-                    {/* Order Summary */}
-                    {metadata && (
-                        <div className="order-summary">
-                            <div className="summary-row">
-                                <span>{lang === 'fr' ? 'Produit' : 'Product'}</span>
-                                <span>{metadata.productName}</span>
+                {/* Step 1: Thank You Page */}
+                {step === 'thankyou' && (
+                    <>
+                        <div className="success-header">
+                            <div className="success-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
                             </div>
-                            <div className="summary-row">
-                                <span>Email</span>
-                                <span>{customerEmail}</span>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Device Form - MAC + PIN */}
-                    <form onSubmit={handleDeviceSubmit} className="device-form">
-                        <h3>📺 {lang === 'fr' ? 'Informations de l\'appareil' : 'Device Information'}</h3>
-
-                        <div className="form-group">
-                            <label htmlFor="macAddress">
-                                {lang === 'fr' ? 'Adresse MAC' : 'MAC Address'} *
-                            </label>
-                            <input
-                                id="macAddress"
-                                type="text"
-                                value={deviceInfo.macAddress}
-                                onChange={(e) => setDeviceInfo({ ...deviceInfo, macAddress: e.target.value.toUpperCase() })}
-                                placeholder="00:1A:79:XX:XX:XX"
-                                required
-                                pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
-                            />
-                            <span className="input-hint">
-                                {lang === 'fr' ? 'Trouvez-la dans Paramètres > À propos' : 'Find it in Settings > About'}
-                            </span>
+                            <h1>{lang === 'fr' ? '🎉 Merci pour votre achat!' : '🎉 Thank you for your purchase!'}</h1>
+                            <p className="success-subtitle">
+                                {lang === 'fr'
+                                    ? 'Votre paiement a été confirmé avec succès'
+                                    : 'Your payment has been confirmed successfully'}
+                            </p>
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="pinKey">
-                                {lang === 'fr' ? 'Clé PIN / Device Key' : 'PIN Key / Device Key'} *
-                            </label>
-                            <input
-                                id="pinKey"
-                                type="text"
-                                value={deviceInfo.pinKey}
-                                onChange={(e) => setDeviceInfo({ ...deviceInfo, pinKey: e.target.value })}
-                                placeholder="XXXX-XXXX-XXXX"
-                                required
-                            />
-                            <span className="input-hint">
-                                {lang === 'fr' ? 'Affiché dans votre application IPTV' : 'Displayed in your IPTV app'}
-                            </span>
-                        </div>
-
-                        <button type="submit" disabled={isSubmitting} className="submit-btn">
-                            {isSubmitting ? (
-                                <span className="btn-loading">
-                                    <svg className="spinner" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25" />
-                                        <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" opacity="0.75" />
-                                    </svg>
-                                    {lang === 'fr' ? 'Envoi...' : 'Sending...'}
-                                </span>
-                            ) : (
-                                <>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                                    </svg>
-                                    {lang === 'fr' ? 'Envoyer pour Activation' : 'Send for Activation'}
-                                </>
+                        <div className="success-body">
+                            {/* Order Summary */}
+                            {metadata && (
+                                <div className="order-summary">
+                                    <h3>{lang === 'fr' ? '📋 Récapitulatif' : '📋 Order Summary'}</h3>
+                                    <div className="summary-row">
+                                        <span>{lang === 'fr' ? 'Produit' : 'Product'}</span>
+                                        <span className="summary-value">{metadata.productName}</span>
+                                    </div>
+                                    <div className="summary-row">
+                                        <span>Email</span>
+                                        <span className="summary-value">{customerEmail}</span>
+                                    </div>
+                                    <div className="summary-row highlight">
+                                        <span>{lang === 'fr' ? 'Total payé' : 'Total Paid'}</span>
+                                        <span className="summary-value price">€{metadata.price}</span>
+                                    </div>
+                                </div>
                             )}
-                        </button>
-                    </form>
 
-                    {/* Expandable Help Guide */}
-                    <details className="help-guide">
-                        <summary className="help-guide-toggle">
-                            <span>❓ {lang === 'fr' ? 'Comment trouver mon MAC / PIN ?' : 'How to find my MAC / PIN?'}</span>
-                            <svg className="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M6 9l6 6 6-6" />
-                            </svg>
-                        </summary>
-                        <div className="help-guide-content">
-                            <div className="guide-step">
-                                <div className="guide-step-number">1</div>
-                                <div className="guide-step-text">
-                                    <strong>{lang === 'fr' ? 'Ouvrez Cap Player' : 'Open Cap Player'}</strong>
-                                    <p>{lang === 'fr' ? 'Lancez l\'application sur votre appareil' : 'Launch the app on your device'}</p>
-                                </div>
-                            </div>
-                            <div className="guide-step">
-                                <div className="guide-step-number">2</div>
-                                <div className="guide-step-text">
-                                    <strong>{lang === 'fr' ? 'Écran de connexion' : 'Login Screen'}</strong>
-                                    <p>{lang === 'fr' ? 'Votre MAC et PIN sont affichés' : 'Your MAC and PIN are displayed'}</p>
-                                </div>
-                            </div>
-                            <div className="guide-screenshot">
-                                <img src="/images/PHOTO-2025-12-14-13-47-55.jpg" alt="Cap Player MAC Address" />
-                            </div>
-                            <a href="/how-it-works" target="_blank" className="guide-link">
-                                📖 {lang === 'fr' ? 'Voir le guide complet' : 'View full guide'}
-                            </a>
+                            <button onClick={handleContinueToDevice} className="submit-btn">
+                                {lang === 'fr' ? 'Continuer → Entrer mes infos appareil' : 'Continue → Enter Device Info'}
+                            </button>
                         </div>
-                    </details>
-                </div>
+                    </>
+                )}
+
+                {/* Step 2: Device Form */}
+                {step === 'device' && (
+                    <>
+                        <div className="success-header compact">
+                            <h2>📺 {lang === 'fr' ? 'Informations de l\'appareil' : 'Device Information'}</h2>
+                            <p>{lang === 'fr' ? 'Entrez votre adresse MAC et code PIN' : 'Enter your MAC address and PIN code'}</p>
+                        </div>
+
+                        <div className="success-body">
+                            <form onSubmit={handleDeviceSubmit} className="device-form">
+                                <div className="form-group">
+                                    <label htmlFor="macAddress">
+                                        {lang === 'fr' ? 'Adresse MAC' : 'MAC Address'} *
+                                    </label>
+                                    <input
+                                        id="macAddress"
+                                        type="text"
+                                        value={deviceInfo.macAddress}
+                                        onChange={handleMacChange}
+                                        placeholder="BC:12:34:56:78:90"
+                                        maxLength={17}
+                                        required
+                                        className="mac-input"
+                                    />
+                                    <span className="input-hint">
+                                        {lang === 'fr' ? 'Format auto: XX:XX:XX:XX:XX:XX' : 'Auto format: XX:XX:XX:XX:XX:XX'}
+                                    </span>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="pinKey">
+                                        {lang === 'fr' ? 'Code PIN (6 chiffres)' : 'PIN Code (6 digits)'} *
+                                    </label>
+                                    <input
+                                        id="pinKey"
+                                        type="text"
+                                        inputMode="numeric"
+                                        value={deviceInfo.pinKey}
+                                        onChange={handlePinChange}
+                                        placeholder="123456"
+                                        maxLength={6}
+                                        required
+                                        className="pin-input"
+                                    />
+                                    <span className="input-hint">
+                                        {lang === 'fr' ? 'Affiché dans Cap Player' : 'Shown in Cap Player app'}
+                                    </span>
+                                    <div className="pin-dots">
+                                        {[0, 1, 2, 3, 4, 5].map(i => (
+                                            <span key={i} className={`pin-dot ${deviceInfo.pinKey.length > i ? 'filled' : ''}`}></span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting || deviceInfo.macAddress.length < 17 || deviceInfo.pinKey.length !== 6}
+                                    className="submit-btn whatsapp-btn"
+                                >
+                                    {isSubmitting ? (
+                                        <span className="btn-loading">
+                                            <svg className="spinner" viewBox="0 0 24 24">
+                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25" />
+                                                <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" opacity="0.75" />
+                                            </svg>
+                                            {lang === 'fr' ? 'Envoi...' : 'Sending...'}
+                                        </span>
+                                    ) : (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                                            </svg>
+                                            {lang === 'fr' ? 'Envoyer via WhatsApp' : 'Send via WhatsApp'}
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+
+                            {/* Expandable Help Guide */}
+                            <details className="help-guide">
+                                <summary className="help-guide-toggle">
+                                    <span>❓ {lang === 'fr' ? 'Comment trouver mon MAC / PIN ?' : 'How to find my MAC / PIN?'}</span>
+                                    <svg className="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M6 9l6 6 6-6" />
+                                    </svg>
+                                </summary>
+                                <div className="help-guide-content">
+                                    <div className="guide-step">
+                                        <div className="guide-step-number">1</div>
+                                        <div className="guide-step-text">
+                                            <strong>{lang === 'fr' ? 'Ouvrez Cap Player' : 'Open Cap Player'}</strong>
+                                            <p>{lang === 'fr' ? 'Lancez l\'application sur votre appareil' : 'Launch the app on your device'}</p>
+                                        </div>
+                                    </div>
+                                    <div className="guide-step">
+                                        <div className="guide-step-number">2</div>
+                                        <div className="guide-step-text">
+                                            <strong>{lang === 'fr' ? 'Écran de connexion' : 'Login Screen'}</strong>
+                                            <p>{lang === 'fr' ? 'Votre MAC et PIN sont affichés' : 'Your MAC and PIN are displayed'}</p>
+                                        </div>
+                                    </div>
+                                    <div className="guide-screenshot">
+                                        <img src="/images/PHOTO-2025-12-14-13-47-55.jpg" alt="Cap Player MAC Address" />
+                                    </div>
+                                    <a href="/how-it-works" target="_blank" className="guide-link">
+                                        📖 {lang === 'fr' ? 'Voir le guide complet' : 'View full guide'}
+                                    </a>
+                                </div>
+                            </details>
+                        </div>
+                    </>
+                )}
+
+                {/* Step 3: Complete */}
+                {step === 'complete' && (
+                    <div className="success-header">
+                        <div className="success-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                        </div>
+                        <h1>{lang === 'fr' ? '✅ Demande envoyée!' : '✅ Request Sent!'}</h1>
+                        <p>{lang === 'fr' ? 'Nous allons activer votre compte sous peu via WhatsApp' : 'We will activate your account shortly via WhatsApp'}</p>
+                    </div>
+                )}
             </div>
 
             <style>{successStyles}</style>
@@ -615,23 +723,33 @@ const successStyles = `
         font-size: 1rem;
         font-weight: 700;
         color: white;
-        background: #25D366;
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
         border: none;
         border-radius: 12px;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
     }
 
     .submit-btn:hover:not(:disabled) {
-        background: #20bd5a;
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .submit-btn.whatsapp-btn {
+        background: #25D366;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .submit-btn.whatsapp-btn:hover:not(:disabled) {
+        background: #20bd5a;
         box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
     }
 
     .submit-btn:disabled {
-        opacity: 0.7;
+        opacity: 0.5;
         cursor: not-allowed;
+        transform: none;
     }
 
     .btn-loading {
@@ -648,6 +766,78 @@ const successStyles = `
 
     @keyframes spin {
         to { transform: rotate(360deg); }
+    }
+
+    /* PIN Dots Visual */
+    .pin-dots {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .pin-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--color-border);
+        transition: all 0.2s ease;
+    }
+
+    .pin-dot.filled {
+        background: var(--color-primary);
+        box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Summary Styling */
+    .order-summary h3 {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .summary-value {
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .summary-row.highlight {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .summary-value.price {
+        font-size: 1.25rem;
+        color: var(--color-primary);
+    }
+
+    /* Compact Header */
+    .success-header.compact {
+        padding: 1rem 0;
+    }
+
+    .success-header.compact h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* MAC Input */
+    .mac-input {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .pin-input {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        letter-spacing: 0.3em;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .success-subtitle {
+        color: var(--color-text-muted);
+        margin-top: 0.5rem;
     }
 
     .help-note {
