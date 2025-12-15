@@ -86,9 +86,9 @@ export const POST: APIRoute = async ({ request }) => {
                     customerPhone: customerPhone || '',
                     price: price.toString(),
                 },
-                success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${baseUrl}/pricing`,
-                ui_mode: 'embedded', // Keep user on site for better conversion
+                // Embedded mode requires return_url, not success_url/cancel_url
+                return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+                ui_mode: 'embedded',
             });
 
             return new Response(JSON.stringify({
