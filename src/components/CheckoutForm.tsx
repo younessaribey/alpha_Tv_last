@@ -457,9 +457,9 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
     // Subscription mode - use EmbeddedCheckout (shows trial info nicely)
     if (step === 'checkout' && clientSecret && checkoutMode === 'subscription') {
         return (
-            <div className="checkout-form-card">
+            <div className="checkout-form-card embedded-mode">
                 <div className="checkout-progress-simple">
-                    <span className="step-label active">{lang === 'fr' ? 'Étape 2/2 : Paiement' : 'Step 2/2: Payment'}</span>
+                    <span className="step-label active">{lang === 'fr' ? 'Étape 2/2 : Paiement sécurisé' : 'Step 2/2: Secure Payment'}</span>
                 </div>
                 <div className="embedded-checkout-container">
                     <EmbeddedCheckoutProvider
@@ -470,11 +470,31 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     </EmbeddedCheckoutProvider>
                 </div>
                 <style>{`
-                    .embedded-checkout-container {
-                        min-height: 400px;
-                        background: var(--color-surface);
-                        border-radius: 16px;
+                    .checkout-form-card.embedded-mode {
+                        padding: 0;
                         overflow: hidden;
+                    }
+                    
+                    .embedded-mode .checkout-progress-simple {
+                        padding: 1rem;
+                        background: var(--color-surface);
+                        border-bottom: 1px solid var(--color-border);
+                    }
+                    
+                    .embedded-checkout-container {
+                        min-height: 500px;
+                        width: 100%;
+                    }
+                    
+                    .embedded-checkout-container iframe {
+                        width: 100% !important;
+                        min-height: 500px !important;
+                    }
+                    
+                    @media (max-width: 640px) {
+                        .embedded-checkout-container {
+                            min-height: 600px;
+                        }
                     }
                 `}</style>
             </div>
