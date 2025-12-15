@@ -17,6 +17,7 @@ const hash = (value: string): string => {
 // Send event to Meta Conversions API
 async function sendMetaEvent(eventData: {
     eventName: string;
+    eventId: string;
     email?: string;
     phone?: string;
     value?: number;
@@ -26,22 +27,25 @@ async function sendMetaEvent(eventData: {
     userAgent?: string;
     clientIp?: string;
     eventSourceUrl?: string;
+    fbclid?: string;
 }) {
     if (!META_ACCESS_TOKEN || META_ACCESS_TOKEN === 'your_meta_access_token') {
         console.log('Meta Conversions API: Token not configured');
         return null;
     }
 
-    const userData: Record<string, string> = {};
+    const userData: Record<string, any> = {};
     if (eventData.email) userData.em = [hash(eventData.email)];
     if (eventData.phone) userData.ph = [hash(eventData.phone)];
     if (eventData.clientIp) userData.client_ip_address = eventData.clientIp;
     if (eventData.userAgent) userData.client_user_agent = eventData.userAgent;
+    if (eventData.fbclid) userData.fbc = eventData.fbclid;
 
     const eventPayload = {
         data: [{
             event_name: eventData.eventName,
-            event_time: Math.floor(Date.now() / 1000),
+            event_time: Math.floor(Date.now() / 1000), // Unix timestamp (seconds)
+            event_id: eventData.eventId, // For deduplication
             action_source: 'website',
             event_source_url: eventData.eventSourceUrl,
             user_data: userData,
@@ -75,6 +79,7 @@ async function sendMetaEvent(eventData: {
 // Send event to TikTok Events API
 async function sendTikTokEvent(eventData: {
     eventName: string;
+    eventId: string;
     email?: string;
     phone?: string;
     value?: number;
@@ -83,6 +88,7 @@ async function sendTikTokEvent(eventData: {
     contentName?: string;
     userAgent?: string;
     clientIp?: string;
+    ttclid?: string;
 }) {
     if (!TIKTOK_ACCESS_TOKEN || !TIKTOK_PIXEL_ID || TIKTOK_PIXEL_ID === 'your_tiktok_pixel_id_here') {
         console.log('TikTok Events API: Token or Pixel ID not configured');
@@ -92,11 +98,12 @@ async function sendTikTokEvent(eventData: {
     const eventPayload = {
         pixel_code: TIKTOK_PIXEL_ID,
         event: eventData.eventName,
-        event_id: crypto.randomUUID(),
-        timestamp: new Date().toISOString(),
+        event_id: eventData.eventId, // Same ID as pixel for deduplication
+        timestamp: Math.floor(Date.now() / 1000), // Unix timestamp (seconds)
         context: {
             user_agent: eventData.userAgent,
             ip: eventData.clientIp,
+            ad: eventData.ttclid ? { callback: eventData.ttclid } : undefined, // TTCLID for attribution
             user: {
                 email: eventData.email ? hash(eventData.email) : undefined,
                 phone_number: eventData.phone ? hash(eventData.phone) : undefined,
@@ -136,13 +143,16 @@ export const POST: APIRoute = async ({ request }) => {
         const body = await request.json();
         const {
             eventName,
+            eventId, // Shared event ID for deduplication
             email,
             phone,
             value,
             currency,
             contentId,
             contentName,
-            eventSourceUrl
+            eventSourceUrl,
+            ttclid, // TikTok Click ID (from URL)
+            fbclid, // Facebook Click ID (from URL)
         } = body;
 
         // Get user agent and IP from request
@@ -150,10 +160,14 @@ export const POST: APIRoute = async ({ request }) => {
         const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] ||
             request.headers.get('x-real-ip') || '';
 
+        // Generate event ID if not provided
+        const sharedEventId = eventId || crypto.randomUUID();
+
         // Send to both platforms in parallel
         const [metaResult, tiktokResult] = await Promise.all([
             sendMetaEvent({
                 eventName,
+                eventId: sharedEventId,
                 email,
                 phone,
                 value,
@@ -163,9 +177,11 @@ export const POST: APIRoute = async ({ request }) => {
                 userAgent,
                 clientIp,
                 eventSourceUrl,
+                fbclid,
             }),
             sendTikTokEvent({
                 eventName: eventName === 'Purchase' ? 'CompletePayment' : eventName,
+                eventId: sharedEventId,
                 email,
                 phone,
                 value,
@@ -174,11 +190,13 @@ export const POST: APIRoute = async ({ request }) => {
                 contentName,
                 userAgent,
                 clientIp,
+                ttclid,
             })
         ]);
 
         return new Response(JSON.stringify({
             success: true,
+            eventId: sharedEventId,
             meta: !!metaResult,
             tiktok: !!tiktokResult,
         }), {

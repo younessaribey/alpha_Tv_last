@@ -65,28 +65,42 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                     setCustomerEmail(data.customer_email || '');
                     setMetadata(data.metadata);
 
-                    // Track TikTok Pixel Purchase event (client-side)
-                    trackTikTokEvent('CompletePayment', {
-                        content_id: data.metadata?.productId,
-                        content_name: data.metadata?.productName,
-                        currency: 'EUR',
-                        value: parseFloat(data.metadata?.price || '0')
-                    });
+                    // Generate shared event ID for deduplication
+                    const eventId = `purchase_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-                    // Track Meta Pixel Purchase event (client-side)
-                    trackMetaEvent('Purchase', {
-                        content_ids: [data.metadata?.productId],
-                        content_name: data.metadata?.productName,
-                        currency: 'EUR',
-                        value: parseFloat(data.metadata?.price || '0')
-                    });
+                    // Get click IDs from URL or localStorage for attribution
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const ttclid = urlParams.get('ttclid') || localStorage.getItem('ttclid') || '';
+                    const fbclid = urlParams.get('fbclid') || localStorage.getItem('fbclid') || '';
 
-                    // SERVER-SIDE Conversions API (more reliable)
+                    // Track TikTok Pixel Purchase event (client-side with same event_id)
+                    if ((window as any).ttq) {
+                        (window as any).ttq.track('CompletePayment', {
+                            content_id: data.metadata?.productId,
+                            content_name: data.metadata?.productName,
+                            currency: 'EUR',
+                            value: parseFloat(data.metadata?.price || '0'),
+                            event_id: eventId, // For deduplication
+                        });
+                    }
+
+                    // Track Meta Pixel Purchase event (client-side with same event_id)
+                    if ((window as any).fbq) {
+                        (window as any).fbq('track', 'Purchase', {
+                            content_ids: [data.metadata?.productId],
+                            content_name: data.metadata?.productName,
+                            currency: 'EUR',
+                            value: parseFloat(data.metadata?.price || '0'),
+                        }, { eventID: eventId }); // For deduplication
+                    }
+
+                    // SERVER-SIDE Conversions API (more reliable, same eventId)
                     fetch('/api/track-conversion', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             eventName: 'Purchase',
+                            eventId: eventId, // Same ID for deduplication
                             email: data.customer_email,
                             phone: data.metadata?.customerPhone,
                             value: parseFloat(data.metadata?.price || '0'),
@@ -94,6 +108,8 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                             contentId: data.metadata?.productId,
                             contentName: data.metadata?.productName,
                             eventSourceUrl: window.location.href,
+                            ttclid: ttclid, // TikTok Click ID for attribution
+                            fbclid: fbclid, // Facebook Click ID for attribution
                         })
                     }).catch(err => console.error('Conversion tracking error:', err));
                 } else {

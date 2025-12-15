@@ -68,6 +68,19 @@ const tiktokPixelId = import.meta.env.PUBLIC_TIKTOK_PIXEL_ID;
 <body>
     <slot />
 
+    <!-- Capture Click IDs for Attribution (TTCLID, FBCLID) -->
+    <script is:inline>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ttclid = urlParams.get('ttclid');
+            const fbclid = urlParams.get('fbclid');
+            
+            // Store click IDs in localStorage for later use
+            if (ttclid) localStorage.setItem('ttclid', ttclid);
+            if (fbclid) localStorage.setItem('fbclid', fbclid);
+        })();
+    </script>
+
     <!-- Scroll Animation Observer -->
     <script is:inline>
         document.addEventListener('DOMContentLoaded', () => {
