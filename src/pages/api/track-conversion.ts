@@ -114,7 +114,7 @@ async function sendTikTokEvent(eventData: {
         context.ad = { callback: eventData.ttclid };
     }
 
-    // Build properties object with all parameters
+    // Build properties object with all parameters (generic naming)
     const properties: Record<string, any> = {
         currency: eventData.currency || 'EUR',
         value: eventData.value,
@@ -122,10 +122,10 @@ async function sendTikTokEvent(eventData: {
             content_id: eventData.contentId,
             content_type: 'product',
             content_name: eventData.contentName,
-            content_category: eventData.contentCategory || 'IPTV Subscription',
+            content_category: 'Subscription',
             price: eventData.value,
             num_items: 1,
-            brand: 'AlphaTV',
+            brand: 'Alpha',
         }],
     };
 

@@ -80,14 +80,14 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                                 content_id: data.metadata?.productId,
                                 content_type: 'product',
                                 content_name: data.metadata?.productName,
-                                content_category: 'IPTV Subscription',
+                                content_category: 'Subscription',
                                 price: parseFloat(data.metadata?.price || '0'),
                                 num_items: 1,
                                 brand: 'AlphaTV',
                             }],
                             value: parseFloat(data.metadata?.price || '0'),
                             currency: 'EUR',
-                            description: 'IPTV subscription purchase completed',
+                            description: 'Subscription purchase completed',
                             status: 'completed',
                         }, {
                             event_id: eventId
