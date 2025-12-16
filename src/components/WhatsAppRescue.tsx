@@ -46,33 +46,71 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
 
         // Only apply these triggers on checkout page
         if (isCheckoutPage) {
-            // 1. Exit intent detection (mouse leaves viewport from top)
-            const handleMouseLeave = (e: MouseEvent) => {
-                if (e.clientY <= 0) {
-                    triggerNotification('Exit intent');
+            let lastScrollY = 0;
+            let scrollTimeout: NodeJS.Timeout;
+
+            // 1. Mobile: Scroll to top detection (exit intent on mobile)
+            const handleScroll = () => {
+                const currentScrollY = window.scrollY;
+
+                // Rapid scroll to top = exit intent on mobile
+                if (currentScrollY < 50 && lastScrollY > 100) {
+                    triggerNotification('Mobile exit intent - scroll to top');
+                }
+
+                lastScrollY = currentScrollY;
+
+                // Reset scroll timeout (user is active)
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // User stopped scrolling for 5s - show notification
+                    if (currentScrollY > 200) {
+                        triggerNotification('User inactive while scrolling');
+                    }
+                }, 5000);
+            };
+
+            // 2. Visibility change (user switches tab/app)
+            const handleVisibilityChange = () => {
+                if (document.hidden) {
+                    // User left the page/tab
+                    triggerNotification('Tab/app switched');
                 }
             };
 
-            // 2. Back button detection (popstate)
+            // 3. Back button detection (works on mobile)
             const handlePopState = () => {
                 triggerNotification('Back button pressed');
             };
 
-            // 3. Timer-based trigger (30 seconds)
+            // 4. Desktop: Exit intent (mouse leaves viewport from top)
+            const handleMouseLeave = (e: MouseEvent) => {
+                if (e.clientY <= 0) {
+                    triggerNotification('Desktop exit intent');
+                }
+            };
+
+            // 5. Timer-based trigger (30 seconds, works on all devices)
             timeoutId = setTimeout(() => {
                 triggerNotification('Timer');
             }, 30000); // 30 seconds
 
-            document.addEventListener('mouseleave', handleMouseLeave);
+            // Register all event listeners
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            document.addEventListener('visibilitychange', handleVisibilityChange);
             window.addEventListener('popstate', handlePopState);
+            document.addEventListener('mouseleave', handleMouseLeave); // Desktop only
 
             // Push a state so back button works
             window.history.pushState({ whatsapp: true }, '');
 
             return () => {
-                document.removeEventListener('mouseleave', handleMouseLeave);
+                window.removeEventListener('scroll', handleScroll);
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
                 window.removeEventListener('popstate', handlePopState);
+                document.removeEventListener('mouseleave', handleMouseLeave);
                 clearTimeout(timeoutId);
+                clearTimeout(scrollTimeout);
             };
         }
     }, [isCheckoutPage, productName]);
