@@ -5,7 +5,7 @@ import Footer from "../components/Footer.astro";
 import WhatsAppRescue from "../components/WhatsAppRescue";
 import { products, t, type Lang } from "../lib/data";
 
-const lang: Lang = "fr";
+const lang: Lang = (Astro.url.searchParams.get("lang") as Lang) || "fr";
 
 // Platform logos for scrolling
 const platformLogos = [

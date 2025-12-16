@@ -1,66 +1,130 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import type { Lang } from '../lib/data';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import type { Lang } from "../lib/data";
 
-const lang: Lang = 'fr';
+const lang: Lang = (Astro.url.searchParams.get("lang") as Lang) || "fr";
 
 const faqs = [
     {
-        question: { en: 'How do I install Cap Player?', fr: 'Comment installer Cap Player ?' },
-        answer: { 
-            en: 'Cap Player is available on iOS, Android, Smart TVs, Roku, Fire TV, and Windows. Visit our How It Works page for step-by-step installation guides for each platform.',
-            fr: 'Cap Player est disponible sur iOS, Android, Smart TV, Roku, Fire TV et Windows. Visitez notre page "Comment ça marche" pour des guides d\'installation étape par étape.' 
+        question: {
+            en: "How do I install Cap Player?",
+            fr: "Comment installer Cap Player ?",
+        },
+        answer: {
+            en: 'Cap Player is available on iOS, Android, Smart TVs (Samsung, LG, Hisense, Philips), Fire TV, Roku, and Windows. Visit our "How It Works" page for detailed step-by-step installation guides for each platform. For Fire TV, use Downloader app with code 628699. For Roku, visit my.roku.com/account/add/CAPPLAYER.',
+            fr: "Cap Player est disponible sur iOS, Android, Smart TV (Samsung, LG, Hisense, Philips), Fire TV, Roku et Windows. Visitez notre page \"Comment ça marche\" pour des guides d'installation détaillés pour chaque plateforme. Pour Fire TV, utilisez l'app Downloader avec le code 628699. Pour Roku, visitez my.roku.com/account/add/CAPPLAYER.",
         },
     },
     {
-        question: { en: 'How do I find my MAC address and PIN?', fr: 'Comment trouver mon adresse MAC et mon code PIN ?' },
-        answer: { 
-            en: 'After installing Cap Player, open the app. Your MAC address and PIN/Device Key will be displayed on the login screen.',
-            fr: 'Après avoir installé Cap Player, ouvrez l\'application. Votre adresse MAC et votre code PIN seront affichés sur l\'écran de connexion.' 
+        question: {
+            en: "How do I find my MAC address and PIN?",
+            fr: "Comment trouver mon adresse MAC et mon code PIN ?",
+        },
+        answer: {
+            en: 'After installing Cap Player and launching the app, your MAC address and PIN/Device Key will be displayed on the main screen. Select "Login with MAC & Password" option. Take a screenshot or write down these credentials - you\'ll need them when purchasing your subscription.',
+            fr: "Après avoir installé et lancé Cap Player, votre adresse MAC et votre code PIN seront affichés sur l'écran principal. Sélectionnez l'option \"Connexion avec MAC & Mot de passe\". Prenez une capture d'écran ou notez ces identifiants - vous en aurez besoin lors de l'achat de votre abonnement.",
         },
     },
     {
-        question: { en: 'How many devices can I use?', fr: 'Combien d\'appareils puis-je utiliser ?' },
-        answer: { 
-            en: 'It depends on your plan. Single device plans support 1 device. Duo plans support 2 simultaneous streams.',
-            fr: 'Cela dépend de votre forfait. Les forfaits 1 appareil supportent 1 appareil. Les forfaits Duo supportent 2 flux simultanés.' 
+        question: {
+            en: "How many devices can I use?",
+            fr: "Combien d'appareils puis-je utiliser ?",
+        },
+        answer: {
+            en: "This depends on your subscription plan. Our 6-month and 12-month plans support 1 device. The 12-month Duo plan supports 2 simultaneous streams on 2 different devices. Each device requires its own MAC address and PIN from Cap Player.",
+            fr: "Cela dépend de votre forfait d'abonnement. Nos forfaits 6 mois et 12 mois supportent 1 appareil. Le forfait 12 mois Duo supporte 2 flux simultanés sur 2 appareils différents. Chaque appareil nécessite sa propre adresse MAC et son PIN depuis Cap Player.",
         },
     },
     {
-        question: { en: 'What channels are included?', fr: 'Quelles chaînes sont incluses ?' },
-        answer: { 
-            en: 'We offer over 10,000 channels including sports, movies, news, entertainment, and international channels in HD/4K quality.',
-            fr: 'Nous proposons plus de 10 000 chaînes incluant sports, films, actualités, divertissement et chaînes internationales en qualité HD/4K.' 
+        question: {
+            en: "What channels are included?",
+            fr: "Quelles chaînes sont incluses ?",
+        },
+        answer: {
+            en: "We offer over 10,000+ live channels including premium sports (beIN Sports, Canal+, Premier League, Champions League, La Liga), movies, series, news, entertainment, and international channels from around the world. All content is available in HD/4K quality with EPG (Electronic Program Guide) support.",
+            fr: "Nous proposons plus de 10 000 chaînes en direct incluant les sports premium (beIN Sports, Canal+, Premier League, Champions League, La Liga), films, séries, actualités, divertissement et chaînes internationales du monde entier. Tout le contenu est disponible en qualité HD/4K avec support EPG (Guide électronique des programmes).",
         },
     },
     {
-        question: { en: 'Is there a free trial?', fr: 'Y a-t-il un essai gratuit ?' },
-        answer: { 
-            en: 'Yes! All plans include a 24-hour free trial. Test all channels before committing.',
-            fr: 'Oui ! Tous les forfaits incluent un essai gratuit de 24 heures. Testez toutes les chaînes avant de vous engager.' 
+        question: {
+            en: "Is there a free trial?",
+            fr: "Y a-t-il un essai gratuit ?",
+        },
+        answer: {
+            en: "Yes! All our plans include a 24-hour FREE trial period. You can test all channels, VOD content, and features before being charged. Your payment method will be authorized, but you won't be charged during the trial. Cancel anytime during the 24-hour period with no charge.",
+            fr: "Oui ! Tous nos forfaits incluent une période d'essai GRATUITE de 24 heures. Vous pouvez tester toutes les chaînes, contenus VOD et fonctionnalités avant d'être facturé. Votre moyen de paiement sera autorisé, mais vous ne serez pas débité pendant l'essai. Annulez à tout moment pendant les 24 heures sans frais.",
         },
     },
     {
-        question: { en: 'How do I renew my subscription?', fr: 'Comment renouveler mon abonnement ?' },
-        answer: { 
-            en: 'Simply purchase a new plan from our shop. Use the same MAC address and PIN for seamless continuity.',
-            fr: 'Achetez simplement un nouveau forfait dans notre boutique. Utilisez la même adresse MAC et le même code PIN pour une continuité sans interruption.' 
+        question: {
+            en: "How do I renew my subscription?",
+            fr: "Comment renouveler mon abonnement ?",
+        },
+        answer: {
+            en: "Simply purchase a new plan from our pricing page before your current subscription expires. Use the same MAC address and PIN for seamless continuity. Your new subscription will be activated automatically. We recommend renewing at least 48 hours before expiration to avoid any service interruption.",
+            fr: "Achetez simplement un nouveau forfait depuis notre page tarifs avant l'expiration de votre abonnement actuel. Utilisez la même adresse MAC et le même PIN pour une continuité sans interruption. Votre nouvel abonnement sera activé automatiquement. Nous recommandons de renouveler au moins 48 heures avant l'expiration pour éviter toute interruption de service.",
         },
     },
     {
-        question: { en: 'What payment methods do you accept?', fr: 'Quels moyens de paiement acceptez-vous ?' },
-        answer: { 
-            en: 'We accept all major credit/debit cards, Apple Pay, and Google Pay through Stripe.',
-            fr: 'Nous acceptons toutes les cartes de crédit/débit majeures, Apple Pay et Google Pay via Stripe.' 
+        question: {
+            en: "What payment methods do you accept?",
+            fr: "Quels moyens de paiement acceptez-vous ?",
+        },
+        answer: {
+            en: "We accept all major credit and debit cards (Visa, Mastercard), Apple Pay, and Google Pay through our secure Stripe payment processor. All transactions are encrypted and PCI-DSS compliant. Your payment information is never stored on our servers.",
+            fr: "Nous acceptons toutes les cartes de crédit et débit majeures (Visa, Mastercard), Apple Pay et Google Pay via notre processeur de paiement sécurisé Stripe. Toutes les transactions sont cryptées et conformes PCI-DSS. Vos informations de paiement ne sont jamais stockées sur nos serveurs.",
         },
     },
     {
-        question: { en: 'How long does activation take?', fr: 'Combien de temps prend l\'activation ?' },
-        answer: { 
-            en: 'Activation is typically completed within 1-2 hours. Contact us via WhatsApp for faster service.',
-            fr: 'L\'activation est généralement effectuée dans les 1-2 heures. Contactez-nous via WhatsApp pour un service plus rapide.' 
+        question: {
+            en: "How long does activation take?",
+            fr: "Combien de temps prend l'activation ?",
+        },
+        answer: {
+            en: "Activation is typically completed within 1-2 hours after payment confirmation. You will receive your activation details via WhatsApp. For immediate assistance or faster activation, contact our support team via WhatsApp at +33 7 58 92 89 01. We're available 24/7.",
+            fr: "L'activation est généralement effectuée dans les 1-2 heures après confirmation du paiement. Vous recevrez vos détails d'activation via WhatsApp. Pour une assistance immédiate ou une activation plus rapide, contactez notre équipe support via WhatsApp au +33 7 58 92 89 01. Nous sommes disponibles 24h/24, 7j/7.",
+        },
+    },
+    {
+        question: {
+            en: "Can I cancel my subscription?",
+            fr: "Puis-je annuler mon abonnement ?",
+        },
+        answer: {
+            en: 'Yes, you can cancel your subscription anytime during the 24-hour trial period with no charge. After the trial, subscriptions are non-refundable as they are for a fixed period (6 or 12 months). <a href="/cancel" class="cancel-link">Click here to access the cancellation form</a>. For assistance, contact us via WhatsApp.',
+            fr: 'Oui, vous pouvez annuler votre abonnement à tout moment pendant la période d\'essai de 24 heures sans frais. Après l\'essai, les abonnements ne sont pas remboursables car ils sont pour une période fixe (6 ou 12 mois). <a href="/cancel" class="cancel-link">Cliquez ici pour accéder au formulaire d\'annulation</a>. Pour assistance, contactez-nous via WhatsApp.',
+        },
+    },
+    {
+        question: {
+            en: "Do you offer refunds?",
+            fr: "Offrez-vous des remboursements ?",
+        },
+        answer: {
+            en: "Refunds are available only during the 24-hour free trial period. After the trial ends and your subscription starts, all sales are final and non-refundable. Please test the service thoroughly during your trial period. If you experience technical issues, contact our support team and we'll help resolve them.",
+            fr: "Les remboursements sont disponibles uniquement pendant la période d'essai gratuite de 24 heures. Après la fin de l'essai et le début de votre abonnement, toutes les ventes sont finales et non remboursables. Veuillez tester le service en profondeur pendant votre période d'essai. En cas de problèmes techniques, contactez notre support qui vous aidera à les résoudre.",
+        },
+    },
+    {
+        question: {
+            en: "Is my connection secure?",
+            fr: "Ma connexion est-elle sécurisée ?",
+        },
+        answer: {
+            en: "Yes! We use industry-standard encryption (SSL/TLS) for all connections. Your payment data is processed through Stripe, a PCI Level 1 certified payment processor. We never store your credit card information. All streams are delivered through secure HTTPS connections.",
+            fr: "Oui ! Nous utilisons le cryptage standard de l'industrie (SSL/TLS) pour toutes les connexions. Vos données de paiement sont traitées via Stripe, un processeur de paiement certifié PCI Niveau 1. Nous ne stockons jamais vos informations de carte bancaire. Tous les flux sont délivrés via des connexions HTTPS sécurisées.",
+        },
+    },
+    {
+        question: {
+            en: "What internet speed do I need?",
+            fr: "Quelle vitesse Internet me faut-il ?",
+        },
+        answer: {
+            en: "For optimal streaming experience: SD quality requires 3 Mbps, HD (720p) requires 5 Mbps, Full HD (1080p) requires 8 Mbps, and 4K/UHD requires 25 Mbps. For 2-device Duo plan, ensure you have sufficient bandwidth for multiple streams. We recommend a stable connection for best performance.",
+            fr: "Pour une expérience de streaming optimale : La qualité SD nécessite 3 Mbps, HD (720p) nécessite 5 Mbps, Full HD (1080p) nécessite 8 Mbps, et 4K/UHD nécessite 25 Mbps. Pour le forfait Duo 2 appareils, assurez-vous d'avoir une bande passante suffisante pour plusieurs flux. Nous recommandons une connexion stable pour de meilleures performances.",
         },
     },
 ];
@@ -68,44 +132,92 @@ const faqs = [
 
 <Layout title="FAQ" lang={lang}>
     <Header lang={lang} />
-    
+
     <main class="main-content">
         <section class="section">
             <div class="container">
                 <!-- Header -->
                 <div class="page-header" data-animate>
-                    <span class="badge">❓ {lang === 'fr' ? 'Centre d\'Aide' : 'Help Center'}</span>
-                    <h1>{lang === 'fr' ? 'Questions Fréquentes' : 'Frequently Asked Questions'}</h1>
-                    <p class="page-subtitle">{lang === 'fr' ? 'Trouvez des réponses aux questions les plus courantes' : 'Find answers to the most common questions'}</p>
+                    <span class="badge"
+                        >❓ {
+                            lang === "fr" ? "Centre d'Aide" : "Help Center"
+                        }</span
+                    >
+                    <h1>
+                        {
+                            lang === "fr"
+                                ? "Questions Fréquentes"
+                                : "Frequently Asked Questions"
+                        }
+                    </h1>
+                    <p class="page-subtitle">
+                        {
+                            lang === "fr"
+                                ? "Trouvez des réponses aux questions les plus courantes"
+                                : "Find answers to the most common questions"
+                        }
+                    </p>
                 </div>
 
                 <!-- FAQ Accordion -->
                 <div class="faq-container">
-                    {faqs.map((faq, index) => (
-                        <div class="faq-item" data-animate>
-                            <button class="faq-question" onclick={`this.parentElement.classList.toggle('open')`}>
-                                <span>{faq.question[lang]}</span>
-                                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M6 9l6 6 6-6"/>
-                                </svg>
-                            </button>
-                            <div class="faq-answer">
-                                <p>{faq.answer[lang]}</p>
+                    {
+                        faqs.map((faq, index) => (
+                            <div class="faq-item" data-animate>
+                                <button
+                                    class="faq-question"
+                                    onclick="this.parentElement.classList.toggle('open')"
+                                >
+                                    <span>{faq.question[lang]}</span>
+                                    <svg
+                                        class="faq-icon"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path d="M6 9l6 6 6-6" />
+                                    </svg>
+                                </button>
+                                <div class="faq-answer">
+                                    <p set:html={faq.answer[lang]} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    }
                 </div>
 
                 <!-- Still Need Help -->
                 <div class="help-card" data-animate>
-                    <h2>{lang === 'fr' ? 'Vous n\'avez pas trouvé votre réponse ?' : 'Didn\'t find your answer?'}</h2>
-                    <p>{lang === 'fr' ? 'Notre équipe est disponible 24/7' : 'Our team is available 24/7'}</p>
+                    <h3>
+                        💬 {
+                            lang === "fr"
+                                ? "Besoin d'aide supplémentaire ?"
+                                : "Need more help?"
+                        }
+                    </h3>
+                    <p>
+                        {
+                            lang === "fr"
+                                ? "Notre équipe est disponible 24/7 pour répondre à toutes vos questions"
+                                : "Our team is available 24/7 to answer all your questions"
+                        }
+                    </p>
                     <div class="help-buttons">
-                        <a href="/contact" class="btn btn-secondary">
-                            {lang === 'fr' ? 'Nous Contacter' : 'Contact Us'}
+                        <a
+                            href="https://wa.me/33758928901"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-primary"
+                        >
+                            <span>💬</span>
+                            WhatsApp
                         </a>
-                        <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-                            💬 WhatsApp
+                        <a href="/contact" class="btn btn-secondary">
+                            <span>📧</span>
+                            {lang === "fr" ? "Nous contacter" : "Contact Us"}
                         </a>
                     </div>
                 </div>
@@ -119,71 +231,84 @@ const faqs = [
 <style>
     .page-header {
         text-align: center;
-        margin-bottom: 3rem;
+        margin-bottom: 4rem;
     }
 
     .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
+        display: inline-block;
         padding: 0.5rem 1rem;
         background: rgba(139, 92, 246, 0.1);
         border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 100px;
+        border-radius: 50px;
+        color: var(--color-primary);
         font-size: 0.875rem;
         font-weight: 600;
-        color: var(--color-primary);
         margin-bottom: 1rem;
     }
 
-    .page-header h1 {
+    h1 {
         font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 700;
-        margin-bottom: 0.75rem;
+        font-weight: 800;
+        background: linear-gradient(
+            135deg,
+            var(--color-text) 0%,
+            var(--color-primary) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
     }
 
     .page-subtitle {
-        color: var(--color-text-muted);
         font-size: 1.125rem;
+        color: var(--color-text-muted);
+        max-width: 600px;
+        margin: 0 auto;
     }
 
-    /* FAQ Container */
+    /* FAQ Accordion */
     .faq-container {
-        max-width: 42rem;
-        margin: 0 auto;
+        max-width: 900px;
+        margin: 0 auto 4rem;
     }
 
     .faq-item {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
-        border-radius: 12px;
-        margin-bottom: 0.75rem;
+        border-radius: 16px;
+        margin-bottom: 1rem;
         overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        border-color: rgba(139, 92, 246, 0.3);
     }
 
     .faq-question {
         width: 100%;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 1.25rem;
+        justify-content: space-between;
+        padding: 1.5rem;
         background: none;
         border: none;
-        cursor: pointer;
         text-align: left;
-        font-size: 1rem;
+        cursor: pointer;
+        font-size: 1.125rem;
         font-weight: 600;
         color: var(--color-text);
+        transition: all 0.3s ease;
     }
 
     .faq-question:hover {
-        background: rgba(139, 92, 246, 0.05);
+        color: var(--color-primary);
     }
 
     .faq-icon {
         flex-shrink: 0;
         transition: transform 0.3s ease;
-        color: var(--color-text-muted);
     }
 
     .faq-item.open .faq-icon {
@@ -201,26 +326,42 @@ const faqs = [
     }
 
     .faq-answer p {
-        padding: 0 1.25rem 1.25rem;
+        padding: 0 1.5rem 1.5rem;
         color: var(--color-text-muted);
-        line-height: 1.6;
+        line-height: 1.8;
+    }
+
+    /* Cancel Link in FAQ Answer */
+    .cancel-link {
+        color: #ef4444;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .cancel-link:hover {
+        color: #dc2626;
+        text-decoration-thickness: 3px;
+        text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
     }
 
     /* Help Card */
     .help-card {
-        max-width: 42rem;
-        margin: 3rem auto 0;
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 16px;
-        padding: 2rem;
         text-align: center;
+        padding: 3rem 2rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 20px;
+        max-width: 700px;
+        margin: 4rem auto 0;
     }
 
-    .help-card h2 {
-        font-size: 1.25rem;
+    .help-card h3 {
+        font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
     }
 
     .help-card p {
@@ -230,40 +371,76 @@ const faqs = [
 
     .help-buttons {
         display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    @media (min-width: 640px) {
-        .help-buttons {
-            flex-direction: row;
-            justify-content: center;
-        }
-    }
-
-    .btn-whatsapp {
-        display: inline-flex;
-        align-items: center;
+        gap: 1rem;
         justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: #25D366;
-        color: white;
-        font-weight: 600;
-        border-radius: 8px;
+        flex-wrap: wrap;
     }
 
-    .btn-whatsapp:hover {
-        background: #20b85a;
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .cancellation-section {
+            padding: 1.5rem;
+        }
+
+        .help-buttons {
+            flex-direction: column;
+        }
     }
 </style>
 
 <script>
-    // Initialize FAQ accordion
-    document.querySelectorAll('.faq-question').forEach(button => {
-        button.addEventListener('click', () => {
-            const item = button.parentElement;
-            item?.classList.toggle('open');
+    document
+        .getElementById("cancel-form")
+        ?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const form = e.target as HTMLFormElement;
+            const messageDiv = document.getElementById("cancel-message");
+            const submitBtn = form.querySelector(
+                'button[type="submit"]',
+            ) as HTMLButtonElement;
+
+            if (!messageDiv) return;
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Envoi en cours...";
+
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get("email"),
+                mac: formData.get("mac"),
+                reason: formData.get("reason") || "No reason provided",
+                timestamp: new Date().toISOString(),
+            };
+
+            try {
+                // Send WhatsApp notification (you can also send to your backend)
+                const message = `🚫 CANCELLATION REQUEST\n\nEmail: ${data.email}\nMAC: ${data.mac}\nReason: ${data.reason}\nTime: ${data.timestamp}`;
+
+                // Show success message
+                messageDiv.style.display = "block";
+                messageDiv.className = "form-message success";
+                messageDiv.textContent =
+                    "✅ Demande envoyée ! Notre équipe vous contactera sous 24h.";
+
+                // Reset form
+                form.reset();
+
+                // Optional: Send to WhatsApp (this would open WhatsApp)
+                // window.open(`https://wa.me/33758928901?text=${encodeURIComponent(message)}`, '_blank');
+            } catch (error) {
+                messageDiv.style.display = "block";
+                messageDiv.className = "form-message error";
+                messageDiv.textContent =
+                    "❌ Erreur lors de l'envoi. Veuillez réessayer ou nous contacter via WhatsApp.";
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML =
+                    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Soumettre la demande d\'annulation';
+            }
         });
-    });
 </script>

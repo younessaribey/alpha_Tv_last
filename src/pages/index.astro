@@ -7,7 +7,7 @@ import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import WhatsAppRescue from '../components/WhatsAppRescue';
 import { products, platforms, t, type Lang } from '../lib/data';
 
-const lang: Lang = 'fr';
+const lang: Lang = (Astro.url.searchParams.get('lang') as Lang) || 'fr';
 
 // WhatsApp config - UPDATE THIS WITH YOUR REAL NUMBER
 const whatsappNumber = '33612345678'; // Replace with real number

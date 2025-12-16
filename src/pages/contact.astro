@@ -1,21 +1,27 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import type { Lang } from '../lib/data';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import type { Lang } from "../lib/data";
 
-const lang: Lang = 'fr';
+const lang: Lang = (Astro.url.searchParams.get("lang") as Lang) || "fr";
 ---
 
 <Layout title="Contact" lang={lang}>
     <Header lang={lang} />
-    
+
     <main class="main-content">
         <section class="section">
             <div class="container">
                 <div class="page-header" data-animate>
-                    <h1>{lang === 'fr' ? 'Contactez-nous' : 'Contact Us'}</h1>
-                    <p class="page-subtitle">{lang === 'fr' ? 'Nous sommes là pour vous aider' : 'We\'re here to help'}</p>
+                    <h1>{lang === "fr" ? "Contactez-nous" : "Contact Us"}</h1>
+                    <p class="page-subtitle">
+                        {
+                            lang === "fr"
+                                ? "Nous sommes là pour vous aider"
+                                : "We're here to help"
+                        }
+                    </p>
                 </div>
 
                 <div class="contact-grid">
@@ -25,7 +31,9 @@ const lang: Lang = 'fr';
                             <div class="contact-icon email-icon">📧</div>
                             <div class="contact-content">
                                 <h3>Email</h3>
-                                <a href="mailto:support@alphatv.com">support@alphatv.com</a>
+                                <a href="mailto:support@alphatv.com"
+                                    >support@alphatv.com</a
+                                >
                             </div>
                         </div>
 
@@ -33,9 +41,24 @@ const lang: Lang = 'fr';
                             <div class="contact-icon whatsapp-icon">💬</div>
                             <div class="contact-content">
                                 <h3>WhatsApp</h3>
-                                <p>{lang === 'fr' ? 'Réponse rapide garantie' : 'Fast response guaranteed'}</p>
-                                <a href="https://wa.me/33612345678" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-                                    {lang === 'fr' ? 'Envoyer un message' : 'Send Message'}
+                                <p>
+                                    {
+                                        lang === "fr"
+                                            ? "Réponse rapide garantie"
+                                            : "Fast response guaranteed"
+                                    }
+                                </p>
+                                <a
+                                    href="https://wa.me/33612345678"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-whatsapp"
+                                >
+                                    {
+                                        lang === "fr"
+                                            ? "Envoyer un message"
+                                            : "Send Message"
+                                    }
                                 </a>
                             </div>
                         </div>
@@ -43,34 +66,80 @@ const lang: Lang = 'fr';
                         <div class="contact-card" data-animate>
                             <div class="contact-icon time-icon">⏰</div>
                             <div class="contact-content">
-                                <h3>{lang === 'fr' ? 'Disponibilité' : 'Availability'}</h3>
-                                <p>24/7 • {lang === 'fr' ? 'Réponse sous 24h' : 'Response within 24h'}</p>
+                                <h3>
+                                    {
+                                        lang === "fr"
+                                            ? "Disponibilité"
+                                            : "Availability"
+                                    }
+                                </h3>
+                                <p>
+                                    24/7 • {
+                                        lang === "fr"
+                                            ? "Réponse sous 24h"
+                                            : "Response within 24h"
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Contact Form -->
                     <div class="contact-form-card" data-animate>
-                        <h2>{lang === 'fr' ? 'Envoyez-nous un message' : 'Send us a message'}</h2>
+                        <h2>
+                            {
+                                lang === "fr"
+                                    ? "Envoyez-nous un message"
+                                    : "Send us a message"
+                            }
+                        </h2>
                         <form class="contact-form">
                             <div class="form-group">
-                                <label for="name">{lang === 'fr' ? 'Nom' : 'Name'}</label>
-                                <input type="text" id="name" name="name" required />
+                                <label for="name"
+                                    >{lang === "fr" ? "Nom" : "Name"}</label
+                                >
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    required
+                                />
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" required />
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                />
                             </div>
                             <div class="form-group">
-                                <label for="subject">{lang === 'fr' ? 'Sujet' : 'Subject'}</label>
-                                <input type="text" id="subject" name="subject" required />
+                                <label for="subject"
+                                    >{
+                                        lang === "fr" ? "Sujet" : "Subject"
+                                    }</label
+                                >
+                                <input
+                                    type="text"
+                                    id="subject"
+                                    name="subject"
+                                    required
+                                />
                             </div>
                             <div class="form-group">
                                 <label for="message">Message</label>
-                                <textarea id="message" name="message" rows="4" required></textarea>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    rows="4"
+                                    required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-full">
-                                {lang === 'fr' ? 'Envoyer' : 'Send'}
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-full"
+                            >
+                                {lang === "fr" ? "Envoyer" : "Send"}
                             </button>
                         </form>
                     </div>
@@ -175,7 +244,7 @@ const lang: Lang = 'fr';
     .btn-whatsapp {
         display: inline-flex;
         padding: 0.5rem 1rem;
-        background: #25D366;
+        background: #25d366;
         color: white;
         font-size: 0.875rem;
         font-weight: 600;

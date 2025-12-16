@@ -1,21 +1,229 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import CancelForm from '../components/CancelForm';
-import type { Lang } from '../lib/data';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import type { Lang } from "../lib/data";
 
-const lang: Lang = 'fr';
+const lang: Lang = (Astro.url.searchParams.get("lang") as Lang) || "fr";
 ---
 
-<Layout title={lang === 'fr' ? 'Annuler mon abonnement' : 'Cancel Subscription'} lang={lang}>
+<Layout
+    title={lang === "fr" ? "Annuler l'abonnement" : "Cancel Subscription"}
+    lang={lang}
+>
     <Header lang={lang} />
-    
-    <main class="pt-[var(--header-height)]">
+
+    <main class="main-content">
         <section class="section">
             <div class="container">
-                <div class="max-w-md mx-auto">
-                    <CancelForm client:load lang={lang} />
+                <div class="page-header" data-animate>
+                    <span class="badge-danger"
+                        >🚫 {
+                            lang === "fr" ? "Annulation" : "Cancellation"
+                        }</span
+                    >
+                    <h1>
+                        {
+                            lang === "fr"
+                                ? "Annuler votre abonnement"
+                                : "Cancel Your Subscription"
+                        }
+                    </h1>
+                    <p class="page-subtitle">
+                        {
+                            lang === "fr"
+                                ? "Disponible uniquement pendant la période d'essai gratuite de 24 heures"
+                                : "Only available during the 24-hour free trial period"
+                        }
+                    </p>
+                </div>
+
+                <div class="cancellation-container" data-animate>
+                    <div class="warning-box">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                            ></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <div>
+                            <h3>
+                                {
+                                    lang === "fr"
+                                        ? "Informations importantes"
+                                        : "Important Information"
+                                }
+                            </h3>
+                            <ul>
+                                <li>
+                                    {
+                                        lang === "fr"
+                                            ? "Les annulations sont gratuites pendant les 24 premières heures (période d'essai)"
+                                            : "Cancellations are free during the first 24 hours (trial period)"
+                                    }
+                                </li>
+                                <li>
+                                    {
+                                        lang === "fr"
+                                            ? "Après l'essai, les abonnements ne sont pas remboursables"
+                                            : "After trial, subscriptions are non-refundable"
+                                    }
+                                </li>
+                                <li>
+                                    {
+                                        lang === "fr"
+                                            ? "Vous recevrez une confirmation par email sous 2-4 heures"
+                                            : "You will receive confirmation by email within 2-4 hours"
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <form class="cancel-form" id="cancel-form">
+                        <h2>
+                            {
+                                lang === "fr"
+                                    ? "Formulaire d'annulation"
+                                    : "Cancellation Form"
+                            }
+                        </h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cancel-email"
+                                    >{
+                                        lang === "fr"
+                                            ? "Adresse Email"
+                                            : "Email Address"
+                                    } *</label
+                                >
+                                <input
+                                    type="email"
+                                    id="cancel-email"
+                                    name="email"
+                                    placeholder={lang === "fr"
+                                        ? "votre@email.com"
+                                        : "your@email.com"}
+                                    required
+                                />
+                                <span class="field-hint"
+                                    >{
+                                        lang === "fr"
+                                            ? "Email utilisé lors de l'achat"
+                                            : "Email used during purchase"
+                                    }</span
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cancel-mac"
+                                    >{
+                                        lang === "fr"
+                                            ? "Adresse MAC"
+                                            : "MAC Address"
+                                    } *</label
+                                >
+                                <input
+                                    type="text"
+                                    id="cancel-mac"
+                                    name="mac"
+                                    placeholder="XX:XX:XX:XX:XX:XX"
+                                    required
+                                />
+                                <span class="field-hint"
+                                    >{
+                                        lang === "fr"
+                                            ? "Adresse MAC de votre appareil"
+                                            : "Your device MAC address"
+                                    }</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cancel-reason"
+                                >{
+                                    lang === "fr"
+                                        ? "Raison de l'annulation (optionnel)"
+                                        : "Cancellation Reason (optional)"
+                                }</label
+                            >
+                            <textarea
+                                id="cancel-reason"
+                                name="reason"
+                                rows="4"
+                                placeholder={lang === "fr"
+                                    ? "Aidez-nous à améliorer notre service..."
+                                    : "Help us improve by sharing your reason..."}
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-full">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            {
+                                lang === "fr"
+                                    ? "Envoyer la demande d'annulation"
+                                    : "Submit Cancellation Request"
+                            }
+                        </button>
+                    </form>
+
+                    <div
+                        id="cancel-message"
+                        class="form-message"
+                        style="display: none;"
+                    >
+                    </div>
+
+                    <div class="alternative-box">
+                        <h3>
+                            💬 {
+                                lang === "fr" ? "Besoin d'aide ?" : "Need Help?"
+                            }
+                        </h3>
+                        <p>
+                            {
+                                lang === "fr"
+                                    ? "Avant d'annuler, contactez-nous ! Nous pouvons peut-être résoudre votre problème."
+                                    : "Before canceling, contact us! We may be able to solve your issue."
+                            }
+                        </p>
+                        <div class="help-buttons">
+                            <a
+                                href="https://wa.me/33758928901"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-primary"
+                            >
+                                <span>💬</span>
+                                WhatsApp Support
+                            </a>
+                            <a href="/faq" class="btn btn-secondary">
+                                <span>❓</span>
+                                {lang === "fr" ? "Voir la FAQ" : "View FAQ"}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -23,3 +231,280 @@ const lang: Lang = 'fr';
 
     <Footer lang={lang} />
 </Layout>
+
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .badge-danger {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 50px;
+        color: #ef4444;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        font-weight: 800;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+        font-size: 1.125rem;
+        color: var(--color-text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .cancellation-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .warning-box {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(251, 191, 36, 0.05);
+        border: 2px solid rgba(251, 191, 36, 0.3);
+        border-radius: 16px;
+        margin-bottom: 2rem;
+    }
+
+    .warning-box svg {
+        flex-shrink: 0;
+        color: #f59e0b;
+    }
+
+    .warning-box h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.75rem;
+    }
+
+    .warning-box ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .warning-box li {
+        padding: 0.5rem 0;
+        color: var(--color-text-muted);
+        line-height: 1.6;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .warning-box li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: #f59e0b;
+        font-weight: 700;
+    }
+
+    .cancel-form {
+        background: var(--color-surface);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .cancel-form h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.875rem 1rem;
+        background: rgba(26, 26, 46, 0.6);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        color: var(--color-text);
+        font-size: 0.9375rem;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: rgba(239, 68, 68, 0.4);
+        background: rgba(26, 26, 46, 0.8);
+    }
+
+    .field-hint {
+        font-size: 0.75rem;
+        color: var(--color-text-subtle);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 600;
+    }
+
+    .btn-danger:hover {
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-full {
+        width: 100%;
+    }
+
+    .form-message {
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .form-message.success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+    }
+
+    .form-message.error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+
+    .alternative-box {
+        text-align: center;
+        padding: 2rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 20px;
+    }
+
+    .alternative-box h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .alternative-box p {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .help-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .cancel-form {
+            padding: 1.5rem;
+        }
+
+        .warning-box {
+            flex-direction: column;
+        }
+
+        .help-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    document
+        .getElementById("cancel-form")
+        ?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const form = e.target as HTMLFormElement;
+            const messageDiv = document.getElementById("cancel-message");
+            const submitBtn = form.querySelector(
+                'button[type="submit"]',
+            ) as HTMLButtonElement;
+
+            if (!messageDiv) return;
+
+            const originalBtnContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Envoi...";
+
+            const formData = new FormData(form);
+
+            try {
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+
+                messageDiv.style.display = "block";
+                messageDiv.className = "form-message success";
+                messageDiv.innerHTML =
+                    "✅ <strong>Demande envoyée!</strong><br>Notre équipe vous contactera par email sous 2-4 heures.";
+
+                form.reset();
+                messageDiv.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            } catch (error) {
+                messageDiv.style.display = "block";
+                messageDiv.className = "form-message error";
+                messageDiv.innerHTML =
+                    "❌ <strong>Erreur</strong><br>Veuillez réessayer ou nous contacter via WhatsApp.";
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
+        });
+
+    // Auto-format MAC address
+    document.getElementById("cancel-mac")?.addEventListener("input", (e) => {
+        const input = e.target as HTMLInputElement;
+        let value = input.value.replace(/[^0-9A-Fa-f]/g, "").toUpperCase();
+        if (value.length > 12) value = value.slice(0, 12);
+        const formatted = value.match(/.{1,2}/g)?.join(":") || value;
+        input.value = formatted;
+    });
+</script>

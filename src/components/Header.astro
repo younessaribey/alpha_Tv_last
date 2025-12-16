@@ -36,14 +36,16 @@ const currentPath = Astro.url.pathname;
                     >
                 </a>
 
-                <!-- Desktop Nav Pills -->
+                <!-- Desktop Nav Pills with Animation -->
                 <div class="desktop-nav">
-                    <div class="nav-pills">
+                    <div class="nav-pills" id="nav-pills">
+                        <div class="pill-background" id="pill-bg"></div>
                         {
                             navItems.map((item) => (
                                 <a
                                     href={item.href}
                                     class={`nav-pill ${currentPath === item.href ? "active" : ""}`}
+                                    data-nav-pill
                                 >
                                     {item.label}
                                 </a>
@@ -99,6 +101,7 @@ const currentPath = Astro.url.pathname;
                             href={item.href}
                             class={`mobile-nav-link ${currentPath === item.href ? "active" : ""}`}
                         >
+                            <span class="mobile-link-icon">→</span>
                             {item.label}
                         </a>
                     ))
@@ -119,11 +122,13 @@ const currentPath = Astro.url.pathname;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        transition: all 0.3s ease;
     }
 
     #main-header.scrolled .header-glass {
         background: rgba(3, 0, 20, 0.95);
         border-bottom-color: rgba(139, 92, 246, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .nav-container {
@@ -131,6 +136,7 @@ const currentPath = Astro.url.pathname;
         align-items: center;
         justify-content: space-between;
         height: var(--header-height);
+        gap: 2rem;
     }
 
     /* Logo */
@@ -139,6 +145,11 @@ const currentPath = Astro.url.pathname;
         align-items: center;
         gap: 0.75rem;
         text-decoration: none;
+        transition: transform 0.3s ease;
+    }
+
+    .logo-link:hover {
+        transform: scale(1.05);
     }
 
     .logo-image {
@@ -147,73 +158,70 @@ const currentPath = Astro.url.pathname;
         border-radius: 10px;
         object-fit: cover;
         box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
+        transition: all 0.3s ease;
     }
 
     .logo-link:hover .logo-image {
-        transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-    }
-
-    @media (min-width: 768px) {
-        .logo-image {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-        }
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
     }
 
     .logo-text {
-        font-size: 1.375rem;
+        font-size: 1.25rem;
         font-weight: 800;
         color: var(--color-text);
         letter-spacing: -0.02em;
     }
 
     .logo-accent {
-        background: linear-gradient(
-            135deg,
-            var(--color-primary) 0%,
-            var(--color-secondary) 100%
-        );
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
 
-    /* Desktop Nav Pills */
+    /* Desktop Nav Pills - Animated */
     .desktop-nav {
-        display: none;
-        align-items: center;
-    }
-
-    @media (min-width: 900px) {
-        .desktop-nav {
-            display: flex;
-        }
+        flex: 1;
+        display: flex;
+        justify-content: center;
     }
 
     .nav-pills {
+        position: relative;
         display: flex;
         align-items: center;
         gap: 0.25rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(26, 26, 46, 0.6);
+        padding: 0.375rem;
         border-radius: 50px;
-        padding: 0.25rem;
+        border: 1px solid rgba(139, 92, 246, 0.1);
+    }
+
+    .pill-background {
+        position: absolute;
+        background: linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.3) 0%,
+            rgba(99, 102, 241, 0.3) 100%
+        );
+        border-radius: 50px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        pointer-events: none;
+        z-index: 0;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
     }
 
     .nav-pill {
-        padding: 0.5rem 1rem;
-        border-radius: 50px;
-        font-size: 0.8125rem;
-        font-weight: 500;
+        position: relative;
+        z-index: 1;
+        padding: 0.625rem 1.25rem;
         color: var(--color-text-muted);
         text-decoration: none;
-        transition: all 0.2s ease;
-        position: relative;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
     }
 
     .nav-pill:hover {
@@ -222,233 +230,285 @@ const currentPath = Astro.url.pathname;
 
     .nav-pill.active {
         color: white;
-        background: linear-gradient(
-            135deg,
-            var(--color-primary) 0%,
-            var(--color-secondary) 100%
-        );
-        box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
     }
 
     /* Nav Right */
     .nav-right {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 1rem;
     }
 
-    @media (min-width: 640px) {
-        .nav-right {
-            gap: 0.75rem;
-        }
-    }
-
+    /* Language Toggle */
     .lang-toggle {
         display: flex;
         align-items: center;
-        gap: 0.375rem;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 600;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+        background: rgba(26, 26, 46, 0.6);
+        border: 1px solid rgba(139, 92, 246, 0.2);
         border-radius: 50px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        color: var(--color-text-muted);
+        color: var(--color-text);
+        font-size: 0.875rem;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
     }
 
     .lang-toggle:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--color-text);
+        background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateY(-1px);
     }
 
     .lang-flag {
-        font-size: 0.875rem;
+        font-size: 1.125rem;
+    }
+
+    /* CTA Button */
+    .cta-desktop {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .cta-icon {
-        margin-right: 0.25rem;
+        font-size: 1.125rem;
+        animation: sparkle 2s ease-in-out infinite;
     }
 
-    .cta-desktop {
-        display: none;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.625rem 1.25rem;
-        font-size: 0.8125rem;
-        border-radius: 50px;
-    }
-
-    @media (min-width: 768px) {
-        .cta-desktop {
-            display: flex;
+    @keyframes sparkle {
+        0%,
+        100% {
+            transform: scale(1) rotate(0deg);
+        }
+        50% {
+            transform: scale(1.1) rotate(5deg);
         }
     }
 
     /* Mobile Menu Button */
     .mobile-menu-btn {
-        display: flex;
+        display: none;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        width: 40px;
-        height: 40px;
-        background: transparent;
+        gap: 0.375rem;
+        background: none;
         border: none;
+        padding: 0.5rem;
         cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: background 0.2s ease;
-    }
-
-    .mobile-menu-btn:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    @media (min-width: 768px) {
-        .mobile-menu-btn {
-            display: none;
-        }
     }
 
     .hamburger-line {
-        width: 22px;
-        height: 2px;
+        width: 24px;
+        height: 2.5px;
         background: var(--color-text);
         border-radius: 2px;
         transition: all 0.3s ease;
-        transform-origin: center;
     }
 
-    .mobile-menu-btn.open .hamburger-line:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
+    .mobile-menu-btn[aria-expanded="true"] .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translateY(8px);
     }
 
-    .mobile-menu-btn.open .hamburger-line:nth-child(2) {
+    .mobile-menu-btn[aria-expanded="true"] .hamburger-line:nth-child(2) {
         opacity: 0;
-        transform: scaleX(0);
     }
 
-    .mobile-menu-btn.open .hamburger-line:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+    .mobile-menu-btn[aria-expanded="true"] .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translateY(-8px);
     }
 
     /* Mobile Menu */
     .mobile-menu {
-        display: none;
-        background: rgba(3, 0, 20, 0.98);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-top: 1px solid var(--color-border);
         position: fixed;
         top: var(--header-height);
         left: 0;
         right: 0;
         bottom: 0;
+        background: rgba(3, 0, 20, 0.98);
+        backdrop-filter: blur(20px);
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         overflow-y: auto;
-        z-index: 40;
     }
 
     .mobile-menu.open {
-        display: block;
-        animation: fadeIn 0.2s ease;
-    }
-
-    @media (min-width: 768px) {
-        .mobile-menu {
-            display: none !important;
-        }
+        transform: translateX(0);
     }
 
     .mobile-menu-content {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
-        padding: 1.5rem 0;
+        gap: 0.5rem;
+        padding: 2rem 0;
     }
 
     .mobile-nav-link {
-        padding: 1rem;
-        border-radius: 12px;
-        font-size: 1.0625rem;
-        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
         color: var(--color-text-muted);
         text-decoration: none;
-        transition: all 0.2s ease;
+        font-size: 1.125rem;
+        font-weight: 600;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: rgba(26, 26, 46, 0.3);
+        border: 1px solid rgba(139, 92, 246, 0.1);
     }
 
-    .mobile-nav-link:hover,
-    .mobile-nav-link.active {
-        color: var(--color-text);
+    .mobile-link-icon {
+        font-size: 1.25rem;
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-nav-link:hover .mobile-link-icon,
+    .mobile-nav-link.active .mobile-link-icon {
+        transform: translateX(4px);
+    }
+
+    .mobile-nav-link:hover {
         background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.3);
+        color: var(--color-text);
+    }
+
+    .mobile-nav-link.active {
+        background: linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.3) 0%,
+            rgba(99, 102, 241, 0.3) 100%
+        );
+        border-color: rgba(139, 92, 246, 0.4);
+        color: white;
     }
 
     .mt-4 {
-        margin-top: 1rem;
+        margin-top: 1.5rem;
     }
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .desktop-nav {
+            display: none;
         }
-        to {
-            opacity: 1;
+
+        .cta-desktop {
+            display: none;
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        .mobile-menu {
+            display: none !important;
         }
     }
 </style>
 
 <script>
-    // Mobile menu toggle
-    const menuBtn = document.getElementById("mobile-menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const body = document.body;
+    // Animated pill nav background
+    function initPillNav() {
+        const navPills = document.getElementById("nav-pills");
+        const pillBg = document.getElementById("pill-bg");
+        const activePill = navPills?.querySelector(
+            ".nav-pill.active",
+        ) as HTMLElement;
 
-    menuBtn?.addEventListener("click", () => {
-        const isOpen = mobileMenu?.classList.toggle("open");
-        menuBtn.classList.toggle("open");
-        menuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        if (!navPills || !pillBg || !activePill) return;
 
-        // Prevent body scroll when menu is open
-        if (isOpen) {
-            body.style.overflow = "hidden";
-        } else {
-            body.style.overflow = "";
-        }
-    });
+        // Set initial position
+        const updatePillBg = (pill: HTMLElement) => {
+            const pillRect = pill.getBoundingClientRect();
+            const navRect = navPills.getBoundingClientRect();
 
-    // Close menu when clicking a link
-    document.querySelectorAll(".mobile-nav-link").forEach((link) => {
-        link.addEventListener("click", () => {
-            mobileMenu?.classList.remove("open");
-            menuBtn?.classList.remove("open");
-            body.style.overflow = "";
+            pillBg.style.width = `${pillRect.width}px`;
+            pillBg.style.height = `${pillRect.height}px`;
+            pillBg.style.left = `${pillRect.left - navRect.left}px`;
+            pillBg.style.top = `${pillRect.top - navRect.top}px`;
+        };
+
+        updatePillBg(activePill);
+
+        // Hover effect
+        const pills = navPills.querySelectorAll("[data-nav-pill]");
+        pills.forEach((pill) => {
+            pill.addEventListener("mouseenter", () => {
+                updatePillBg(pill as HTMLElement);
+            });
         });
-    });
+
+        navPills.addEventListener("mouseleave", () => {
+            updatePillBg(activePill);
+        });
+    }
+
+    // Mobile menu toggle
+    function initMobileMenu() {
+        const menuBtn = document.getElementById("mobile-menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileLinks = mobileMenu?.querySelectorAll("a");
+
+        menuBtn?.addEventListener("click", () => {
+            const isExpanded = menuBtn.getAttribute("aria-expanded") === "true";
+            menuBtn.setAttribute("aria-expanded", String(!isExpanded));
+            mobileMenu?.classList.toggle("open");
+        });
+
+        // Close menu when clicking a link
+        mobileLinks?.forEach((link) => {
+            link.addEventListener("click", () => {
+                menuBtn?.setAttribute("aria-expanded", "false");
+                mobileMenu?.classList.remove("open");
+            });
+        });
+    }
+
+    // Scroll detection
+    function initScrollDetection() {
+        const header = document.getElementById("main-header");
+        let lastScroll = 0;
+
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 50) {
+                header?.classList.add("scrolled");
+            } else {
+                header?.classList.remove("scrolled");
+            }
+
+            lastScroll = currentScroll;
+        });
+    }
 
     // Language toggle
-    const langToggle = document.getElementById("lang-toggle");
-    langToggle?.addEventListener("click", () => {
-        const currentLang = langToggle.dataset.lang;
-        const newLang = currentLang === "fr" ? "en" : "fr";
-        localStorage.setItem("lang", newLang);
-        window.location.reload();
-    });
+    function initLangToggle() {
+        const langToggle = document.getElementById("lang-toggle");
+        langToggle?.addEventListener("click", () => {
+            const currentLang = langToggle.getAttribute("data-lang");
+            const newLang = currentLang === "fr" ? "en" : "fr";
 
-    // Header scroll effect
-    const header = document.getElementById("main-header");
-    let lastScroll = 0;
+            // Get current URL
+            const url = new URL(window.location.href);
 
-    window.addEventListener("scroll", () => {
-        const currentScroll = window.scrollY;
+            // Update or add lang parameter
+            url.searchParams.set("lang", newLang);
 
-        if (currentScroll > 50) {
-            header?.classList.add("scrolled");
-        } else {
-            header?.classList.remove("scrolled");
-        }
+            // Redirect to same page with new language
+            window.location.href = url.toString();
+        });
+    }
 
-        lastScroll = currentScroll;
+    // Initialize everything
+    document.addEventListener("DOMContentLoaded", () => {
+        initPillNav();
+        initMobileMenu();
+        initScrollDetection();
+        initLangToggle();
     });
 </script>
