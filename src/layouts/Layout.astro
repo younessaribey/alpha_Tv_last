@@ -1,101 +1,188 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
     title: string;
     description?: string;
-    lang?: 'en' | 'fr';
+    lang?: "en" | "fr";
 }
 
-const { 
-    title, 
-    description = "Premium IPTV streaming service with 10,000+ channels in 4K quality.", 
-    lang = 'fr' 
+const {
+    title,
+    description = "Premium IPTV streaming service with 10,000+ channels in 4K quality.",
+    lang = "fr",
 } = Astro.props;
 
 const tiktokPixelId = import.meta.env.PUBLIC_TIKTOK_PIXEL_ID;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang}>
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#030014" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content={`${title} | AlphaTv`} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <title>{title} | AlphaTv</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
+        />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#030014" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
 
-    <!-- TikTok Pixel -->
-    {tiktokPixelId && tiktokPixelId !== 'your_tiktok_pixel_id_here' && (
-        <script is:inline define:vars={{ tiktokPixelId }}>
-            !function (w, d, t) {
-                w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
-                ttq.load(tiktokPixelId);
+        <!-- Open Graph -->
+        <meta property="og:title" content={`${title} | AlphaTv`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <title>{title} | AlphaTv</title>
+
+        <!-- TikTok Pixel -->
+        <script is:inline>
+            !(function (w, d, t) {
+                w.TiktokAnalyticsObject = t;
+                var ttq = (w[t] = w[t] || []);
+                ((ttq.methods = [
+                    "page",
+                    "track",
+                    "identify",
+                    "instances",
+                    "debug",
+                    "on",
+                    "off",
+                    "once",
+                    "ready",
+                    "alias",
+                    "group",
+                    "enableCookie",
+                    "disableCookie",
+                    "holdConsent",
+                    "revokeConsent",
+                    "grantConsent",
+                ]),
+                    (ttq.setAndDefer = function (t, e) {
+                        t[e] = function () {
+                            t.push(
+                                [e].concat(
+                                    Array.prototype.slice.call(arguments, 0),
+                                ),
+                            );
+                        };
+                    }));
+                for (var i = 0; i < ttq.methods.length; i++)
+                    ttq.setAndDefer(ttq, ttq.methods[i]);
+                ((ttq.instance = function (t) {
+                    for (
+                        var e = ttq._i[t] || [], n = 0;
+                        n < ttq.methods.length;
+                        n++
+                    )
+                        ttq.setAndDefer(e, ttq.methods[n]);
+                    return e;
+                }),
+                    (ttq.load = function (e, n) {
+                        var r =
+                                "https://analytics.tiktok.com/i18n/pixel/events.js",
+                            o = n && n.partner;
+                        ((ttq._i = ttq._i || {}),
+                            (ttq._i[e] = []),
+                            (ttq._i[e]._u = r),
+                            (ttq._t = ttq._t || {}),
+                            (ttq._t[e] = +new Date()),
+                            (ttq._o = ttq._o || {}),
+                            (ttq._o[e] = n || {}));
+                        n = document.createElement("script");
+                        ((n.type = "text/javascript"),
+                            (n.async = !0),
+                            (n.src = r + "?sdkid=" + e + "&lib=" + t));
+                        e = document.getElementsByTagName("script")[0];
+                        e.parentNode.insertBefore(n, e);
+                    }));
+                ttq.load("D4VGO13C77U8MKV6P5M0");
                 ttq.page();
-            }(window, document, 'ttq');
+            })(window, document, "ttq");
         </script>
-    )}
 
-    <!-- Meta (Facebook) Pixel -->
-    <script is:inline>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '880536628051228');
-        fbq('track', 'PageView');
-    </script>
-    <noscript>
-        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=880536628051228&ev=PageView&noscript=1" />
-    </noscript>
-</head>
-<body>
-    <slot />
+        <!-- Meta (Facebook) Pixel -->
+        <script is:inline>
+            !(function (f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function () {
+                    n.callMethod
+                        ? n.callMethod.apply(n, arguments)
+                        : n.queue.push(arguments);
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = "2.0";
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+            })(
+                window,
+                document,
+                "script",
+                "https://connect.facebook.net/en_US/fbevents.js",
+            );
+            fbq("init", "880536628051228");
+            fbq("track", "PageView");
+        </script>
+        <noscript>
+            <img
+                height="1"
+                width="1"
+                style="display:none"
+                src="https://www.facebook.com/tr?id=880536628051228&ev=PageView&noscript=1"
+            />
+        </noscript>
+    </head>
+    <body>
+        <slot />
 
-    <!-- Capture Click IDs for Attribution (TTCLID, FBCLID) -->
-    <script is:inline>
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const ttclid = urlParams.get('ttclid');
-            const fbclid = urlParams.get('fbclid');
-            
-            // Store click IDs in localStorage for later use
-            if (ttclid) localStorage.setItem('ttclid', ttclid);
-            if (fbclid) localStorage.setItem('fbclid', fbclid);
-        })();
-    </script>
+        <!-- Capture Click IDs for Attribution (TTCLID, FBCLID) -->
+        <script is:inline>
+            (function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const ttclid = urlParams.get("ttclid");
+                const fbclid = urlParams.get("fbclid");
 
-    <!-- Scroll Animation Observer -->
-    <script is:inline>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+                // Store click IDs in localStorage for later use
+                if (ttclid) localStorage.setItem("ttclid", ttclid);
+                if (fbclid) localStorage.setItem("fbclid", fbclid);
+            })();
+        </script>
+
+        <!-- Scroll Animation Observer -->
+        <script is:inline>
+            document.addEventListener("DOMContentLoaded", () => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("visible");
+                            }
+                        });
+                    },
+                    { threshold: 0.1 },
+                );
+
+                document.querySelectorAll("[data-animate]").forEach((el) => {
+                    observer.observe(el);
                 });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('[data-animate]').forEach(el => {
-                observer.observe(el);
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
