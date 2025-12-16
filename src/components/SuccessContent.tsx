@@ -152,6 +152,29 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
 
         setIsSubmitting(true);
 
+        // Track completed order to Google Sheets
+        try {
+            await fetch('/api/track-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'checkout_completed',
+                    customerName: metadata?.customerName,
+                    customerEmail: metadata?.customerEmail,
+                    customerPhone: metadata?.customerPhone,
+                    productId: metadata?.productId,
+                    productName: metadata?.productName,
+                    price: metadata?.price,
+                    macAddress: deviceInfo.macAddress,
+                    pinKey: deviceInfo.pinKey,
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href,
+                })
+            });
+        } catch (err) {
+            console.log('Order tracking error:', err);
+        }
+
         // Build WhatsApp message with all info
         const message = lang === 'fr'
             ? `🎬 NOUVELLE ACTIVATION ALPHATV
@@ -178,7 +201,7 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
 💰 Price: €${metadata?.price}`;
 
         // Open WhatsApp with the message
-        const whatsappUrl = `https://wa.me/33612345678?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/33758928901?text=${encodeURIComponent(message)}`;
 
         setTimeout(() => {
             setStep('complete');

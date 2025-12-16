@@ -1,7 +1,7 @@
 # Google Sheets Integration Setup
 
 This guide will help you set up Google Sheets to capture:
-- ✅ Paid orders
+- ✅ Paid orders (with MAC address & PIN)
 - ✅ Abandoned checkouts
 - ✅ WhatsApp leads
 
@@ -15,9 +15,9 @@ This guide will help you set up Google Sheets to capture:
    - `WhatsApp Leads`
 
 ### Paid Orders Columns:
-| A | B | C | D | E | F | G | H |
-|--|--|--|--|--|--|--|--|
-| Timestamp | Name | Email | Phone | Product | Price | Session ID | IP |
+| A | B | C | D | E | F | G | H | I |
+|--|--|--|--|--|--|--|--|--|
+| Timestamp | Name | Email | Phone | Product | Price | MAC Address | PIN | IP |
 
 ### Abandoned Columns:
 | A | B | C | D | E | F | G | H |
@@ -54,7 +54,8 @@ function doPost(e) {
           data.customerPhone || '',
           data.productName || data.productId || '',
           data.price || '',
-          data.sessionId || '',
+          data.macAddress || '',      // MAC Address
+          data.pinKey || '',           // PIN Code
           data.ip || ''
         ];
         break;
@@ -117,13 +118,14 @@ function testDoPost() {
   const testData = {
     postData: {
       contents: JSON.stringify({
-        action: 'form_abandoned',
+        action: 'checkout_completed',
         customerName: 'Test User',
         customerEmail: 'test@example.com',
         customerPhone: '+33612345678',
         productName: '12 Month Subscription',
         price: 59.99,
-        url: 'https://example.com/checkout',
+        macAddress: '00:1A:2B:3C:4D:5E',
+        pinKey: '123456',
         ip: '192.168.1.1',
         receivedAt: new Date().toISOString()
       })
@@ -155,22 +157,48 @@ GOOGLE_SHEET_WEBHOOK_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
 
 ## Step 5: Test
 
-1. Go to your checkout page
-2. Start filling the form
-3. Close the tab without completing
-4. Check your Google Sheet - you should see the abandoned checkout!
+Do a test purchase on your site and check your Google Sheet!
 
-## Tracking Events
+## Data Captured
 
-| Event | When | Sheet |
-|-------|------|-------|
-| `form_started` | User starts typing | (not saved) |
-| `form_abandoned` | User leaves without paying | Abandoned |
-| `checkout_completed` | Payment successful | Paid Orders |
-| `whatsapp_click` | User clicks WhatsApp | WhatsApp Leads |
+### Paid Orders Sheet
+| Field | Description |
+|-------|-------------|
+| Timestamp | When the order was completed |
+| Name | Customer name |
+| Email | Customer email |
+| Phone | Customer phone |
+| Product | Product name (12 Month Subscription, etc) |
+| Price | Price in EUR |
+| MAC Address | Device MAC address (XX:XX:XX:XX:XX:XX) |
+| PIN | 6-digit PIN code |
+| IP | Customer IP address |
+
+### Abandoned Sheet
+| Field | Description |
+|-------|-------------|
+| Timestamp | When they abandoned |
+| Name | Partial name (if entered) |
+| Email | Partial email (if entered) |
+| Phone | Partial phone (if entered) |
+| Product | What they were trying to buy |
+| Price | Product price |
+| URL | Checkout URL |
+| IP | Customer IP |
+
+### WhatsApp Leads Sheet
+| Field | Description |
+|-------|-------------|
+| Timestamp | When they clicked WhatsApp |
+| Product | Product they were viewing |
+| URL | Page URL |
+| User Agent | Browser/device info |
+| IP | Customer IP |
+| Status | "Clicked" |
 
 ## Notes
 
 - The webhook is called from your server, so it's reliable
-- Data includes IP and user agent for fraud detection
-- Timestamps are in ISO format
+- Data includes IP for fraud detection
+- MAC addresses are auto-formatted with colons (XX:XX:XX:XX:XX:XX)
+- PIN codes are 6 digits

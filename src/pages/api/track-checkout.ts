@@ -15,6 +15,9 @@ interface TrackingData {
     productId?: string;
     productName?: string;
     price?: number;
+    // Device info
+    macAddress?: string;
+    pinKey?: string;
     // Meta
     timestamp?: string;
     url?: string;
