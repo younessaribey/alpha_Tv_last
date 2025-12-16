@@ -4,6 +4,7 @@ import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import CheckoutForm from "../../components/CheckoutForm";
 import WhatsAppRescue from "../../components/WhatsAppRescue";
+import PaymentIcons from "../../components/PaymentIcons.astro";
 import { products, type Lang } from "../../lib/data";
 
 const { id } = Astro.params;
@@ -101,6 +102,9 @@ if (!product) {
                         price={product.price}
                         lang={lang}
                     />
+
+                    <!-- Premium Payment Icons -->
+                    <PaymentIcons lang={lang} />
                 </div>
             </div>
         </section>
