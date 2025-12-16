@@ -500,10 +500,14 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
             const data = await response.json();
 
             if (data.clientSecret) {
-                console.log('[CheckoutForm] Raw clientSecret:', data.clientSecret);
-                console.log('[CheckoutForm] clientSecret length:', data.clientSecret.length);
-                console.log('[CheckoutForm] Contains URL encoding:', data.clientSecret.includes('%'));
-                setClientSecret(data.clientSecret);
+                // Decode client secret if it's URL-encoded
+                let cleanSecret = data.clientSecret;
+                if (cleanSecret.includes('%')) {
+                    cleanSecret = decodeURIComponent(cleanSecret);
+                    console.log('[CheckoutForm] Decoded clientSecret');
+                }
+                console.log('[CheckoutForm] Final clientSecret:', cleanSecret);
+                setClientSecret(cleanSecret);
                 setCheckoutMode(data.mode || 'payment');
                 setStep('checkout');
             }
