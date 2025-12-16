@@ -699,23 +699,6 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                             </span>
                         )}
                     </button>
-
-                    <div className="payment-methods">
-                        <span className="secure-badge">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
-                            {lang === 'fr' ? 'Paiement 100% sécurisé' : '100% Secure Payment'}
-                        </span>
-                        <div className="payment-icons">
-                            <img src="/logos/visa.png" alt="Visa" className="payment-badge-img" />
-                            <img src="/logos/mastercard.png" alt="Mastercard" className="payment-badge-img" />
-                            <img src="/logos/apple-pay.png" alt="Apple Pay" className="payment-badge-img" />
-                            <img src="/logos/google-pay.png" alt="Google Pay" className="payment-badge-img" />
-                            <img src="/logos/stripe.png" alt="Stripe" className="payment-badge-img" />
-                        </div>
-                    </div>
                 </form>
             </div>
 
@@ -876,50 +859,6 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     to { transform: rotate(360deg); }
                 }
 
-                .payment-methods {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding-top: 0.75rem;
-                }
-
-                .payment-methods .secure-badge {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.5rem;
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    color: #10b981;
-                    background: rgba(16, 185, 129, 0.1);
-                    padding: 0.5rem 1rem;
-                    border-radius: 20px;
-                    margin-bottom: 0.75rem;
-                }
-
-                .payment-icons {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 0.75rem;
-                    flex-wrap: wrap;
-                }
-
-                .payment-badge-img {
-                    height: 42px;
-                    width: auto;
-                    max-width: 120px;
-                    object-fit: contain;
-                    border-radius: 6px;
-                    transition: transform 0.2s ease, opacity 0.2s ease;
-                    opacity: 0.9;
-                }
-
-                .payment-badge-img:hover {
-                    transform: translateY(-2px);
-                    opacity: 1;
-                }
 
                 .checkout-progress-simple {
                     text-align: center;
