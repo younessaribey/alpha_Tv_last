@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ChannelLogos from '../components/ChannelLogos.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import WhatsAppRescue from '../components/WhatsAppRescue';
 import { products, platforms, t, type Lang } from '../lib/data';
 
 const lang: Lang = 'fr';
@@ -472,6 +473,9 @@ const trialsLeft = 23;
 
     <!-- Floating WhatsApp Button -->
     <WhatsAppFloat lang={lang} phoneNumber={whatsappNumber} />
+
+    <!-- WhatsApp Rescue (shows if user came back from checkout) -->
+    <WhatsAppRescue client:load lang={lang} />
 </Layout>
 
 <style>

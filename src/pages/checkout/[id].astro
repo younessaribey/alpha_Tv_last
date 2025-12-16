@@ -106,8 +106,13 @@ if (!product) {
         </section>
     </main>
 
-    <!-- WhatsApp Rescue Popup (exit intent / 60s timer) -->
-    <WhatsAppRescue client:load lang={lang} productName={product.name[lang]} />
+    <!-- WhatsApp Rescue Popup (30s timer / exit intent) -->
+    <WhatsAppRescue
+        client:load
+        lang={lang}
+        productName={product.name[lang]}
+        isCheckoutPage={true}
+    />
 
     <Footer lang={lang} />
 </Layout>

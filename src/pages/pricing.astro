@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import WhatsAppRescue from "../components/WhatsAppRescue";
 import { products, t, type Lang } from "../lib/data";
 
 const lang: Lang = "fr";
@@ -748,6 +749,9 @@ const stats = {
             </div>
         </section>
     </main>
+
+    <!-- WhatsApp Rescue (shows if user came back from checkout) -->
+    <WhatsAppRescue client:load lang={lang} />
 
     <Footer lang={lang} />
 </Layout>
