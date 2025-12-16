@@ -6,7 +6,7 @@ const META_PIXEL_ID = '880536628051228';
 const META_ACCESS_TOKEN = import.meta.env.META_ACCESS_TOKEN;
 
 // TikTok Events API
-const TIKTOK_PIXEL_ID = import.meta.env.PUBLIC_TIKTOK_PIXEL_ID;
+const TIKTOK_PIXEL_ID = import.meta.env.PUBLIC_TIKTOK_PIXEL_ID || 'D4VGO13C77U8MKV6P5M0';
 const TIKTOK_ACCESS_TOKEN = import.meta.env.TIKTOK_ACCESS_TOKEN;
 
 // Hash function for user data (required by both APIs)
