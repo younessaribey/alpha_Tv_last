@@ -86,47 +86,73 @@ async function sendTikTokEvent(eventData: {
     currency?: string;
     contentId?: string;
     contentName?: string;
+    contentCategory?: string;
     userAgent?: string;
     clientIp?: string;
     ttclid?: string;
+    url?: string;
 }) {
     if (!TIKTOK_ACCESS_TOKEN || !TIKTOK_PIXEL_ID || TIKTOK_PIXEL_ID === 'your_tiktok_pixel_id_here') {
         console.log('TikTok Events API: Token or Pixel ID not configured');
         return null;
     }
 
+    // Build user data object
+    const userData: Record<string, any> = {};
+    if (eventData.email) userData.email = hash(eventData.email);
+    if (eventData.phone) userData.phone_number = hash(eventData.phone);
+
+    // Build context object
+    const context: Record<string, any> = {
+        user_agent: eventData.userAgent,
+        ip: eventData.clientIp,
+        user: userData,
+    };
+
+    // Add TTCLID for attribution if available
+    if (eventData.ttclid) {
+        context.ad = { callback: eventData.ttclid };
+    }
+
+    // Build properties object with all parameters
+    const properties: Record<string, any> = {
+        currency: eventData.currency || 'EUR',
+        value: eventData.value,
+        contents: [{
+            content_id: eventData.contentId,
+            content_type: 'product',
+            content_name: eventData.contentName,
+            content_category: eventData.contentCategory || 'IPTV Subscription',
+            price: eventData.value,
+            num_items: 1,
+            brand: 'AlphaTV',
+        }],
+    };
+
     const eventPayload = {
         pixel_code: TIKTOK_PIXEL_ID,
         event: eventData.eventName,
-        event_id: eventData.eventId, // Same ID as pixel for deduplication
-        timestamp: Math.floor(Date.now() / 1000), // Unix timestamp (seconds)
-        context: {
-            user_agent: eventData.userAgent,
-            ip: eventData.clientIp,
-            ad: eventData.ttclid ? { callback: eventData.ttclid } : undefined, // TTCLID for attribution
-            user: {
-                email: eventData.email ? hash(eventData.email) : undefined,
-                phone_number: eventData.phone ? hash(eventData.phone) : undefined,
-            }
-        },
-        properties: {
-            currency: eventData.currency || 'EUR',
-            value: eventData.value,
-            content_id: eventData.contentId,
-            content_name: eventData.contentName,
-        }
+        event_id: eventData.eventId,
+        event_time: Math.floor(Date.now() / 1000), // Unix timestamp (seconds)
+        context: context,
+        properties: properties,
     };
+
+    // If URL is provided, add it to properties
+    if (eventData.url) {
+        eventPayload.properties.url = eventData.url;
+    }
 
     try {
         const response = await fetch(
-            'https://business-api.tiktok.com/open_api/v1.3/pixel/track/',
+            'https://business-api.tiktok.com/open_api/v1.3/event/track/',
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Token': TIKTOK_ACCESS_TOKEN,
                 },
-                body: JSON.stringify(eventPayload)
+                body: JSON.stringify({ data: [eventPayload] })
             }
         );
         const result = await response.json();
