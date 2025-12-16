@@ -61,6 +61,10 @@ export const POST: APIRoute = async ({ request }) => {
             receipt_email: customerEmail,
         });
 
+        console.log('[API] Stripe returned client_secret:', paymentIntent.client_secret);
+        console.log('[API] client_secret type:', typeof paymentIntent.client_secret);
+        console.log('[API] client_secret length:', paymentIntent.client_secret?.length);
+
         return new Response(JSON.stringify({
             clientSecret: paymentIntent.client_secret,
         }), {
