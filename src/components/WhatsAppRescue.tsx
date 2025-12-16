@@ -49,6 +49,14 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
             let lastScrollY = 0;
             let scrollTimeout: NodeJS.Timeout;
 
+            // Handle back button from browser cache (BFCache)
+            const handlePageShow = (event: PageTransitionEvent) => {
+                // If page loaded from cache (back button on mobile)
+                if (event.persisted) {
+                    triggerNotification('Back from cache');
+                }
+            };
+
             // 1. Mobile: Scroll to top detection (exit intent on mobile)
             const handleScroll = () => {
                 const currentScrollY = window.scrollY;
@@ -96,6 +104,7 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
             }, 30000); // 30 seconds
 
             // Register all event listeners
+            window.addEventListener('pageshow', handlePageShow); // Back button from cache
             window.addEventListener('scroll', handleScroll, { passive: true });
             document.addEventListener('visibilitychange', handleVisibilityChange);
             window.addEventListener('popstate', handlePopState);
@@ -105,6 +114,7 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
             window.history.pushState({ whatsapp: true }, '');
 
             return () => {
+                window.removeEventListener('pageshow', handlePageShow);
                 window.removeEventListener('scroll', handleScroll);
                 document.removeEventListener('visibilitychange', handleVisibilityChange);
                 window.removeEventListener('popstate', handlePopState);
