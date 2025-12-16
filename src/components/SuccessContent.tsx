@@ -30,7 +30,7 @@ const formatMacAddress = (value: string): string => {
 
 export default function SuccessContent({ lang }: SuccessContentProps) {
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-    const [step, setStep] = useState<'thankyou' | 'device' | 'complete'>('thankyou');
+    const [step, setStep] = useState<'device' | 'complete'>('device'); // Skip thankyou, go straight to device form
     const [customerEmail, setCustomerEmail] = useState('');
     const [metadata, setMetadata] = useState<Record<string, string> | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -200,14 +200,15 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
 🎁 Product: ${metadata?.productName}
 💰 Price: €${metadata?.price}`;
 
-        // Open WhatsApp with the message
+        // Open WhatsApp with the message (use direct navigation to avoid popup blocker)
         const whatsappUrl = `https://wa.me/33758928901?text=${encodeURIComponent(message)}`;
 
-        setTimeout(() => {
-            setStep('complete');
-            setIsSubmitting(false);
-            window.open(whatsappUrl, '_blank');
-        }, 500);
+        // Update state first
+        setStep('complete');
+        setIsSubmitting(false);
+
+        // Navigate to WhatsApp (won't be blocked like window.open)
+        window.location.href = whatsappUrl;
     };
 
     if (status === 'loading') {
@@ -515,6 +516,115 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                                     )}
                                 </button>
                             </form>
+
+                            {/* Installation Guide - Expandable */}
+                            <details className="install-guide" open>
+                                <summary className="install-guide-toggle">
+                                    <span>📲 {lang === 'fr' ? 'Guide d\'installation Cap Player' : 'Cap Player Installation Guide'}</span>
+                                    <svg className="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M6 9l6 6 6-6" />
+                                    </svg>
+                                </summary>
+                                <div className="install-guide-content">
+                                    {/* iOS / tvOS */}
+                                    <div className="platform-section">
+                                        <div className="platform-header">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.98-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                                            </svg>
+                                            <h4>iOS / Apple TV</h4>
+                                        </div>
+                                        <ol className="platform-steps">
+                                            <li>{lang === 'fr' ? 'Ouvrez l\'App Store' : 'Open the App Store'}</li>
+                                            <li>{lang === 'fr' ? 'Recherchez "Cap Player"' : 'Search for "Cap Player"'}</li>
+                                            <li>{lang === 'fr' ? 'Téléchargez et installez' : 'Download and install'}</li>
+                                            <li>{lang === 'fr' ? 'Ouvrez l\'app' : 'Open the app'}</li>
+                                            <li>{lang === 'fr' ? 'Notez votre MAC et PIN affichés' : 'Note your displayed MAC and PIN'}</li>
+                                        </ol>
+                                        <a href="https://apps.apple.com/us/app/cap-player/id6471679250" target="_blank" className="download-link">
+                                            📥 {lang === 'fr' ? 'Télécharger' : 'Download'}
+                                        </a>
+                                    </div>
+
+                                    {/* Android / Android TV */}
+                                    <div className="platform-section">
+                                        <div className="platform-header">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C2.92 11.03 1 14.22 1 17.8h22c0-3.58-1.92-6.77-5.4-8.32zM8.06 15.2c-.66 0-1.2-.54-1.2-1.2 0-.66.54-1.2 1.2-1.2.66 0 1.2.54 1.2 1.2 0 .66-.54 1.2-1.2 1.2zm7.88 0c-.66 0-1.2-.54-1.2-1.2 0-.66.54-1.2 1.2-1.2.66 0 1.2.54 1.2 1.2 0 .66-.54 1.2-1.2 1.2z" />
+                                            </svg>
+                                            <h4>Android / Android TV</h4>
+                                        </div>
+                                        <ol className="platform-steps">
+                                            <li>{lang === 'fr' ? 'Ouvrez le Play Store' : 'Open the Play Store'}</li>
+                                            <li>{lang === 'fr' ? 'Recherchez "Cap Player"' : 'Search for "Cap Player"'}</li>
+                                            <li>{lang === 'fr' ? 'Installer' : 'Install'}</li>
+                                            <li>{lang === 'fr' ? 'Lancer l\'application' : 'Launch the app'}</li>
+                                            <li>{lang === 'fr' ? 'Copiez votre MAC et PIN' : 'Copy your MAC and PIN'}</li>
+                                        </ol>
+                                        <a href="https://play.google.com/store/apps/details?id=tv.cap.player" target="_blank" className="download-link">
+                                            📥 {lang === 'fr' ? 'Télécharger' : 'Download'}
+                                        </a>
+                                    </div>
+
+                                    {/* Fire TV */}
+                                    <div className="platform-section">
+                                        <div className="platform-header">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V9h7V2.99c3.17.81 5.53 3.58 6 6.99h-6v3.01z" />
+                                            </svg>
+                                            <h4>Amazon Fire TV</h4>
+                                        </div>
+                                        <ol className="platform-steps">
+                                            <li>{lang === 'fr' ? 'Allez dans "Find" > "Search"' : 'Go to "Find" > "Search"'}</li>
+                                            <li>{lang === 'fr' ? 'Tapez "Cap Player" ou le code: 628699' : 'Type "Cap Player" or code: 628699'}</li>
+                                            <li>{lang === 'fr' ? 'Télécharger et installer' : 'Download and install'}</li>
+                                            <li>{lang === 'fr' ? 'Ouvrir l\'app' : 'Open the app'}</li>
+                                            <li>{lang === 'fr' ? 'Relever le MAC et PIN' : 'Note the MAC and PIN'}</li>
+                                        </ol>
+                                        <div className="download-code">
+                                            {lang === 'fr' ? 'Code de recherche:' : 'Search code:'} <strong>628699</strong>
+                                        </div>
+                                    </div>
+
+                                    {/* Smart TV */}
+                                    <div className="platform-section">
+                                        <div className="platform-header">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+                                                <polyline points="17 2 12 7 7 2" />
+                                            </svg>
+                                            <h4>Smart TV (Samsung / LG / Hisense)</h4>
+                                        </div>
+                                        <ol className="platform-steps">
+                                            <li>{lang === 'fr' ? 'Ouvrez votre App Store TV' : 'Open your TV App Store'}</li>
+                                            <li>{lang === 'fr' ? 'Recherchez "Cap Player"' : 'Search "Cap Player"'}</li>
+                                            <li>{lang === 'fr' ? 'Installer l\'application' : 'Install the application'}</li>
+                                            <li>{lang === 'fr' ? 'Lancer' : 'Launch'}</li>
+                                            <li>{lang === 'fr' ? 'Notez le MAC et PIN' : 'Note the MAC and PIN'}</li>
+                                        </ol>
+                                    </div>
+
+                                    {/* Windows */}
+                                    <div className="platform-section">
+                                        <div className="platform-header">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+                                            </svg>
+                                            <h4>Windows PC</h4>
+                                        </div>
+                                        <ol className="platform-steps">
+                                            <li>{lang === 'fr' ? 'Ouvrez le Microsoft Store' : 'Open Microsoft Store'}</li>
+                                            <li>{lang === 'fr' ? 'Cherchez "Cap Player"' : 'Search "Cap Player"'}</li>
+                                            <li>{lang === 'fr' ? 'Installer' : 'Install'}</li>
+                                            <li>{lang === 'fr' ? 'Ouvrir l\'app' : 'Open the app'}</li>
+                                            <li>{lang === 'fr' ? 'Copiez le MAC et PIN' : 'Copy the MAC and PIN'}</li>
+                                        </ol>
+                                        <a href="https://apps.microsoft.com/detail/9pncrbkbb90x" target="_blank" className="download-link">
+                                            📥 {lang === 'fr' ? 'Télécharger' : 'Download'}
+                                        </a>
+                                    </div>
+                                </div>
+                            </details>
 
                             {/* Expandable Help Guide */}
                             <details className="help-guide">
@@ -986,6 +1096,122 @@ const successStyles = `
     .home-btn:hover {
         background: rgba(139, 92, 246, 0.1);
         border-color: var(--color-primary);
+    }
+
+    /* Installation Guide */
+    .install-guide {
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .install-guide-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.875rem 1rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-success);
+        list-style: none;
+    }
+
+    .install-guide-toggle::-webkit-details-marker {
+        display: none;
+    }
+
+    .install-guide[open] .install-guide-toggle {
+        border-radius: 12px 12px 0 0;
+    }
+
+    .install-guide .chevron {
+        transition: transform 0.2s ease;
+    }
+
+    .install-guide[open] .chevron {
+        transform: rotate(180deg);
+    }
+
+    .install-guide-content {
+        padding: 1rem;
+        background: var(--color-surface-elevated);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .platform-section {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: rgba(139, 92, 246, 0.05);
+        border: 1px solid rgba(139, 92, 246, 0.1);
+        border-radius: 10px;
+    }
+
+    .platform-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .platform-header svg {
+        color: var(--color-primary);
+    }
+
+    .platform-header h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .platform-steps {
+        margin: 0.75rem 0;
+        padding-left: 1.25rem;
+    }
+
+    .platform-steps li {
+        font-size: 0.8125rem;
+        color: var(--color-text-muted);
+        margin-bottom: 0.375rem;
+    }
+
+    .download-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 0.875rem;
+        background: var(--color-primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .download-link:hover {
+        background: var(--color-primary-dark);
+        transform: translateY(-1px);
+    }
+
+    .download-code {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        text-align: center;
+    }
+
+    .download-code strong {
+        color: var(--color-primary);
+        font-weight: 700;
+        font-size: 1rem;
     }
 
     /* Expandable Help Guide */
