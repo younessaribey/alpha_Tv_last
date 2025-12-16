@@ -92,6 +92,12 @@ async function sendTikTokEvent(eventData: {
     ttclid?: string;
     url?: string;
 }) {
+    console.log('TikTok CAPI check:', {
+        hasToken: !!TIKTOK_ACCESS_TOKEN,
+        hasPixelId: !!TIKTOK_PIXEL_ID,
+        pixelId: TIKTOK_PIXEL_ID
+    });
+
     if (!TIKTOK_ACCESS_TOKEN || !TIKTOK_PIXEL_ID || TIKTOK_PIXEL_ID === 'your_tiktok_pixel_id_here') {
         console.log('TikTok Events API: Token or Pixel ID not configured');
         return null;
