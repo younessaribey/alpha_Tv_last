@@ -89,6 +89,47 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
         }
     }, [isCheckoutPage, productName]);
 
+    // Track popup impression when it becomes visible
+    useEffect(() => {
+        if (!isVisible) return;
+
+        console.log('[WhatsApp] Popup shown - tracking impression');
+
+        // Track to Google Sheets
+        fetch('/api/track-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'whatsapp_impression',
+                customerName: '',
+                customerEmail: '',
+                customerPhone: '',
+                productId: '',
+                productName: productName || '',
+                price: 0,
+                url: window.location.href,
+                timestamp: new Date().toISOString(),
+                leadId: sessionStorage.getItem('leadId') || '',
+            }),
+        }).catch(err => console.error('[WhatsApp] Impression tracking error:', err));
+
+        // Track TikTok ViewContent for popup shown
+        if ((window as any).ttq) {
+            (window as any).ttq.track('ViewContent', {
+                content_name: 'WhatsApp Rescue Popup',
+                content_type: 'popup',
+                description: 'Checkout rescue popup displayed',
+            });
+        }
+
+        // Track Meta Pixel
+        if ((window as any).fbq) {
+            (window as any).fbq('trackCustom', 'WhatsAppPopupShown', {
+                product_name: productName,
+            });
+        }
+    }, [isVisible, productName]);
+
     const handleWhatsApp = () => {
         console.log('[WhatsApp] Button clicked - opening WhatsApp');
 
