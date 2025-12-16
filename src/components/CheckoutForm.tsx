@@ -410,6 +410,59 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
         email: '',
         phone: '',
     });
+    const [hasStartedForm, setHasStartedForm] = useState(false);
+
+    // Track form abandonment when user leaves
+    useEffect(() => {
+        const trackAbandonment = () => {
+            // Only track if form was started (has any data)
+            if (hasStartedForm && step === 'form') {
+                fetch('/api/track-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'form_abandoned',
+                        customerName: formData.name || undefined,
+                        customerEmail: formData.email || undefined,
+                        customerPhone: formData.phone || undefined,
+                        productId,
+                        productName,
+                        price,
+                        url: window.location.href,
+                        timestamp: new Date().toISOString(),
+                    })
+                }).catch(err => console.log('Abandonment tracking error:', err));
+            }
+        };
+
+        // Track on page unload
+        window.addEventListener('beforeunload', trackAbandonment);
+
+        return () => {
+            window.removeEventListener('beforeunload', trackAbandonment);
+        };
+    }, [hasStartedForm, formData, step, productId, productName, price]);
+
+    // Detect when form is started
+    const handleInputChange = (field: string, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        if (!hasStartedForm && value.length > 0) {
+            setHasStartedForm(true);
+            // Track form start
+            fetch('/api/track-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'form_started',
+                    productId,
+                    productName,
+                    price,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString(),
+                })
+            }).catch(err => console.log('Form start tracking error:', err));
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -553,7 +606,7 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                             id="name"
                             type="text"
                             value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            onChange={(e) => handleInputChange('name', e.target.value)}
                             placeholder={lang === 'fr' ? 'Votre nom' : 'Your name'}
                             required
                             autoComplete="name"
@@ -566,7 +619,7 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                             id="email"
                             type="email"
                             value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            onChange={(e) => handleInputChange('email', e.target.value)}
                             placeholder="email@example.com"
                             required
                             autoComplete="email"
@@ -581,7 +634,7 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                             id="phone"
                             type="tel"
                             value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            onChange={(e) => handleInputChange('phone', e.target.value)}
                             placeholder="+33 6 12 34 56 78"
                             required
                             autoComplete="tel"

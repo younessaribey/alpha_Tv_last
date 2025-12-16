@@ -5,54 +5,110 @@ interface WhatsAppRescueProps {
     productName?: string;
 }
 
+// WhatsApp number (change before campaign)
+const WHATSAPP_NUMBER = '33758928901';
+
 export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [showBadge, setShowBadge] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
+        console.log('[WhatsApp] Component mounted');
+
         // Don't show if already dismissed this session
         if (sessionStorage.getItem('whatsapp_rescue_dismissed')) {
+            console.log('[WhatsApp] Already dismissed this session');
             return;
         }
 
         let timeoutId: NodeJS.Timeout;
         let hasTriggered = false;
 
-        // Exit intent detection (mouse leaves viewport from top)
+        const triggerWhatsApp = (reason: string) => {
+            if (hasTriggered) return;
+            hasTriggered = true;
+            console.log(`[WhatsApp] Triggered: ${reason}`);
+            setIsVisible(true);
+            setShowBadge(true);
+            setShowMessage(true);
+        };
+
+        // 1. Exit intent detection (mouse leaves viewport from top)
         const handleMouseLeave = (e: MouseEvent) => {
-            if (e.clientY <= 0 && !hasTriggered) {
-                hasTriggered = true;
-                setIsVisible(true);
-                setShowBadge(true);
-                setShowMessage(true);
+            if (e.clientY <= 0) {
+                triggerWhatsApp('Exit intent - mouse left top of page');
             }
         };
 
-        // Timer-based trigger (45 seconds)
+        // 2. Back button detection (popstate)
+        const handlePopState = () => {
+            triggerWhatsApp('Back button pressed');
+        };
+
+        // 3. Timer-based trigger (45 seconds)
+        console.log('[WhatsApp] Starting 45 second timer...');
         timeoutId = setTimeout(() => {
-            if (!hasTriggered) {
-                hasTriggered = true;
-                setIsVisible(true);
-                setShowBadge(true);
-                setShowMessage(true);
-            }
+            triggerWhatsApp('45 second timer completed');
         }, 45000); // 45 seconds
 
+        // 4. Visibility change (user switching tabs and coming back)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                console.log('[WhatsApp] User returned to tab');
+                // Don't trigger immediately, just log for now
+            }
+        };
+
         document.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('popstate', handlePopState);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Push a state so back button works
+        window.history.pushState({ whatsapp: true }, '');
 
         return () => {
             document.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('popstate', handlePopState);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             clearTimeout(timeoutId);
         };
     }, []);
 
     const handleWhatsApp = () => {
+        console.log('[WhatsApp] Button clicked - opening WhatsApp');
+
         const message = lang === 'fr'
             ? `Bonjour ! J'ai besoin d'aide pour finaliser mon essai gratuit 24h ${productName ? `(${productName})` : ''}`
             : `Hello! I need help completing my 24h free trial ${productName ? `(${productName})` : ''}`;
 
-        const whatsappUrl = `https://wa.me/33612345678?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+        // Track WhatsApp click for analytics
+        if ((window as any).ttq) {
+            (window as any).ttq.track('Contact', {
+                content_name: 'WhatsApp Rescue',
+                content_id: 'whatsapp_checkout_rescue'
+            });
+        }
+        if ((window as any).fbq) {
+            (window as any).fbq('track', 'Contact', {
+                content_name: 'WhatsApp Rescue'
+            });
+        }
+
+        // Send to tracking API for Google Sheets
+        fetch('/api/track-whatsapp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'whatsapp_click',
+                productName,
+                timestamp: new Date().toISOString(),
+                url: window.location.href
+            })
+        }).catch(err => console.log('[WhatsApp] Tracking error:', err));
+
         window.open(whatsappUrl, '_blank');
         setShowBadge(false);
         setShowMessage(false);
@@ -62,6 +118,7 @@ export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProp
     const dismissMessage = (e: React.MouseEvent) => {
         e.stopPropagation();
         setShowMessage(false);
+        console.log('[WhatsApp] Message dismissed');
     };
 
     if (!isVisible) return null;
