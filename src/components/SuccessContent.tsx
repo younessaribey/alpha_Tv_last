@@ -30,7 +30,7 @@ const formatMacAddress = (value: string): string => {
 
 export default function SuccessContent({ lang }: SuccessContentProps) {
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-    const [step, setStep] = useState<'device' | 'complete'>('device'); // Skip thankyou, go straight to device form
+    const [step, setStep] = useState<'thankyou' | 'device' | 'complete'>('device'); // Skip thankyou, go straight to device form
     const [customerEmail, setCustomerEmail] = useState('');
     const [metadata, setMetadata] = useState<Record<string, string> | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -381,18 +381,18 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
             <div className="success-card">
                 {/* Progress Steps */}
                 <div className="progress-steps">
-                    <div className={`progress-step ${step === 'thankyou' ? 'active' : ''} completed`}>
+                    <div className="progress-step completed">
                         <div className="step-number">✓</div>
                         <span>{lang === 'fr' ? 'Paiement' : 'Payment'}</span>
                     </div>
                     <div className="progress-line"></div>
                     <div className={`progress-step ${step === 'device' ? 'active' : ''} ${step === 'complete' ? 'completed' : ''}`}>
-                        <div className="step-number">{step === 'complete' ? '✓' : '2'}</div>
+                        <div className="step-number">{step === 'complete' ? '✓' : '1'}</div>
                         <span>{lang === 'fr' ? 'Appareil' : 'Device'}</span>
                     </div>
                     <div className="progress-line"></div>
                     <div className={`progress-step ${step === 'complete' ? 'active' : ''}`}>
-                        <div className="step-number">3</div>
+                        <div className="step-number">2</div>
                         <span>{lang === 'fr' ? 'Activation' : 'Activation'}</span>
                     </div>
                 </div>

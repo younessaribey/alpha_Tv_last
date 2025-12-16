@@ -10,46 +10,36 @@ interface WhatsAppRescueProps {
 const WHATSAPP_NUMBER = '33758928901';
 
 export default function WhatsAppRescue({ lang, productName, isCheckoutPage = false }: WhatsAppRescueProps) {
-    const [isVisible, setIsVisible] = useState(false);
-    const [showBadge, setShowBadge] = useState(false);
-    const [showMessage, setShowMessage] = useState(false);
+    const [showNotification, setShowNotification] = useState(false); // Notification popup
+    const [showBadge, setShowBadge] = useState(true); // Always show badge/icon
 
     useEffect(() => {
-        console.log('[WhatsApp] Component mounted', { isCheckoutPage });
-
         // If on checkout page, mark that user visited checkout
         if (isCheckoutPage) {
             sessionStorage.setItem('visited_checkout', 'true');
             sessionStorage.setItem('checkout_product', productName || '');
-            console.log('[WhatsApp] Marked checkout visit');
         }
 
-        // Don't show if already dismissed this session
+        // Don't show notification if already dismissed this session
         if (sessionStorage.getItem('whatsapp_rescue_dismissed')) {
-            console.log('[WhatsApp] Already dismissed this session');
             return;
         }
 
         let timeoutId: NodeJS.Timeout;
         let hasTriggered = false;
 
-        const triggerWhatsApp = (reason: string) => {
+        const triggerNotification = (reason: string) => {
             if (hasTriggered) return;
             hasTriggered = true;
-            console.log(`[WhatsApp] Triggered: ${reason}`);
-            setIsVisible(true);
-            setShowBadge(true);
-            setShowMessage(true);
+            setShowNotification(true); // Show notification popup
         };
 
         // Check if user came BACK from checkout to this page
         const visitedCheckout = sessionStorage.getItem('visited_checkout');
-        const checkoutProduct = sessionStorage.getItem('checkout_product');
 
         if (!isCheckoutPage && visitedCheckout) {
-            // User left checkout and came to another page - show immediately!
-            console.log('[WhatsApp] User came back from checkout - showing immediately');
-            triggerWhatsApp('User returned from checkout page');
+            // User left checkout and came to another page - show notification immediately!
+            triggerNotification('User returned from checkout page');
             // Clear the flag so it doesn't trigger again on next page
             sessionStorage.removeItem('visited_checkout');
             return;
@@ -60,19 +50,18 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
             // 1. Exit intent detection (mouse leaves viewport from top)
             const handleMouseLeave = (e: MouseEvent) => {
                 if (e.clientY <= 0) {
-                    triggerWhatsApp('Exit intent - mouse left top of page');
+                    triggerNotification('Exit intent');
                 }
             };
 
             // 2. Back button detection (popstate)
             const handlePopState = () => {
-                triggerWhatsApp('Back button pressed');
+                triggerNotification('Back button pressed');
             };
 
             // 3. Timer-based trigger (30 seconds)
-            console.log('[WhatsApp] Starting 30 second timer...');
             timeoutId = setTimeout(() => {
-                triggerWhatsApp('30 second timer completed');
+                triggerNotification('Timer');
             }, 30000); // 30 seconds
 
             document.addEventListener('mouseleave', handleMouseLeave);
@@ -89,11 +78,9 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
         }
     }, [isCheckoutPage, productName]);
 
-    // Track popup impression when it becomes visible
+    // Track notification impression when it becomes visible
     useEffect(() => {
-        if (!isVisible) return;
-
-        console.log('[WhatsApp] Popup shown - tracking impression');
+        if (!showNotification) return;
 
         // Track to Google Sheets
         fetch('/api/track-checkout', {
@@ -111,7 +98,7 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
                 timestamp: new Date().toISOString(),
                 leadId: sessionStorage.getItem('leadId') || '',
             }),
-        }).catch(err => console.error('[WhatsApp] Impression tracking error:', err));
+        }).catch(err => console.error('WhatsApp tracking error:', err));
 
         // Track TikTok ViewContent for popup shown
         if ((window as any).ttq) {
@@ -128,7 +115,7 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
                 product_name: productName,
             });
         }
-    }, [isVisible, productName]);
+    }, [showNotification, productName]);
 
     const handleWhatsApp = () => {
         console.log('[WhatsApp] Button clicked - opening WhatsApp');
@@ -149,44 +136,40 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
         }
         if ((window as any).fbq) {
             (window as any).fbq('track', 'Contact', {
-                content_name: 'WhatsApp Rescue'
+                content_name: 'WhatsApp Rescue Clicked',
             });
         }
 
-        // Send to tracking API for Google Sheets
-        fetch('/api/track-checkout', {
+        // Track to Google Sheets
+        fetch('/api/track-whatsapp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                action: 'whatsapp_click',
-                productName: checkoutProduct,
+                product: checkoutProduct,
                 timestamp: new Date().toISOString(),
-                url: window.location.href
-            })
-        }).catch(err => console.log('[WhatsApp] Tracking error:', err));
+                url: window.location.href,
+            }),
+        }).catch(err => console.error('WhatsApp click tracking error:', err));
 
         window.open(whatsappUrl, '_blank');
-        setShowBadge(false);
-        setShowMessage(false);
+        setShowNotification(false); // Hide notification after click
         sessionStorage.setItem('whatsapp_rescue_dismissed', 'true');
         sessionStorage.removeItem('visited_checkout');
         sessionStorage.removeItem('checkout_product');
     };
 
-    const dismissMessage = (e: React.MouseEvent) => {
+    const dismissNotification = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setShowMessage(false);
+        setShowNotification(false);
         console.log('[WhatsApp] Message dismissed');
     };
 
-    if (!isVisible) return null;
-
     return (
         <>
-            {/* Message Preview Bubble */}
-            {showMessage && (
+            {/* Notification Bubble - Shows based on triggers */}
+            {showNotification && (
                 <div className="whatsapp-message-bubble" onClick={handleWhatsApp}>
-                    <button className="message-close" onClick={dismissMessage}>×</button>
+                    <button className="message-close" onClick={dismissNotification}>×</button>
                     <div className="message-header">
                         <span className="message-name">AlphaTV Support</span>
                         <span className="message-time">
@@ -201,19 +184,20 @@ export default function WhatsAppRescue({ lang, productName, isCheckoutPage = fal
                 </div>
             )}
 
+            {/* WhatsApp Icon - Always visible */}
             <div className="whatsapp-rescue-float" onClick={handleWhatsApp}>
                 {/* WhatsApp Icon */}
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
 
-                {/* Red Badge */}
+                {/* Red Badge - Always visible */}
                 {showBadge && (
                     <span className="rescue-badge">1</span>
                 )}
 
-                {/* Tooltip (shows on hover when message is dismissed) */}
-                {!showMessage && (
+                {/* Tooltip (shows on hover) */}
+                {!showNotification && (
                     <span className="rescue-tooltip">
                         {lang === 'fr' ? 'Besoin d\'aide ?' : 'Need help?'}
                     </span>
