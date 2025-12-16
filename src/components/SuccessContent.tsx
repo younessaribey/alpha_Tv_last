@@ -65,8 +65,8 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                     setCustomerEmail(data.customer_email || '');
                     setMetadata(data.metadata);
 
-                    // Generate shared event ID for deduplication
-                    const eventId = `purchase_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                    // Generate shared event ID for deduplication (simpler format)
+                    const eventId = `purchase_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
 
                     // Get click IDs from URL or localStorage for attribution
                     const urlParams = new URLSearchParams(window.location.search);
@@ -75,23 +75,23 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
 
                     // Track TikTok Pixel CompletePayment (full parameters)
                     if ((window as any).ttq) {
+                        const eventOptions: any = { event_id: eventId };
+
+                        // Add ttclid for better attribution matching (critical for deduplication)
+                        if (ttclid) {
+                            eventOptions.callback = ttclid;
+                        }
+
                         (window as any).ttq.track('CompletePayment', {
                             contents: [{
                                 content_id: data.metadata?.productId,
                                 content_type: 'product',
                                 content_name: data.metadata?.productName,
-                                content_category: 'Subscription',
                                 price: parseFloat(data.metadata?.price || '0'),
-                                num_items: 1,
-                                brand: 'AlphaTV',
                             }],
                             value: parseFloat(data.metadata?.price || '0'),
                             currency: 'EUR',
-                            description: 'Subscription purchase completed',
-                            status: 'completed',
-                        }, {
-                            event_id: eventId
-                        });
+                        }, eventOptions);
                     }
 
                     // Track Meta Pixel Purchase event (client-side with same event_id)
@@ -104,24 +104,27 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                         }, { eventID: eventId }); // For deduplication
                     }
 
-                    // SERVER-SIDE Conversions API (more reliable, same eventId)
-                    fetch('/api/track-conversion', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            eventName: 'Purchase',
-                            eventId: eventId, // Same ID for deduplication
-                            email: data.customer_email,
-                            phone: data.metadata?.customerPhone,
-                            value: parseFloat(data.metadata?.price || '0'),
-                            currency: 'EUR',
-                            contentId: data.metadata?.productId,
-                            contentName: data.metadata?.productName,
-                            eventSourceUrl: window.location.href,
-                            ttclid: ttclid, // TikTok Click ID for attribution
-                            fbclid: fbclid, // Facebook Click ID for attribution
-                        })
-                    }).catch(err => console.error('Conversion tracking error:', err));
+                    // SERVER-SIDE Conversions API (delayed to ensure client event arrives first)
+                    // 500ms delay helps TikTok deduplicate properly
+                    setTimeout(() => {
+                        fetch('/api/track-conversion', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                eventName: 'Purchase',
+                                eventId: eventId, // Same ID for deduplication
+                                email: data.customer_email,
+                                phone: data.metadata?.customerPhone,
+                                value: parseFloat(data.metadata?.price || '0'),
+                                currency: 'EUR',
+                                contentId: data.metadata?.productId,
+                                contentName: data.metadata?.productName,
+                                eventSourceUrl: window.location.href,
+                                ttclid: ttclid, // TikTok Click ID for attribution
+                                fbclid: fbclid, // Facebook Click ID for attribution
+                            })
+                        }).catch(err => console.error('Conversion tracking error:', err));
+                    }, 500);
                 } else {
                     setStatus('error');
                 }
