@@ -410,13 +410,36 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
         email: '',
         phone: '',
     });
-    const [hasStartedForm, setHasStartedForm] = useState(false);
+    const [leadId] = useState(() => `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
 
-    // Track form abandonment when user leaves
+    // Track lead immediately when checkout page loads
     useEffect(() => {
-        const trackAbandonment = () => {
-            // Only track if form was started (has any data)
-            if (hasStartedForm && step === 'form') {
+        console.log('[Tracking] Checkout page loaded - creating lead');
+        fetch('/api/track-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'form_abandoned',
+                customerName: '',
+                customerEmail: '',
+                customerPhone: '',
+                productId,
+                productName,
+                price,
+                url: window.location.href,
+                timestamp: new Date().toISOString(),
+                leadId,
+                status: 'started'
+            })
+        }).catch(err => console.log('[Tracking] Initial lead error:', err));
+    }, [productId, productName, price, leadId]);
+
+    // Update lead as user types (debounced)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            // Only update if at least one field has data
+            if (formData.name || formData.email || formData.phone) {
+                console.log('[Tracking] Updating lead with:', formData);
                 fetch('/api/track-checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -430,38 +453,19 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                         price,
                         url: window.location.href,
                         timestamp: new Date().toISOString(),
+                        leadId,
+                        status: 'typing'
                     })
-                }).catch(err => console.log('Abandonment tracking error:', err));
+                }).catch(err => console.log('[Tracking] Update lead error:', err));
             }
-        };
+        }, 1000); // Wait 1 second after typing stops
 
-        // Track on page unload
-        window.addEventListener('beforeunload', trackAbandonment);
+        return () => clearTimeout(timer);
+    }, [formData, productId, productName, price, leadId]);
 
-        return () => {
-            window.removeEventListener('beforeunload', trackAbandonment);
-        };
-    }, [hasStartedForm, formData, step, productId, productName, price]);
-
-    // Detect when form is started
+    // Handle input changes
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-        if (!hasStartedForm && value.length > 0) {
-            setHasStartedForm(true);
-            // Track form start
-            fetch('/api/track-checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'form_started',
-                    productId,
-                    productName,
-                    price,
-                    url: window.location.href,
-                    timestamp: new Date().toISOString(),
-                })
-            }).catch(err => console.log('Form start tracking error:', err));
-        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {

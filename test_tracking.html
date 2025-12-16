@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Tracking</title>
+</head>
+<body>
+    <h1>Test AlphaTV Tracking</h1>
+    <button onclick="testAbandoned()">Test Abandoned Order</button>
+    <button onclick="testWhatsApp()">Test WhatsApp Lead</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAbandoned() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing abandoned order...';
+            
+            const response = await fetch('http://localhost:4321/api/track-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'form_abandoned',
+                    customerName: 'Test User',
+                    customerEmail: 'test@example.com',
+                    customerPhone: '+33612345678',
+                    productId: '12-month',
+                    productName: '12 Month Subscription',
+                    price: 59.99,
+                    url: 'http://localhost:4321/checkout/12-month',
+                    timestamp: new Date().toISOString(),
+                })
+            });
+            
+            const data = await response.json();
+            result.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+
+        async function testWhatsApp() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing WhatsApp lead...';
+            
+            const response = await fetch('http://localhost:4321/api/track-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'whatsapp_click',
+                    productName: '12 Month Subscription',
+                    url: 'http://localhost:4321/checkout/12-month',
+                    timestamp: new Date().toISOString(),
+                })
+            });
+            
+            const data = await response.json();
+            result.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+    </script>
+</body>
+</html>
