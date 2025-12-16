@@ -565,23 +565,50 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
         );
     }
 
-    // Payment mode - use Elements + PaymentForm
+    // Payment mode - also use EmbeddedCheckout (all modes use Checkout Sessions now)
     if (step === 'checkout' && clientSecret && checkoutMode === 'payment') {
         return (
-            <Elements
-                stripe={stripePromise}
-                options={{
-                    clientSecret,
-                    appearance: stripeAppearance,
-                }}
-            >
-                <PaymentForm
-                    lang={lang}
-                    onBack={() => setStep('form')}
-                    customerName={formData.name}
-                    customerEmail={formData.email}
-                />
-            </Elements>
+            <div className="checkout-form-card embedded-mode">
+                <div className="checkout-progress-simple">
+                    <span className="step-label active">{lang === 'fr' ? 'Étape 2/2 : Paiement sécurisé' : 'Step 2/2: Secure Payment'}</span>
+                </div>
+                <div className="embedded-checkout-container">
+                    <EmbeddedCheckoutProvider
+                        stripe={stripePromise}
+                        options={{ clientSecret }}
+                    >
+                        <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                </div>
+                <style>{`
+                    .checkout-form-card.embedded-mode {
+                        padding: 0;
+                        overflow: hidden;
+                    }
+                    
+                    .embedded-mode .checkout-progress-simple {
+                        padding: 1rem;
+                        background: var(--color-surface);
+                        border-bottom: 1px solid var(--color-border);
+                    }
+                    
+                    .embedded-checkout-container {
+                        min-height: 500px;
+                        width: 100%;
+                    }
+                    
+                    .embedded-checkout-container iframe {
+                        width: 100% !important;
+                        min-height: 500px !important;
+                    }
+                    
+                    @media (max-width: 640px) {
+                        .embedded-checkout-container {
+                            min-height: 600px;
+                        }
+                    }
+                `}</style>
+            </div>
         );
     }
 
