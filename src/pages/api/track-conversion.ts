@@ -230,8 +230,11 @@ export const POST: APIRoute = async ({ request }) => {
                 userAgent,
                 clientIp,
                 ttclid,
+                url: eventSourceUrl,
             })
         ]);
+
+        console.log('CAPI Results:', { meta: !!metaResult, tiktok: !!tiktokResult, tiktokResponse: tiktokResult });
 
         return new Response(JSON.stringify({
             success: true,
