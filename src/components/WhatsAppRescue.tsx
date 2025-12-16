@@ -8,6 +8,7 @@ interface WhatsAppRescueProps {
 export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [showBadge, setShowBadge] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
         // Don't show if already dismissed this session
@@ -24,17 +25,19 @@ export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProp
                 hasTriggered = true;
                 setIsVisible(true);
                 setShowBadge(true);
+                setShowMessage(true);
             }
         };
 
-        // Timer-based trigger (60 seconds)
+        // Timer-based trigger (45 seconds)
         timeoutId = setTimeout(() => {
             if (!hasTriggered) {
                 hasTriggered = true;
                 setIsVisible(true);
                 setShowBadge(true);
+                setShowMessage(true);
             }
-        }, 60000); // 60 seconds
+        }, 45000); // 45 seconds
 
         document.addEventListener('mouseleave', handleMouseLeave);
 
@@ -52,13 +55,37 @@ export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProp
         const whatsappUrl = `https://wa.me/33612345678?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         setShowBadge(false);
+        setShowMessage(false);
         sessionStorage.setItem('whatsapp_rescue_dismissed', 'true');
+    };
+
+    const dismissMessage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setShowMessage(false);
     };
 
     if (!isVisible) return null;
 
     return (
         <>
+            {/* Message Preview Bubble */}
+            {showMessage && (
+                <div className="whatsapp-message-bubble" onClick={handleWhatsApp}>
+                    <button className="message-close" onClick={dismissMessage}>×</button>
+                    <div className="message-header">
+                        <span className="message-name">AlphaTV Support</span>
+                        <span className="message-time">
+                            {lang === 'fr' ? 'En ligne' : 'Online'}
+                        </span>
+                    </div>
+                    <div className="message-text">
+                        {lang === 'fr'
+                            ? '👋 Notre équipe est là pour vous aider ! N\'hésitez pas à nous contacter.'
+                            : '👋 Our team is here to assist you! Feel free to reach out.'}
+                    </div>
+                </div>
+            )}
+
             <div className="whatsapp-rescue-float" onClick={handleWhatsApp}>
                 {/* WhatsApp Icon */}
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
@@ -70,13 +97,102 @@ export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProp
                     <span className="rescue-badge">1</span>
                 )}
 
-                {/* Tooltip */}
-                <span className="rescue-tooltip">
-                    {lang === 'fr' ? 'Besoin d\'aide ?' : 'Need help?'}
-                </span>
+                {/* Tooltip (shows on hover when message is dismissed) */}
+                {!showMessage && (
+                    <span className="rescue-tooltip">
+                        {lang === 'fr' ? 'Besoin d\'aide ?' : 'Need help?'}
+                    </span>
+                )}
             </div>
 
             <style>{`
+                .whatsapp-message-bubble {
+                    position: fixed;
+                    bottom: 170px;
+                    right: 20px;
+                    width: 280px;
+                    background: white;
+                    border-radius: 16px;
+                    padding: 16px;
+                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+                    z-index: 9999;
+                    cursor: pointer;
+                    animation: slideIn 0.4s ease;
+                }
+
+                .message-close {
+                    position: absolute;
+                    top: 8px;
+                    right: 12px;
+                    background: none;
+                    border: none;
+                    font-size: 20px;
+                    color: #999;
+                    cursor: pointer;
+                    padding: 0;
+                    line-height: 1;
+                }
+
+                .message-close:hover {
+                    color: #666;
+                }
+
+                .message-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }
+
+                .message-name {
+                    font-weight: 600;
+                    color: #075e54;
+                    font-size: 14px;
+                }
+
+                .message-time {
+                    font-size: 11px;
+                    color: #25D366;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+
+                .message-time::before {
+                    content: '';
+                    width: 8px;
+                    height: 8px;
+                    background: #25D366;
+                    border-radius: 50%;
+                }
+
+                .message-text {
+                    color: #333;
+                    font-size: 14px;
+                    line-height: 1.4;
+                }
+
+                .whatsapp-message-bubble::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -10px;
+                    right: 30px;
+                    border: 10px solid transparent;
+                    border-top-color: white;
+                    border-bottom: 0;
+                }
+
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px) scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+
                 .whatsapp-rescue-float {
                     position: fixed;
                     bottom: 100px;
@@ -176,6 +292,13 @@ export default function WhatsAppRescue({ lang, productName }: WhatsAppRescueProp
                 }
 
                 @media (max-width: 640px) {
+                    .whatsapp-message-bubble {
+                        right: 12px;
+                        left: 12px;
+                        width: auto;
+                        bottom: 150px;
+                    }
+
                     .whatsapp-rescue-float {
                         bottom: 80px;
                         right: 16px;
