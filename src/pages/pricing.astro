@@ -517,23 +517,28 @@ const stats = {
                                 <ul class="problem-list">
                                     <li>
                                         Netflix : <span class="price-red"
-                                            >15.99€/mois</span>
+                                            >15.99€/mois</span
+                                        >
                                     </li>
                                     <li>
                                         Disney+ : <span class="price-red"
-                                            >11.99€/mois</span>
+                                            >11.99€/mois</span
+                                        >
                                     </li>
                                     <li>
                                         Canal+ : <span class="price-red"
-                                            >24.99€/mois</span>
+                                            >24.99€/mois</span
+                                        >
                                     </li>
                                     <li>
                                         beIN Sports : <span class="price-red"
-                                            >15€/mois</span>
+                                            >15€/mois</span
+                                        >
                                     </li>
                                     <li>
                                         Amazon Prime : <span class="price-red"
-                                            >6.99€/mois</span>
+                                            >6.99€/mois</span
+                                        >
                                     </li>
                                 </ul>
                                 <div class="total-cost">
@@ -1738,19 +1743,23 @@ const stats = {
     const eventId =
         "view_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
 
-    // TikTok Pixel - Track ViewContent for pricing page (proper format)
+    // TikTok Pixel - Track ViewContent for pricing page (full parameters)
     if (typeof ttq !== "undefined") {
         ttq.track(
             "ViewContent",
             {
                 contents: [
                     {
-                        content_id: "pricing",
+                        content_id: "alphatv-subscriptions",
                         content_type: "product_group",
-                        content_name: "Pricing Page",
+                        content_name: "AlphaTV Pricing Page",
+                        content_category: "IPTV Subscription",
+                        brand: "AlphaTV",
                     },
                 ],
+                value: 59,
                 currency: "EUR",
+                description: "IPTV streaming subscription plans",
             },
             {
                 event_id: eventId,

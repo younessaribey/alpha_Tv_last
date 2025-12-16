@@ -73,16 +73,22 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                     const ttclid = urlParams.get('ttclid') || localStorage.getItem('ttclid') || '';
                     const fbclid = urlParams.get('fbclid') || localStorage.getItem('fbclid') || '';
 
-                    // Track TikTok Pixel CompletePayment (proper format with contents array)
+                    // Track TikTok Pixel CompletePayment (full parameters)
                     if ((window as any).ttq) {
                         (window as any).ttq.track('CompletePayment', {
                             contents: [{
                                 content_id: data.metadata?.productId,
                                 content_type: 'product',
                                 content_name: data.metadata?.productName,
+                                content_category: 'IPTV Subscription',
+                                price: parseFloat(data.metadata?.price || '0'),
+                                num_items: 1,
+                                brand: 'AlphaTV',
                             }],
                             value: parseFloat(data.metadata?.price || '0'),
                             currency: 'EUR',
+                            description: 'IPTV subscription purchase completed',
+                            status: 'completed',
                         }, {
                             event_id: eventId
                         });
