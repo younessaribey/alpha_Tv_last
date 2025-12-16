@@ -7,7 +7,7 @@ import WhatsAppRescue from "../../components/WhatsAppRescue";
 import { products, type Lang } from "../../lib/data";
 
 const { id } = Astro.params;
-const lang: Lang = "fr";
+const lang: Lang = (Astro.url.searchParams.get("lang") as Lang) || "fr";
 
 const product = products.find((p) => p.id === id);
 
