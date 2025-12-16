@@ -229,13 +229,46 @@ if (!product) {
         price: product.price,
     }}
 >
-    // TikTok Pixel - Track InitiateCheckout
+    // Generate unique event ID for deduplication
+    const eventId =
+        "checkout_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substr(2, 9);
+
+    // TikTok Pixel - Track InitiateCheckout (proper format)
     if (typeof ttq !== "undefined") {
-        ttq.track("InitiateCheckout", {
-            content_id: productId,
-            content_name: productName,
-            currency: "EUR",
-            value: price,
-        });
+        ttq.track(
+            "InitiateCheckout",
+            {
+                contents: [
+                    {
+                        content_id: productId,
+                        content_type: "product",
+                        content_name: productName,
+                    },
+                ],
+                value: price,
+                currency: "EUR",
+            },
+            {
+                event_id: eventId,
+            },
+        );
+    }
+
+    // Meta Pixel - Track InitiateCheckout
+    if (typeof fbq !== "undefined") {
+        fbq(
+            "track",
+            "InitiateCheckout",
+            {
+                content_ids: [productId],
+                content_name: productName,
+                value: price,
+                currency: "EUR",
+            },
+            { eventID: eventId },
+        );
     }
 </script>

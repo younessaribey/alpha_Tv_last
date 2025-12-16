@@ -1,41 +1,41 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { products, t, type Lang } from '../lib/data';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { products, t, type Lang } from "../lib/data";
 
-const lang: Lang = 'fr';
+const lang: Lang = "fr";
 
 // Platform logos for scrolling
 const platformLogos = [
-    { name: 'Netflix', logo: '/logos/netflix_logo_1765793447774.png' },
-    { name: 'Disney+', logo: '/logos/disney_plus_logo_1765793514911.png' },
-    { name: 'Canal+', logo: '/logos/canal_plus_logo_1765793476078.png' },
-    { name: 'beIN', logo: '/logos/bein_sports_purple_1765793640937.png' },
-    { name: 'Prime', logo: '/logos/amazon-prime.png' },
-    { name: 'TF1', logo: '/logos/tf1.png' },
+    { name: "Netflix", logo: "/logos/netflix_logo_1765793447774.png" },
+    { name: "Disney+", logo: "/logos/disney_plus_logo_1765793514911.png" },
+    { name: "Canal+", logo: "/logos/canal_plus_logo_1765793476078.png" },
+    { name: "beIN", logo: "/logos/bein_sports_purple_1765793640937.png" },
+    { name: "Prime", logo: "/logos/amazon-prime.png" },
+    { name: "TF1", logo: "/logos/tf1.png" },
 ];
 
 // League logos for scrolling
 const leagueLogos = [
-    { name: 'UCL', logo: '/logos/champions_league_logo_1765793396216.png' },
-    { name: 'Premier', logo: '/logos/premier_league_logo_1765793432569.png' },
-    { name: 'Liga', logo: '/logos/laliga_logo_1765793567812.png' },
-    { name: 'Ligue 1', logo: '/logos/ligue1_logo_1765793615718.png' },
+    { name: "UCL", logo: "/logos/champions_league_logo_1765793396216.png" },
+    { name: "Premier", logo: "/logos/premier_league_logo_1765793432569.png" },
+    { name: "Liga", logo: "/logos/laliga_logo_1765793567812.png" },
+    { name: "Ligue 1", logo: "/logos/ligue1_logo_1765793615718.png" },
 ];
 
 // Key stats
 const stats = {
-    movies: '22K+',
-    channels: '8K+',
-    quality: '4K/FHD',
-    speed: 'Ultra Rapide'
+    movies: "22K+",
+    channels: "8K+",
+    quality: "4K/FHD",
+    speed: "Ultra Rapide",
 };
 ---
 
 <Layout title="Tarifs" lang={lang}>
     <Header lang={lang} />
-    
+
     <main class="main-content">
         <section class="section pricing-page">
             <div class="container">
@@ -43,57 +43,132 @@ const stats = {
                 <div class="page-header" data-animate>
                     <div class="free-trial-banner">
                         <span class="trial-emoji">🎁</span>
-                        <span class="trial-main">{lang === 'fr' ? 'Commencez GRATUITEMENT' : 'Start FREE'}</span>
-                        <span class="trial-sub">{lang === 'fr' ? '24h d\'essai sans engagement' : '24h trial, no commitment'}</span>
+                        <span class="trial-main"
+                            >{
+                                lang === "fr"
+                                    ? "Commencez GRATUITEMENT"
+                                    : "Start FREE"
+                            }</span
+                        >
+                        <span class="trial-sub"
+                            >{
+                                lang === "fr"
+                                    ? "24h d'essai sans engagement"
+                                    : "24h trial, no commitment"
+                            }</span
+                        >
                     </div>
-                    <h1>{lang === 'fr' ? 'Tout le Streaming Illimité' : 'Unlimited Streaming'}</h1>
-                    <p class="page-subtitle">{lang === 'fr' ? 'beIN Sports, Canal+, Netflix, Disney+ et 10 000+ chaînes. Qualité 4K, zapping ultra-rapide.' : 'beIN Sports, Canal+, Netflix, Disney+ and 10,000+ channels. 4K quality, ultra-fast zapping.'}</p>
-                    
+                    <h1>
+                        {
+                            lang === "fr"
+                                ? "Tout le Streaming Illimité"
+                                : "Unlimited Streaming"
+                        }
+                    </h1>
+                    <p class="page-subtitle">
+                        {
+                            lang === "fr"
+                                ? "beIN Sports, Canal+, Netflix, Disney+ et 10 000+ chaînes. Qualité 4K, zapping ultra-rapide."
+                                : "beIN Sports, Canal+, Netflix, Disney+ and 10,000+ channels. 4K quality, ultra-fast zapping."
+                        }
+                    </p>
+
                     <!-- Quick Stats -->
                     <div class="quick-stats">
                         <div class="quick-stat">
                             <span class="stat-emoji">🎬</span>
-                            <span class="stat-text">22K+ {lang === 'fr' ? 'Films' : 'Movies'}</span>
+                            <span class="stat-text"
+                                >22K+ {lang === "fr" ? "Films" : "Movies"}</span
+                            >
                         </div>
                         <div class="quick-stat">
                             <span class="stat-emoji">📺</span>
-                            <span class="stat-text">8K+ {lang === 'fr' ? 'Séries' : 'Series'}</span>
+                            <span class="stat-text"
+                                >8K+ {lang === "fr" ? "Séries" : "Series"}</span
+                            >
                         </div>
                         <div class="quick-stat">
                             <span class="stat-emoji">🌍</span>
-                            <span class="stat-text">8K+ {lang === 'fr' ? 'Chaînes' : 'Channels'}</span>
+                            <span class="stat-text"
+                                >8K+ {
+                                    lang === "fr" ? "Chaînes" : "Channels"
+                                }</span
+                            >
                         </div>
                     </div>
 
                     <!-- Trust Badges - Stripe & Money Back -->
                     <div class="header-trust-badges">
                         <div class="trust-badge stripe">
-                            <svg class="checkmark-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="10" fill="#10b981"/>
-                                <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg
+                                class="checkmark-icon"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <circle cx="12" cy="12" r="10" fill="#10b981"
+                                ></circle>
+                                <path
+                                    d="M9 12l2 2 4-4"
+                                    stroke="white"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
                             </svg>
-                            <span>{lang === 'fr' ? 'Sécurisé par Stripe' : 'Secured by Stripe'}</span>
+                            <span
+                                >{
+                                    lang === "fr"
+                                        ? "Sécurisé par Stripe"
+                                        : "Secured by Stripe"
+                                }</span
+                            >
                         </div>
                         <div class="trust-badge money-back">
                             <span class="guarantee-icon">💰</span>
-                            <span>{lang === 'fr' ? 'Satisfait ou Remboursé' : 'Money Back Guarantee'}</span>
+                            <span
+                                >{
+                                    lang === "fr"
+                                        ? "Satisfait ou Remboursé"
+                                        : "Money Back Guarantee"
+                                }</span
+                            >
                         </div>
                     </div>
                 </div>
 
                 <!-- Scrolling Streaming Platforms - BEFORE PRICING -->
                 <div class="scroll-section" data-animate>
-                    <p class="scroll-title">📺 {lang === 'fr' ? 'Plateformes de streaming' : 'Streaming Platforms'}</p>
+                    <p class="scroll-title">
+                        📺 {
+                            lang === "fr"
+                                ? "Plateformes de streaming"
+                                : "Streaming Platforms"
+                        }
+                    </p>
                     <div class="channel-logos-container">
                         <div class="channel-logos-track">
-                            {[...platformLogos, ...platformLogos, ...platformLogos].map((platform) => (
-                                <div class="channel-logo-wrapper">
-                                    <div class="channel-logo-item">
-                                        <img src={platform.logo} alt={platform.name} class="channel-logo-image" loading="lazy" />
+                            {
+                                [
+                                    ...platformLogos,
+                                    ...platformLogos,
+                                    ...platformLogos,
+                                ].map((platform) => (
+                                    <div class="channel-logo-wrapper">
+                                        <div class="channel-logo-item">
+                                            <img
+                                                src={platform.logo}
+                                                alt={platform.name}
+                                                class="channel-logo-image"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                        <span class="channel-name">
+                                            {platform.name}
+                                        </span>
                                     </div>
-                                    <span class="channel-name">{platform.name}</span>
-                                </div>
-                            ))}
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -101,140 +176,302 @@ const stats = {
                 <!-- Why Choose Us Section -->
                 <div class="why-choose-section" data-animate>
                     <div class="section-header-mini">
-                        <h2>{lang === 'fr' ? 'Pourquoi Nous Choisir ?' : 'Why Choose Us?'}</h2>
-                        <p class="section-subtitle">{lang === 'fr' ? 'Qualité premium, stabilité garantie' : 'Premium quality, guaranteed stability'}</p>
+                        <h2>
+                            {
+                                lang === "fr"
+                                    ? "Pourquoi Nous Choisir ?"
+                                    : "Why Choose Us?"
+                            }
+                        </h2>
+                        <p class="section-subtitle">
+                            {
+                                lang === "fr"
+                                    ? "Qualité premium, stabilité garantie"
+                                    : "Premium quality, guaranteed stability"
+                            }
+                        </p>
                     </div>
                     <div class="trust-grid-pricing">
                         <div class="trust-card" data-animate>
-                            <div class="trust-icon" style="background: rgba(16, 185, 129, 0.15);">
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(16, 185, 129, 0.15);"
+                            >
                                 <span>⚡</span>
                             </div>
-                            <h3>{lang === 'fr' ? 'Anti-Freeze' : 'Anti-Freeze'}</h3>
-                            <p>{lang === 'fr' ? 'Zapping ultra-rapide, aucun buffering même en 4K' : 'Ultra-fast zapping, no buffering even in 4K'}</p>
+                            <h3>
+                                {lang === "fr" ? "Anti-Freeze" : "Anti-Freeze"}
+                            </h3>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Zapping ultra-rapide, aucun buffering même en 4K"
+                                        : "Ultra-fast zapping, no buffering even in 4K"
+                                }
+                            </p>
                         </div>
                         <div class="trust-card" data-animate>
-                            <div class="trust-icon" style="background: rgba(139, 92, 246, 0.15);">
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(139, 92, 246, 0.15);"
+                            >
                                 <span>🛰️</span>
                             </div>
-                            <h3>{lang === 'fr' ? 'Multi-Serveurs' : 'Multi-Server'}</h3>
-                            <p>{lang === 'fr' ? 'Backup automatique si un serveur est down' : 'Automatic backup if a server is down'}</p>
+                            <h3>
+                                {
+                                    lang === "fr"
+                                        ? "Multi-Serveurs"
+                                        : "Multi-Server"
+                                }
+                            </h3>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Backup automatique si un serveur est down"
+                                        : "Automatic backup if a server is down"
+                                }
+                            </p>
                         </div>
                         <div class="trust-card" data-animate>
-                            <div class="trust-icon" style="background: rgba(6, 182, 212, 0.15);">
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(6, 182, 212, 0.15);"
+                            >
                                 <span>💬</span>
                             </div>
-                            <h3>{lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</h3>
-                            <p>{lang === 'fr' ? 'Réponse en moins de 10 minutes sur WhatsApp' : 'Response in less than 10 minutes on WhatsApp'}</p>
+                            <h3>
+                                {
+                                    lang === "fr"
+                                        ? "Support 24/7"
+                                        : "24/7 Support"
+                                }
+                            </h3>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Réponse en moins de 10 minutes sur WhatsApp"
+                                        : "Response in less than 10 minutes on WhatsApp"
+                                }
+                            </p>
                         </div>
                         <div class="trust-card" data-animate>
-                            <div class="trust-icon" style="background: rgba(245, 158, 11, 0.15);">
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(245, 158, 11, 0.15);"
+                            >
                                 <span>🔄</span>
                             </div>
-                            <h3>{lang === 'fr' ? 'Garantie' : 'Guarantee'}</h3>
-                            <p>{lang === 'fr' ? 'Ligne de remplacement si problème technique' : 'Replacement line if technical problem'}</p>
+                            <h3>{lang === "fr" ? "Garantie" : "Guarantee"}</h3>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Ligne de remplacement si problème technique"
+                                        : "Replacement line if technical problem"
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pricing Cards -->
                 <div class="pricing-grid" id="pricing">
-                    {products.map((product, index) => (
-                        <div 
-                            class={`pricing-card ${product.popular ? 'pricing-card-featured' : ''}`}
-                            data-animate
-                            style={`animation-delay: ${index * 0.1}s`}
-                        >
-                            {/* Popular Badge */}
-                            {product.popular && (
-                                <div class="popular-tag">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                                    {t(lang, 'products.popular')}
-                                </div>
-                            )}
+                    {
+                        products.map((product, index) => (
+                            <div
+                                class={`pricing-card ${product.popular ? "pricing-card-featured" : ""}`}
+                                data-animate
+                                style={`animation-delay: ${index * 0.1}s`}
+                            >
+                                {/* Popular Badge */}
+                                {product.popular && (
+                                    <div class="popular-tag">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                        >
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                        </svg>
+                                        {t(lang, "products.popular")}
+                                    </div>
+                                )}
 
-                            {/* Savings Badge */}
-                            {product.badge && (
-                                <div class="savings-badge">
-                                    {product.badge[lang]}
-                                </div>
-                            )}
+                                {/* Savings Badge */}
+                                {product.badge && (
+                                    <div class="savings-badge">
+                                        {product.badge[lang]}
+                                    </div>
+                                )}
 
-                            <div class={`pricing-card-content ${product.popular ? 'has-popular' : ''}`}>
-                                {/* Plan Name */}
-                                <div class="plan-header">
-                                    <h2 class="plan-name">{product.name[lang]}</h2>
-                                    <p class="plan-devices">
-                                        {product.devices} {product.devices > 1 ? t(lang, 'products.devices') : t(lang, 'products.device')}
+                                <div
+                                    class={`pricing-card-content ${product.popular ? "has-popular" : ""}`}
+                                >
+                                    {/* Plan Name */}
+                                    <div class="plan-header">
+                                        <h2 class="plan-name">
+                                            {product.name[lang]}
+                                        </h2>
+                                        <p class="plan-devices">
+                                            {product.devices}{" "}
+                                            {product.devices > 1
+                                                ? t(lang, "products.devices")
+                                                : t(lang, "products.device")}
+                                        </p>
+                                    </div>
+
+                                    {/* Price */}
+                                    <div class="plan-price">
+                                        {product.originalPrice && (
+                                            <span class="price-original">
+                                                €{product.originalPrice}
+                                            </span>
+                                        )}
+                                        <span class="price-amount gradient-text">
+                                            €{product.price}
+                                        </span>
+                                        <span class="price-note">
+                                            {lang === "fr"
+                                                ? "paiement unique"
+                                                : "one-time payment"}
+                                        </span>
+                                    </div>
+
+                                    {/* What's Included Mini */}
+                                    <div class="plan-includes">
+                                        <span>✓ 10000+ Chaînes</span>
+                                        <span>✓ 8000+ Films/Séries</span>
+                                        <span>✓ Sports en Direct</span>
+                                        <span>✓ 4K Ultra HD</span>
+                                    </div>
+
+                                    {/* CTA */}
+                                    <a
+                                        href={`/checkout/${product.id}`}
+                                        class={`btn pricing-btn ${product.popular ? "btn-free" : "btn-secondary"}`}
+                                    >
+                                        <span class="btn-text">
+                                            {lang === "fr"
+                                                ? "🎁 Réclamez votre essai gratuit"
+                                                : "🎁 Claim your free trial"}
+                                        </span>
+                                    </a>
+
+                                    {/* Payment Methods */}
+                                    <div class="payment-methods">
+                                        <svg
+                                            width="38"
+                                            height="24"
+                                            viewBox="0 0 38 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <rect
+                                                width="38"
+                                                height="24"
+                                                rx="4"
+                                                fill="#1A1F71"
+                                            />
+                                            <path
+                                                d="M15.2 16.5H12.8L14.4 7.5H16.8L15.2 16.5Z"
+                                                fill="white"
+                                            />
+                                            <path
+                                                d="M23.8 7.7C23.3 7.5 22.5 7.3 21.5 7.3C19.1 7.3 17.4 8.6 17.4 10.3C17.4 11.6 18.6 12.3 19.5 12.7C20.4 13.1 20.7 13.4 20.7 13.8C20.7 14.4 20 14.7 19.3 14.7C18.3 14.7 17.8 14.6 17 14.2L16.7 14.1L16.4 15.9C17 16.2 18.1 16.4 19.2 16.4C21.8 16.4 23.4 15.1 23.4 13.3C23.4 12.3 22.8 11.5 21.4 10.9C20.6 10.5 20.1 10.3 20.1 9.8C20.1 9.4 20.6 9 21.5 9C22.3 9 22.9 9.2 23.3 9.4L23.5 9.5L23.8 7.7Z"
+                                                fill="white"
+                                            />
+                                            <path
+                                                d="M27.3 7.5H25.4C24.8 7.5 24.4 7.7 24.1 8.3L20.7 16.5H23.3L23.8 15H27C27.1 15.4 27.3 16.5 27.3 16.5H29.6L27.3 7.5ZM24.5 13.3C24.7 12.7 25.5 10.6 25.5 10.6C25.5 10.6 25.7 10.1 25.8 9.7L26 10.5C26 10.5 26.5 12.6 26.6 13.3H24.5Z"
+                                                fill="white"
+                                            />
+                                            <path
+                                                d="M11.5 7.5L9.1 13.5L8.8 12.1C8.3 10.5 6.8 8.7 5.1 7.8L7.3 16.5H9.9L14.1 7.5H11.5Z"
+                                                fill="white"
+                                            />
+                                        </svg>
+                                        <svg
+                                            width="38"
+                                            height="24"
+                                            viewBox="0 0 38 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <rect
+                                                width="38"
+                                                height="24"
+                                                rx="4"
+                                                fill="#252525"
+                                            />
+                                            <circle
+                                                cx="15"
+                                                cy="12"
+                                                r="7"
+                                                fill="#EB001B"
+                                            />
+                                            <circle
+                                                cx="23"
+                                                cy="12"
+                                                r="7"
+                                                fill="#F79E1B"
+                                            />
+                                            <path
+                                                d="M19 6.8C20.7 8.1 21.8 10.2 21.8 12.5C21.8 14.8 20.7 16.9 19 18.2C17.3 16.9 16.2 14.8 16.2 12.5C16.2 10.2 17.3 8.1 19 6.8Z"
+                                                fill="#FF5F00"
+                                            />
+                                        </svg>
+                                        <span class="payment-secure">
+                                            🔒{" "}
+                                            {lang === "fr"
+                                                ? "Sécurisé"
+                                                : "Secure"}
+                                        </span>
+                                    </div>
+
+                                    {/* Trial Note */}
+                                    <p class="trial-note">
+                                        {lang === "fr"
+                                            ? "Testez 24h avant de payer !"
+                                            : "Try 24h before you pay!"}
                                     </p>
                                 </div>
-
-                                {/* Price */}
-                                <div class="plan-price">
-                                    {product.originalPrice && (
-                                        <span class="price-original">€{product.originalPrice}</span>
-                                    )}
-                                    <span class="price-amount gradient-text">€{product.price}</span>
-                                    <span class="price-note">
-                                        {lang === 'fr' ? 'paiement unique' : 'one-time payment'}
-                                    </span>
-                                </div>
-
-                                {/* What's Included Mini */}
-                                <div class="plan-includes">
-                                    <span>✓ 10000+ Chaînes</span>
-                                    <span>✓ 8000+ Films/Séries</span>
-                                    <span>✓ Sports en Direct</span>
-                                    <span>✓ 4K Ultra HD</span>
-                                </div>
-
-                                {/* CTA */}
-                                <a 
-                                    href={`/checkout/${product.id}`}
-                                    class={`btn pricing-btn ${product.popular ? 'btn-free' : 'btn-secondary'}`}
-                                >
-                                    <span class="btn-text">{lang === 'fr' ? '🎁 Réclamez votre essai gratuit' : '🎁 Claim your free trial'}</span>
-                                </a>
-
-                                {/* Payment Methods */}
-                                <div class="payment-methods">
-                                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="38" height="24" rx="4" fill="#1A1F71"/>
-                                        <path d="M15.2 16.5H12.8L14.4 7.5H16.8L15.2 16.5Z" fill="white"/>
-                                        <path d="M23.8 7.7C23.3 7.5 22.5 7.3 21.5 7.3C19.1 7.3 17.4 8.6 17.4 10.3C17.4 11.6 18.6 12.3 19.5 12.7C20.4 13.1 20.7 13.4 20.7 13.8C20.7 14.4 20 14.7 19.3 14.7C18.3 14.7 17.8 14.6 17 14.2L16.7 14.1L16.4 15.9C17 16.2 18.1 16.4 19.2 16.4C21.8 16.4 23.4 15.1 23.4 13.3C23.4 12.3 22.8 11.5 21.4 10.9C20.6 10.5 20.1 10.3 20.1 9.8C20.1 9.4 20.6 9 21.5 9C22.3 9 22.9 9.2 23.3 9.4L23.5 9.5L23.8 7.7Z" fill="white"/>
-                                        <path d="M27.3 7.5H25.4C24.8 7.5 24.4 7.7 24.1 8.3L20.7 16.5H23.3L23.8 15H27C27.1 15.4 27.3 16.5 27.3 16.5H29.6L27.3 7.5ZM24.5 13.3C24.7 12.7 25.5 10.6 25.5 10.6C25.5 10.6 25.7 10.1 25.8 9.7L26 10.5C26 10.5 26.5 12.6 26.6 13.3H24.5Z" fill="white"/>
-                                        <path d="M11.5 7.5L9.1 13.5L8.8 12.1C8.3 10.5 6.8 8.7 5.1 7.8L7.3 16.5H9.9L14.1 7.5H11.5Z" fill="white"/>
-                                    </svg>
-                                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="38" height="24" rx="4" fill="#252525"/>
-                                        <circle cx="15" cy="12" r="7" fill="#EB001B"/>
-                                        <circle cx="23" cy="12" r="7" fill="#F79E1B"/>
-                                        <path d="M19 6.8C20.7 8.1 21.8 10.2 21.8 12.5C21.8 14.8 20.7 16.9 19 18.2C17.3 16.9 16.2 14.8 16.2 12.5C16.2 10.2 17.3 8.1 19 6.8Z" fill="#FF5F00"/>
-                                    </svg>
-                                    <span class="payment-secure">🔒 {lang === 'fr' ? 'Sécurisé' : 'Secure'}</span>
-                                </div>
-
-                                {/* Trial Note */}
-                                <p class="trial-note">
-                                    {lang === 'fr' ? 'Testez 24h avant de payer !' : 'Try 24h before you pay!'}
-                                </p>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    }
                 </div>
 
                 <!-- Scrolling Football Leagues - AFTER PRICING -->
                 <div class="scroll-section" data-animate>
-                    <p class="scroll-title">⚽ {lang === 'fr' ? 'Ligues de Football' : 'Football Leagues'}</p>
+                    <p class="scroll-title">
+                        ⚽ {
+                            lang === "fr"
+                                ? "Ligues de Football"
+                                : "Football Leagues"
+                        }
+                    </p>
                     <div class="channel-logos-container">
                         <div class="channel-logos-track leagues-track">
-                            {[...leagueLogos, ...leagueLogos, ...leagueLogos].map((league) => (
-                                <div class="channel-logo-wrapper">
-                                    <div class="channel-logo-item">
-                                        <img src={league.logo} alt={league.name} class="channel-logo-image" loading="lazy" />
+                            {
+                                [
+                                    ...leagueLogos,
+                                    ...leagueLogos,
+                                    ...leagueLogos,
+                                ].map((league) => (
+                                    <div class="channel-logo-wrapper">
+                                        <div class="channel-logo-item">
+                                            <img
+                                                src={league.logo}
+                                                alt={league.name}
+                                                class="channel-logo-image"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                        <span class="channel-name">
+                                            {league.name}
+                                        </span>
                                     </div>
-                                    <span class="channel-name">{league.name}</span>
-                                </div>
-                            ))}
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -242,38 +479,103 @@ const stats = {
                 <!-- Marketing Section - Problem vs Solution -->
                 <div class="marketing-section" data-animate>
                     <div class="section-header-mini">
-                        <h2>{lang === 'fr' ? '💸 Arrêtez de payer pour 10 abonnements !' : '💸 Stop paying for 10 subscriptions!'}</h2>
-                        <p class="section-subtitle">{lang === 'fr' ? 'Netflix, Disney+, Canal+, beIN... Ça coûte une fortune !' : 'Netflix, Disney+, Canal+, beIN... It costs a fortune!'}</p>
+                        <h2>
+                            {
+                                lang === "fr"
+                                    ? "💸 Arrêtez de payer pour 10 abonnements !"
+                                    : "💸 Stop paying for 10 subscriptions!"
+                            }
+                        </h2>
+                        <p class="section-subtitle">
+                            {
+                                lang === "fr"
+                                    ? "Netflix, Disney+, Canal+, beIN... Ça coûte une fortune !"
+                                    : "Netflix, Disney+, Canal+, beIN... It costs a fortune!"
+                            }
+                        </p>
                     </div>
-                    
+
                     <div class="comparison-grid">
                         <!-- Problem Side -->
                         <div class="comparison-card problem">
-                            <div class="comparison-badge problem-badge">❌ {lang === 'fr' ? 'AVANT' : 'BEFORE'}</div>
-                            <img src="/images/Gemini_Generated_Image_o2ogmdo2ogmdo2og.png" alt="Frustration des abonnements multiples" loading="lazy" />
+                            <div class="comparison-badge problem-badge">
+                                ❌ {lang === "fr" ? "AVANT" : "BEFORE"}
+                            </div>
+                            <img
+                                src="/images/Gemini_Generated_Image_o2ogmdo2ogmdo2og.png"
+                                alt="Frustration des abonnements multiples"
+                                loading="lazy"
+                            />
                             <div class="comparison-content">
-                                <h3>{lang === 'fr' ? 'Payer séparément ?' : 'Pay separately?'}</h3>
+                                <h3>
+                                    {
+                                        lang === "fr"
+                                            ? "Payer séparément ?"
+                                            : "Pay separately?"
+                                    }
+                                </h3>
                                 <ul class="problem-list">
-                                    <li>Netflix : <span class="price-red">15.99€/mois</span></li>
-                                    <li>Disney+ : <span class="price-red">11.99€/mois</span></li>
-                                    <li>Canal+ : <span class="price-red">24.99€/mois</span></li>
-                                    <li>beIN Sports : <span class="price-red">15€/mois</span></li>
-                                    <li>Amazon Prime : <span class="price-red">6.99€/mois</span></li>
+                                    <li>
+                                        Netflix : <span class="price-red"
+                                            >15.99€/mois</span>
+                                    </li>
+                                    <li>
+                                        Disney+ : <span class="price-red"
+                                            >11.99€/mois</span>
+                                    </li>
+                                    <li>
+                                        Canal+ : <span class="price-red"
+                                            >24.99€/mois</span>
+                                    </li>
+                                    <li>
+                                        beIN Sports : <span class="price-red"
+                                            >15€/mois</span>
+                                    </li>
+                                    <li>
+                                        Amazon Prime : <span class="price-red"
+                                            >6.99€/mois</span>
+                                    </li>
                                 </ul>
                                 <div class="total-cost">
-                                    <span>{lang === 'fr' ? 'TOTAL' : 'TOTAL'}</span>
+                                    <span
+                                        >{
+                                            lang === "fr" ? "TOTAL" : "TOTAL"
+                                        }</span
+                                    >
                                     <span class="total-price">~75€/mois</span>
                                 </div>
-                                <p class="cost-yearly">{lang === 'fr' ? 'Soit 900€ par an !' : 'That\'s €900 per year!'}</p>
+                                <p class="cost-yearly">
+                                    {
+                                        lang === "fr"
+                                            ? "Soit 900€ par an !"
+                                            : "That's €900 per year!"
+                                    }
+                                </p>
                             </div>
                         </div>
 
                         <!-- Solution Side -->
                         <div class="comparison-card solution">
-                            <div class="comparison-badge solution-badge">✅ {lang === 'fr' ? 'AVEC ALPHATV' : 'WITH ALPHATV'}</div>
-                            <img src="/images/Gemini_Generated_Image_dfrscddfrscddfrs.png" alt="Tout le streaming en un seul abonnement" loading="lazy" />
+                            <div class="comparison-badge solution-badge">
+                                ✅ {
+                                    lang === "fr"
+                                        ? "AVEC ALPHATV"
+                                        : "WITH ALPHATV"
+                                }
+                            </div>
+                            <img
+                                src="/images/Gemini_Generated_Image_dfrscddfrscddfrs.png"
+                                alt="Tout le streaming en un seul abonnement"
+                                loading="lazy"
+                            />
                             <div class="comparison-content">
-                                <h3>{lang === 'fr' ? 'Tout inclus !' : 'All included!'}</h3>
+                                <h3>
+                                    {
+                                        lang === "fr"
+                                            ? "Tout inclus !"
+                                            : "All included!"
+                                    }
+                                </h3>
                                 <ul class="solution-list">
                                     <li>✓ Netflix, Disney+, HBO Max...</li>
                                     <li>✓ Canal+, beIN Sports, RMC...</li>
@@ -282,19 +584,41 @@ const stats = {
                                     <li>✓ Qualité 4K Ultra HD</li>
                                 </ul>
                                 <div class="total-cost solution-total">
-                                    <span>{lang === 'fr' ? 'SEULEMENT' : 'ONLY'}</span>
-                                    <span class="total-price-green">À partir de 29€</span>
+                                    <span
+                                        >{
+                                            lang === "fr" ? "SEULEMENT" : "ONLY"
+                                        }</span
+                                    >
+                                    <span class="total-price-green"
+                                        >À partir de 29€</span
+                                    >
                                 </div>
-                                <p class="savings">{lang === 'fr' ? 'Économisez +800€ par an !' : 'Save €800+ per year!'}</p>
+                                <p class="savings">
+                                    {
+                                        lang === "fr"
+                                            ? "Économisez +800€ par an !"
+                                            : "Save €800+ per year!"
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Enjoy Content Image -->
                     <div class="enjoy-content" data-animate>
-                        <img src="/images/Gemini_Generated_Image_ka82moka82moka82.png" alt="Profitez du streaming" loading="lazy" />
+                        <img
+                            src="/images/Gemini_Generated_Image_ka82moka82moka82.png"
+                            alt="Profitez du streaming"
+                            loading="lazy"
+                        />
                         <div class="enjoy-overlay">
-                            <p>{lang === 'fr' ? '🍿 Profitez de TOUT le contenu pour le prix d\'un seul abonnement' : '🍿 Enjoy ALL content for the price of one subscription'}</p>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "🍿 Profitez de TOUT le contenu pour le prix d'un seul abonnement"
+                                        : "🍿 Enjoy ALL content for the price of one subscription"
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -303,28 +627,116 @@ const stats = {
                 <div class="trust-section" data-animate>
                     <div class="trust-grid">
                         <div class="trust-item">
-                            <div class="trust-icon" style="background: rgba(16, 185, 129, 0.15);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(16, 185, 129, 0.15);"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#10b981"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    ><path
+                                        d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"
+                                    ></path></svg
+                                >
                             </div>
-                            <p>{lang === 'fr' ? 'Paiement Sécurisé' : 'Secure Payment'}</p>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Paiement Sécurisé"
+                                        : "Secure Payment"
+                                }
+                            </p>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon" style="background: rgba(139, 92, 246, 0.15);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(139, 92, 246, 0.15);"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#a78bfa"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    ><path
+                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+                                    ></path><path d="m9 12 2 2 4-4"></path></svg
+                                >
                             </div>
-                            <p>{lang === 'fr' ? 'Activation Rapide' : 'Fast Activation'}</p>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Activation Rapide"
+                                        : "Fast Activation"
+                                }
+                            </p>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon" style="background: rgba(6, 182, 212, 0.15);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(6, 182, 212, 0.15);"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#06b6d4"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    ><path
+                                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                                    ></path></svg
+                                >
                             </div>
-                            <p>{lang === 'fr' ? 'Support 24/7' : '24/7 Support'}</p>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Support 24/7"
+                                        : "24/7 Support"
+                                }
+                            </p>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon" style="background: rgba(245, 158, 11, 0.15);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <div
+                                class="trust-icon"
+                                style="background: rgba(245, 158, 11, 0.15);"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#f59e0b"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    ><polygon
+                                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                                    ></polygon></svg
+                                >
                             </div>
-                            <p>{lang === 'fr' ? 'Qualité Premium' : 'Premium Quality'}</p>
+                            <p>
+                                {
+                                    lang === "fr"
+                                        ? "Qualité Premium"
+                                        : "Premium Quality"
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -364,7 +776,11 @@ const stats = {
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1.25rem;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.2) 0%,
+            rgba(16, 185, 129, 0.1) 100%
+        );
         border: 1px solid rgba(16, 185, 129, 0.3);
         border-radius: 100px;
         margin-bottom: 1.5rem;
@@ -524,8 +940,20 @@ const stats = {
     .channel-logos-container {
         position: relative;
         overflow: hidden;
-        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 5%,
+            black 95%,
+            transparent
+        );
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 5%,
+            black 95%,
+            transparent
+        );
     }
 
     .channel-logos-track {
@@ -541,13 +969,21 @@ const stats = {
     }
 
     @keyframes scroll-logos {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-33.33%); }
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-33.33%);
+        }
     }
 
     @keyframes scroll-logos-reverse {
-        0% { transform: translateX(-33.33%); }
-        100% { transform: translateX(0); }
+        0% {
+            transform: translateX(-33.33%);
+        }
+        100% {
+            transform: translateX(0);
+        }
     }
 
     .channel-logo-wrapper {
@@ -709,7 +1145,11 @@ const stats = {
     .stat-value {
         font-size: 1.5rem;
         font-weight: 800;
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary) 0%,
+            var(--color-secondary) 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -760,7 +1200,7 @@ const stats = {
         left: 0;
         right: 0;
         padding: 0.5rem;
-        background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
         font-size: 0.6875rem;
         font-weight: 600;
         color: white;
@@ -862,7 +1302,11 @@ const stats = {
 
     .pricing-card-featured {
         border: 2px solid var(--color-primary);
-        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(139, 92, 246, 0.1) 0%,
+            rgba(236, 72, 153, 0.05) 100%
+        );
         box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
     }
 
@@ -870,7 +1314,7 @@ const stats = {
         .pricing-card-featured {
             transform: scale(1.03);
         }
-        
+
         .pricing-card-featured:hover {
             transform: scale(1.05);
         }
@@ -1114,13 +1558,15 @@ const stats = {
         margin-bottom: 0.75rem;
     }
 
-    .problem-list, .solution-list {
+    .problem-list,
+    .solution-list {
         list-style: none;
         padding: 0;
         margin: 0 0 1rem 0;
     }
 
-    .problem-list li, .solution-list li {
+    .problem-list li,
+    .solution-list li {
         font-size: 0.8125rem;
         padding: 0.375rem 0;
         border-bottom: 1px solid var(--color-border);
@@ -1128,7 +1574,8 @@ const stats = {
         justify-content: space-between;
     }
 
-    .problem-list li:last-child, .solution-list li:last-child {
+    .problem-list li:last-child,
+    .solution-list li:last-child {
         border-bottom: none;
     }
 
@@ -1274,24 +1721,54 @@ const stats = {
 
 <script>
     // Auto-scroll to the second (popular) pricing card on page load
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
-            const pricingCards = document.querySelectorAll('.pricing-card');
+            const pricingCards = document.querySelectorAll(".pricing-card");
             if (pricingCards.length >= 2) {
                 const secondCard = pricingCards[1];
-                secondCard.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
+                secondCard.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
                 });
             }
         }, 500);
     });
 
-    // TikTok Pixel - Track ViewContent for pricing page
-    if (typeof ttq !== 'undefined') {
-        ttq.track('ViewContent', {
-            content_type: 'product',
-            content_name: 'Pricing Page'
-        });
+    // Generate unique event ID for deduplication
+    const eventId =
+        "view_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+
+    // TikTok Pixel - Track ViewContent for pricing page (proper format)
+    if (typeof ttq !== "undefined") {
+        ttq.track(
+            "ViewContent",
+            {
+                contents: [
+                    {
+                        content_id: "pricing",
+                        content_type: "product_group",
+                        content_name: "Pricing Page",
+                    },
+                ],
+                currency: "EUR",
+            },
+            {
+                event_id: eventId,
+            },
+        );
+    }
+
+    // Meta Pixel - Track ViewContent
+    if (typeof fbq !== "undefined") {
+        fbq(
+            "track",
+            "ViewContent",
+            {
+                content_ids: ["pricing"],
+                content_name: "Pricing Page",
+                content_type: "product_group",
+            },
+            { eventID: eventId },
+        );
     }
 </script>

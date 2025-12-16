@@ -73,14 +73,18 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
                     const ttclid = urlParams.get('ttclid') || localStorage.getItem('ttclid') || '';
                     const fbclid = urlParams.get('fbclid') || localStorage.getItem('fbclid') || '';
 
-                    // Track TikTok Pixel Purchase event (client-side with same event_id)
+                    // Track TikTok Pixel CompletePayment (proper format with contents array)
                     if ((window as any).ttq) {
                         (window as any).ttq.track('CompletePayment', {
-                            content_id: data.metadata?.productId,
-                            content_name: data.metadata?.productName,
-                            currency: 'EUR',
+                            contents: [{
+                                content_id: data.metadata?.productId,
+                                content_type: 'product',
+                                content_name: data.metadata?.productName,
+                            }],
                             value: parseFloat(data.metadata?.price || '0'),
-                            event_id: eventId, // For deduplication
+                            currency: 'EUR',
+                        }, {
+                            event_id: eventId
                         });
                     }
 
