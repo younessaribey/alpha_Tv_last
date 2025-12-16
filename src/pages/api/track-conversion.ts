@@ -130,18 +130,25 @@ async function sendTikTokEvent(eventData: {
     };
 
     const eventPayload = {
-        pixel_code: TIKTOK_PIXEL_ID,
         event: eventData.eventName,
         event_id: eventData.eventId,
-        event_time: Math.floor(Date.now() / 1000), // Unix timestamp (seconds)
-        context: context,
+        event_time: Math.floor(Date.now() / 1000),
+        user: {
+            email: eventData.email ? hash(eventData.email) : undefined,
+            phone: eventData.phone ? hash(eventData.phone) : undefined,
+        },
         properties: properties,
+        page: {
+            url: eventData.url,
+        },
     };
 
-    // If URL is provided, add it to properties
-    if (eventData.url) {
-        eventPayload.properties.url = eventData.url;
-    }
+    // Build the full request body with event_source at top level
+    const requestBody = {
+        event_source: 'web',
+        event_source_id: TIKTOK_PIXEL_ID,
+        data: [eventPayload],
+    };
 
     try {
         const response = await fetch(
@@ -152,7 +159,7 @@ async function sendTikTokEvent(eventData: {
                     'Content-Type': 'application/json',
                     'Access-Token': TIKTOK_ACCESS_TOKEN,
                 },
-                body: JSON.stringify({ data: [eventPayload] })
+                body: JSON.stringify(requestBody)
             }
         );
         const result = await response.json();
