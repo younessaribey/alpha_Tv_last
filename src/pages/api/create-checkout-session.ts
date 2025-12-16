@@ -91,6 +91,11 @@ export const POST: APIRoute = async ({ request }) => {
                 ui_mode: 'embedded',
             });
 
+            console.log('[API] Stripe Checkout Session created');
+            console.log('[API] Session client_secret:', session.client_secret);
+            console.log('[API] Session client_secret type:', typeof session.client_secret);
+            console.log('[API] Session client_secret length:', session.client_secret?.length);
+
             return new Response(JSON.stringify({
                 clientSecret: session.client_secret, // For EmbeddedCheckout
                 sessionId: session.id,
@@ -129,6 +134,9 @@ export const POST: APIRoute = async ({ request }) => {
             },
             return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         });
+
+        console.log('[API] Payment Checkout Session created');
+        console.log('[API] Payment Session client_secret:', session.client_secret);
 
         return new Response(JSON.stringify({
             clientSecret: session.client_secret,
