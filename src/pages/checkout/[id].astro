@@ -1,30 +1,43 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import CheckoutForm from '../../components/CheckoutForm';
-import { products, type Lang } from '../../lib/data';
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import CheckoutForm from "../../components/CheckoutForm";
+import WhatsAppRescue from "../../components/WhatsAppRescue";
+import { products, type Lang } from "../../lib/data";
 
 const { id } = Astro.params;
-const lang: Lang = 'fr';
+const lang: Lang = "fr";
 
-const product = products.find(p => p.id === id);
+const product = products.find((p) => p.id === id);
 
 if (!product) {
-    return Astro.redirect('/pricing');
+    return Astro.redirect("/pricing");
 }
 ---
 
 <Layout title={`Checkout - ${product.name[lang]}`} lang={lang}>
     <Header lang={lang} />
-    
+
     <main class="main-content">
         <section class="checkout-section">
             <div class="container">
                 <!-- Back Link -->
                 <a href="/pricing" class="back-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-                    {lang === 'fr' ? 'Retour aux forfaits' : 'Back to plans'}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"
+                        ></path></svg
+                    >
+                    {lang === "fr" ? "Retour aux forfaits" : "Back to plans"}
                 </a>
 
                 <div class="checkout-container">
@@ -32,26 +45,56 @@ if (!product) {
                     <div class="order-summary card">
                         <div class="order-header">
                             <div class="order-info">
-                                <h2 class="order-title">{product.name[lang]}</h2>
+                                <h2 class="order-title">
+                                    {product.name[lang]}
+                                </h2>
                                 <p class="order-devices">
-                                    {product.devices} {product.devices > 1 ? 'appareils' : 'appareil'}
+                                    {product.devices}
+                                    {
+                                        product.devices > 1
+                                            ? "appareils"
+                                            : "appareil"
+                                    }
                                 </p>
                             </div>
                             <div class="order-price">
-                                {product.originalPrice && (
-                                    <span class="price-original">€{product.originalPrice}</span>
-                                )}
-                                <span class="price-current gradient-text">€{product.price}</span>
+                                {
+                                    product.originalPrice && (
+                                        <span class="price-original">
+                                            €{product.originalPrice}
+                                        </span>
+                                    )
+                                }
+                                <span class="price-current gradient-text"
+                                    >€{product.price}</span
+                                >
                             </div>
                         </div>
                         <div class="order-trial">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            {lang === 'fr' ? '24h d\'essai gratuit inclus' : '24h free trial included'}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+                                ></path><polyline points="22 4 12 14.01 9 11.01"
+                                ></polyline></svg
+                            >
+                            {
+                                lang === "fr"
+                                    ? "24h d'essai gratuit inclus"
+                                    : "24h free trial included"
+                            }
                         </div>
                     </div>
 
                     <!-- Checkout Form (React Island) -->
-                    <CheckoutForm 
+                    <CheckoutForm
                         client:load
                         productId={product.id}
                         productName={product.name[lang]}
@@ -62,6 +105,9 @@ if (!product) {
             </div>
         </section>
     </main>
+
+    <!-- WhatsApp Rescue Popup (exit intent / 60s timer) -->
+    <WhatsAppRescue client:load lang={lang} productName={product.name[lang]} />
 
     <Footer lang={lang} />
 </Layout>
@@ -176,14 +222,20 @@ if (!product) {
     }
 </style>
 
-<script define:vars={{ productId: product.id, productName: product.name[lang], price: product.price }}>
+<script
+    define:vars={{
+        productId: product.id,
+        productName: product.name[lang],
+        price: product.price,
+    }}
+>
     // TikTok Pixel - Track InitiateCheckout
-    if (typeof ttq !== 'undefined') {
-        ttq.track('InitiateCheckout', {
+    if (typeof ttq !== "undefined") {
+        ttq.track("InitiateCheckout", {
             content_id: productId,
             content_name: productName,
-            currency: 'EUR',
-            value: price
+            currency: "EUR",
+            value: price,
         });
     }
 </script>
