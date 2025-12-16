@@ -114,6 +114,7 @@ const trialsLeft = 23;
                 <div class="pricing-grid">
                     {products.map((product, index) => (
                         <div 
+                            id={product.popular ? 'popular-plan' : undefined}
                             class={`pricing-card ${product.popular ? 'card-featured' : 'card'}`} 
                             data-animate
                             style={`animation-delay: ${index * 0.1}s`}
