@@ -663,11 +663,53 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     </button>
 
                     <div className="payment-methods">
-                        <span>{lang === 'fr' ? 'Paiement sécurisé' : 'Secure payment'}</span>
+                        <span className="secure-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            {lang === 'fr' ? 'Paiement 100% sécurisé' : '100% Secure Payment'}
+                        </span>
                         <div className="payment-icons">
-                            <span>💳</span>
-                            <span>🍎 Pay</span>
-                            <span>G Pay</span>
+                            {/* Visa */}
+                            <div className="payment-badge" title="Visa">
+                                <svg viewBox="0 0 48 48" width="36" height="24">
+                                    <rect fill="#1A1F71" width="48" height="48" rx="4" />
+                                    <path fill="#FFFFFF" d="M19.4 32.1l2.4-14.7h3.8l-2.4 14.7h-3.8zm14.3-14.4c-.7-.3-1.9-.6-3.3-.6-3.6 0-6.2 1.9-6.2 4.6 0 2 1.8 3.1 3.2 3.8 1.4.7 1.9 1.1 1.9 1.8 0 1-.7 1.4-2.1 1.4-1.4 0-2.2-.2-3.3-.7l-.5-.2-.5 3.1c.8.4 2.4.7 4 .7 3.9 0 6.4-1.9 6.4-4.8 0-1.6-1-2.8-3.1-3.8-1.3-.6-2.1-1.1-2.1-1.7 0-.6.7-1.2 2.1-1.2 1.2 0 2.1.3 2.8.5l.3.2.5-3.1zm9.6-.3h-2.8c-.9 0-1.5.3-1.9 1.1l-5.4 12.6h3.8l.8-2.1h4.7l.4 2.1h3.4l-3-13.7zm-4.5 8.9l1.5-4 .8 4h-2.3zM17.7 17.4l-3.6 10-0.4-1.9c-.7-2.3-2.8-4.8-5.2-6L11.7 32h3.9l5.8-14.6h-3.7z" />
+                                </svg>
+                            </div>
+                            {/* Mastercard */}
+                            <div className="payment-badge" title="Mastercard">
+                                <svg viewBox="0 0 48 48" width="36" height="24">
+                                    <rect fill="#1A1F24" width="48" height="48" rx="4" />
+                                    <circle fill="#EB001B" cx="18" cy="24" r="10" />
+                                    <circle fill="#F79E1B" cx="30" cy="24" r="10" />
+                                    <path fill="#FF5F00" d="M24 16.5a10 10 0 0 0-6 7.5 10 10 0 0 0 6 7.5 10 10 0 0 0 6-7.5 10 10 0 0 0-6-7.5z" />
+                                </svg>
+                            </div>
+                            {/* Apple Pay */}
+                            <div className="payment-badge" title="Apple Pay">
+                                <svg viewBox="0 0 48 48" width="36" height="24">
+                                    <rect fill="#000000" width="48" height="48" rx="4" />
+                                    <path fill="#FFFFFF" d="M14.8 18.1c-.6.7-1.6 1.3-2.6 1.2-.1-1 .4-2.1 1-2.7.6-.7 1.7-1.2 2.5-1.2.1 1.1-.3 2.1-.9 2.7zm.9 1.4c-1.4-.1-2.7.8-3.4.8-.7 0-1.7-.8-2.9-.7-1.5 0-2.8.9-3.6 2.2-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.8 2.1 1.1 0 1.5-.7 2.8-.7 1.3 0 1.6.7 2.9.7 1.2 0 2-1 2.7-2 .9-1.2 1.2-2.3 1.2-2.4-.1 0-2.4-.9-2.4-3.6 0-2.3 1.9-3.4 2-3.4-1.1-1.6-2.8-1.6-3.2-1.6zM28 16.2v16.2h2.5v-5.5h3.5c3.2 0 5.4-2.2 5.4-5.4 0-3.2-2.2-5.3-5.3-5.3H28zm2.5 2.1h2.9c2.2 0 3.4 1.2 3.4 3.2 0 2.1-1.2 3.2-3.5 3.2h-2.8v-6.4z" />
+                                </svg>
+                            </div>
+                            {/* Google Pay */}
+                            <div className="payment-badge" title="Google Pay">
+                                <svg viewBox="0 0 48 48" width="36" height="24">
+                                    <rect fill="#FFFFFF" stroke="#E0E0E0" width="48" height="48" rx="4" />
+                                    <path fill="#4285F4" d="M23.7 24.5v3.1h7.4c-.3 1.6-1.1 2.9-2.3 3.8l3.7 2.9c2.2-2 3.4-5 3.4-8.5 0-.8-.1-1.6-.2-2.4h-12v1.1z" />
+                                    <path fill="#34A853" d="M12.1 27.6l-.8.6-2.9 2.2c1.8 3.6 5.6 6.1 10 6.1 3 0 5.5-1 7.4-2.7l-3.7-2.9c-1 .7-2.3 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.6l-.1.2z" />
+                                    <path fill="#FBBC05" d="M8.4 18.6c-.5 1-.8 2.1-.8 3.4s.3 2.4.8 3.4l3.7-2.9c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2l-3.7-2.9z" />
+                                    <path fill="#EA4335" d="M14.4 16.9c1.6 0 3 .6 4.1 1.6l3.1-3.1c-1.9-1.8-4.4-2.9-7.2-2.9-4.4 0-8.2 2.5-10 6.1l3.7 2.9c.9-2.7 3.4-4.6 6.3-4.6z" />
+                                </svg>
+                            </div>
+                            {/* Stripe Badge */}
+                            <div className="stripe-badge" title="Powered by Stripe">
+                                <svg viewBox="0 0 60 24" width="50" height="20">
+                                    <path fill="#6772E5" d="M5 7.6c0-.5.4-.7.9-.7.8 0 1.8.2 2.7.7V5c-.9-.4-1.8-.5-2.7-.5C4 4.5 2.6 5.6 2.6 7.7c0 3.3 4.4 2.8 4.4 4.2 0 .6-.5.8-1.1.8-.9 0-2.1-.4-3-.9v2.6c1 .4 2.1.6 3 .6 1.9 0 3.4-1 3.4-3.1C9.3 8.3 5 8.9 5 7.6zm8.8-3.8c-.7 0-1.2.5-1.5 1.3l-.1-.5v-.2c0-.1-.1-.2-.3-.2h-1.5c-.1 0-.2.1-.2.2v10.4c0 .1.1.2.2.2h1.7c.1 0 .2-.1.2-.2v-2.5c.4.4 1 .6 1.8.6 1.8 0 3.4-1.4 3.4-4.6-.1-3-1.6-4.5-3.7-4.5zm-.5 7c-.6 0-1-.2-1.2-.5V7c.2-.3.6-.6 1.2-.6 1 0 1.6.9 1.6 2.2 0 1.3-.6 2.2-1.6 2.2zm9.2-7c-2.4 0-3.8 2-3.8 4.5 0 3 1.7 4.6 4.2 4.6 1.2 0 2-.3 2.7-.7l-.1-1.8c-.7.4-1.4.5-2.3.5-1 0-1.7-.4-1.8-1.6h4.6c0-.2.1-.9.1-1.1-.1-2.5-1.3-4.4-3.6-4.4zm-1.1 3.5c.1-.9.6-1.5 1.4-1.5.8 0 1.2.6 1.2 1.5h-2.6zm8.5-3.5c-.9 0-1.5.4-1.8 1l-.1-.8c0-.1-.1-.2-.2-.2h-1.5c-.1 0-.2 0-.2.2v8.8c0 .1.1.2.2.2h1.7c.1 0 .2-.1.2-.2V7c.2-.3.5-.5 1-.5.2 0 .4 0 .7.1 0 0 .1 0 .2-.1l.3-2c-.1-.1-.4-.3-.5-.3zm2.3-1.5c-.7 0-1.2.5-1.2 1.1 0 .6.5 1.1 1.2 1.1.7 0 1.2-.5 1.2-1.1 0-.6-.5-1.1-1.2-1.1zm-.9 10.5v-8.6c0-.1.1-.2.2-.2h1.7c.1 0 .2.1.2.2v8.6c0 .1-.1.2-.2.2h-1.7c-.2 0-.2-.1-.2-.2zm4-3c0-.5.4-.7.9-.7.8 0 1.8.2 2.7.7V5c-.9-.4-1.8-.5-2.7-.5-1.9 0-3.3 1.1-3.3 3.2 0 3.3 4.4 2.8 4.4 4.2 0 .6-.5.8-1.1.8-.9 0-2.1-.4-3-.9v2.6c1 .4 2.1.6 3 .6 1.9 0 3.4-1 3.4-3.1.1-3.5-4.3-2.9-4.3-4.2zm9.4-6.5c-2.4 0-4 2-4 4.6 0 3 1.8 4.5 4.4 4.5 1.3 0 2.3-.3 3-.6l-.3-1.8c-.7.3-1.3.4-2 .4-1 0-1.9-.4-2-1.5h4.7c0-.2.1-.7.1-1.1 0-2.7-1.3-4.5-3.9-4.5zm-1.3 3.6c.1-.9.6-1.6 1.4-1.6.9 0 1.3.7 1.3 1.6h-2.7z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -838,17 +880,59 @@ export default function CheckoutForm({ productId, productName, price, lang }: Ch
                     padding-top: 0.75rem;
                 }
 
-                .payment-methods > span {
+                .payment-methods .secure-badge {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
                     font-size: 0.75rem;
-                    color: var(--color-text-subtle);
+                    font-weight: 600;
+                    color: #10b981;
+                    background: rgba(16, 185, 129, 0.1);
+                    padding: 0.5rem 1rem;
+                    border-radius: 20px;
+                    margin-bottom: 0.75rem;
                 }
 
                 .payment-icons {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
-                    font-size: 0.8125rem;
-                    color: var(--color-text-muted);
+                    justify-content: center;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                }
+
+                .payment-badge {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 6px;
+                    padding: 4px 6px;
+                    transition: all 0.2s ease;
+                }
+
+                .payment-badge:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                    transform: translateY(-1px);
+                }
+
+                .payment-badge svg {
+                    border-radius: 4px;
+                }
+
+                .stripe-badge {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 4px 8px;
+                    opacity: 0.7;
+                    transition: opacity 0.2s ease;
+                }
+
+                .stripe-badge:hover {
+                    opacity: 1;
                 }
 
                 .checkout-progress-simple {
