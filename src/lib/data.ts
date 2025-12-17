@@ -26,7 +26,7 @@ export const products: Product[] = [
             en: '6 Months',
             fr: '6 Mois',
         },
-        price: 39,
+        price: 40,
         originalPrice: 49.99,
         duration: '6 months',
         devices: 1,
@@ -47,8 +47,8 @@ export const products: Product[] = [
             ],
         },
         badge: {
-            en: 'Save €11',
-            fr: '-11€',
+            en: 'Save €10',
+            fr: '-10€',
         },
     },
     {
@@ -57,7 +57,7 @@ export const products: Product[] = [
             en: '12 Months',
             fr: '12 Mois',
         },
-        price: 59,
+        price: 59.99,
         originalPrice: 89.99,
         duration: '12 months',
         devices: 1,
@@ -81,8 +81,8 @@ export const products: Product[] = [
         },
         popular: true,
         badge: {
-            en: 'Save €31',
-            fr: '-31€',
+            en: 'Save €30',
+            fr: '-30€',
         },
     },
     {
@@ -91,7 +91,7 @@ export const products: Product[] = [
             en: '12 Months Duo',
             fr: '12 Mois Duo',
         },
-        price: 79,
+        price: 100,
         originalPrice: 159.99,
         duration: '12 months',
         devices: 2,
@@ -114,8 +114,8 @@ export const products: Product[] = [
             ],
         },
         badge: {
-            en: 'Save €81',
-            fr: '-81€',
+            en: 'Save €60',
+            fr: '-60€',
         },
     },
 ];
