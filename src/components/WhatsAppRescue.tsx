@@ -7,7 +7,7 @@ interface WhatsAppRescueProps {
 }
 
 // WhatsApp number (change before campaign)
-const WHATSAPP_NUMBER = '33758928901';
+const WHATSAPP_NUMBER = '447861393211';
 
 export default function WhatsAppRescue({ lang, productName, isCheckoutPage = false }: WhatsAppRescueProps) {
     const [showNotification, setShowNotification] = useState(false); // Notification popup + badge
