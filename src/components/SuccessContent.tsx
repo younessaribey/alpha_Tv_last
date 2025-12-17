@@ -204,7 +204,7 @@ export default function SuccessContent({ lang }: SuccessContentProps) {
 💰 Price: €${metadata?.price}`;
 
         // Open WhatsApp with the message (use direct navigation to avoid popup blocker)
-        const whatsappUrl = `https://wa.me/33758928901?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/447861393211?text=${encodeURIComponent(message)}`;
 
         // Update state first
         setStep('complete');

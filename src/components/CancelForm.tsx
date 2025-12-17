@@ -145,7 +145,7 @@ export default function CancelForm({ lang }: CancelFormProps) {
                         {lang === 'fr' ? 'Ou contactez-nous directement:' : 'Or contact us directly:'}
                     </p>
                     <a
-                        href="https://wa.me/33758928901?text=Je%20souhaite%20annuler%20mon%20abonnement"
+                        href="https://wa.me/447861393211?text=Je%20souhaite%20annuler%20mon%20abonnement"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-green-400 hover:text-green-300"
