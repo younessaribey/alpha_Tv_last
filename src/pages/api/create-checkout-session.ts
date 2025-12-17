@@ -54,11 +54,8 @@ export const POST: APIRoute = async ({ request }) => {
             baseUrl = `https://${baseUrl}`;
         }
 
-        console.log('Checkout request:', { productId, useSubscription, priceId: priceConfig.priceId, baseUrl });
-
         // If we have a Stripe Price ID AND subscription is requested, use subscription mode with trial
         if (priceConfig.priceId && useSubscription) {
-            console.log('Creating subscription with trial for price:', priceConfig.priceId);
             const session = await stripe.checkout.sessions.create({
                 mode: 'subscription',
                 customer_email: customerEmail,
@@ -90,11 +87,6 @@ export const POST: APIRoute = async ({ request }) => {
                 return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
                 ui_mode: 'embedded',
             });
-
-            console.log('[API] Stripe Checkout Session created');
-            console.log('[API] Session client_secret:', session.client_secret);
-            console.log('[API] Session client_secret type:', typeof session.client_secret);
-            console.log('[API] Session client_secret length:', session.client_secret?.length);
 
             return new Response(JSON.stringify({
                 clientSecret: session.client_secret, // For EmbeddedCheckout
@@ -135,9 +127,6 @@ export const POST: APIRoute = async ({ request }) => {
             return_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         });
 
-        console.log('[API] Payment Checkout Session created');
-        console.log('[API] Payment Session client_secret:', session.client_secret);
-
         return new Response(JSON.stringify({
             clientSecret: session.client_secret,
             sessionId: session.id,
@@ -147,32 +136,15 @@ export const POST: APIRoute = async ({ request }) => {
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error: any) {
-        console.error('=== STRIPE CHECKOUT ERROR ===');
-        console.error('Error message:', error.message);
-        console.error('Error type:', error.type);
-        console.error('Error code:', error.code);
-        console.error('Error param:', error.param);
-        console.error('Environment check:', {
-            hasSecretKey: !!import.meta.env.STRIPE_SECRET_KEY,
-            secretKeyPrefix: import.meta.env.STRIPE_SECRET_KEY?.substring(0, 8),
-            hasPriceIds: {
-                '6m': !!import.meta.env.STRIPE_PRICE_6M_1D,
-                '12m': !!import.meta.env.STRIPE_PRICE_12M_1D,
-                '12m_duo': !!import.meta.env.STRIPE_PRICE_12M_2D,
-            },
-            priceIds: {
-                '6m': import.meta.env.STRIPE_PRICE_6M_1D,
-                '12m': import.meta.env.STRIPE_PRICE_12M_1D,
-                '12m_duo': import.meta.env.STRIPE_PRICE_12M_2D,
-            }
+        console.error('Stripe checkout error:', {
+            message: error.message,
+            type: error.type,
+            code: error.code,
         });
-        console.error('=== END ERROR ===');
 
         return new Response(JSON.stringify({
             error: 'Failed to create checkout session',
             details: error.message,
-            type: error.type || 'unknown',
-            code: error.code,
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
