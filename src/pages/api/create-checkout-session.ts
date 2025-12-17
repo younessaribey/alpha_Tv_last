@@ -147,18 +147,32 @@ export const POST: APIRoute = async ({ request }) => {
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error: any) {
-        console.error('Stripe checkout error:', error);
-        console.error('Error details:', {
-            message: error.message,
-            type: error.type,
-            code: error.code,
-            stack: error.stack,
+        console.error('=== STRIPE CHECKOUT ERROR ===');
+        console.error('Error message:', error.message);
+        console.error('Error type:', error.type);
+        console.error('Error code:', error.code);
+        console.error('Error param:', error.param);
+        console.error('Environment check:', {
+            hasSecretKey: !!import.meta.env.STRIPE_SECRET_KEY,
+            secretKeyPrefix: import.meta.env.STRIPE_SECRET_KEY?.substring(0, 8),
+            hasPriceIds: {
+                '6m': !!import.meta.env.STRIPE_PRICE_6M_1D,
+                '12m': !!import.meta.env.STRIPE_PRICE_12M_1D,
+                '12m_duo': !!import.meta.env.STRIPE_PRICE_12M_2D,
+            },
+            priceIds: {
+                '6m': import.meta.env.STRIPE_PRICE_6M_1D,
+                '12m': import.meta.env.STRIPE_PRICE_12M_1D,
+                '12m_duo': import.meta.env.STRIPE_PRICE_12M_2D,
+            }
         });
+        console.error('=== END ERROR ===');
 
         return new Response(JSON.stringify({
             error: 'Failed to create checkout session',
             details: error.message,
             type: error.type || 'unknown',
+            code: error.code,
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
